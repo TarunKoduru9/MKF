@@ -57,8 +57,11 @@ export function Navbar() {
                     <Link href="/cart">
                         <Button variant="ghost" size="icon" className="relative text-foreground hover:text-primary">
                             <ShoppingCart className="h-5 w-5" />
-                            {/* Badge placeholder */}
-                            {/* <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary" /> */}
+                            {useStore((state) => state.cart.length) > 0 && (
+                                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+                                    {useStore((state) => state.cart.reduce((acc, item) => acc + item.quantity, 0))}
+                                </span>
+                            )}
                         </Button>
                     </Link>
 

@@ -8,12 +8,51 @@ import { Trash2, ShoppingCart, ArrowRight } from "lucide-react";
 import useStore from "@/lib/store";
 import Link from "next/link";
 import { loadRazorpay } from "@/lib/razorpay";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { API_ROUTES } from "@/lib/routes";
+import { DonationCard } from "@/components/donate/DonationCard";
+
+const allSuggestions = [
+    {
+        id: "food-20",
+        title: "Food Packets (20 People)",
+        variants: { veg: 1500, nonveg: 2000 },
+        desc: "Complete meal distribution for 20 people.",
+        image: "/images/food_distribution_kids.png"
+    },
+    {
+        id: "food-50",
+        title: "Food Packets (50 People)",
+        variants: { veg: 3500, nonveg: 4500 },
+        desc: "Complete meal distribution for 50 people.",
+        image: "/images/food_distribution_kids.png"
+    },
+    {
+        id: "combo-20",
+        title: "20 Food + Cake + Wishes",
+        price: 2000,
+        desc: "20 Food + Cake + Wishes from Kids",
+        image: "/images/birthday_party_kids.png"
+    },
+    {
+        id: "cake-500",
+        title: "Cake (Add-on)",
+        price: 500,
+        desc: "Optional Add-on: Cake",
+        image: "/images/birthday_party_kids.png"
+    }
+];
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, clearCart, user } = useStore();
     const [loading, setLoading] = useState(false);
+    const [recommendations, setRecommendations] = useState([]);
+
+    useEffect(() => {
+        // Shuffle and pick 2 random items
+        const shuffled = [...allSuggestions].sort(() => 0.5 - Math.random());
+        setRecommendations(shuffled.slice(0, 2));
+    }, []);
 
     const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
 
@@ -114,36 +153,63 @@ export default function CartPage() {
             <main className="flex-1 container mx-auto px-4 py-12">
                 <h1 className="text-3xl font-bold mb-8">Your Contribution Cart</h1>
 
-                <div className="grid gap-8 lg:grid-cols-12">
-                    {/* Cart Items */}
-                    <div className="lg:col-span-8 space-y-4">
-                        {cart.map((item) => (
-                            <Card key={item.id} className="flex flex-col sm:flex-row items-center p-4 gap-4">
-                                <div className="h-20 w-20 bg-slate-200 rounded-md shrink-0 overflow-hidden">
-                                    {/* Image Placeholder */}
-                                </div>
-                                <div className="flex-1 text-center sm:text-left">
-                                    <h3 className="font-bold">{item.title}</h3>
-                                    <p className="text-sm text-muted-foreground">₹{item.price} x {item.quantity}</p>
-                                </div>
-
-                                <div className="flex items-center gap-4">
-                                    <div className="flex items-center border border-slate-200 rounded-md">
-                                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-3 py-1 hover:bg-slate-50">-</button>
-                                        <span className="px-2">{item.quantity}</span>
-                                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-3 py-1 hover:bg-slate-50">+</button>
+                <div className="grid gap-8 lg:grid-cols-12 items-start">
+                    {/* LEFT COLUMN */}
+                    <div className="lg:col-span-8 flex flex-col gap-8">
+                        {/* Cart Items List */}
+                        <div className="space-y-4">
+                            {cart.map((item) => (
+                                <Card key={item.id} className="flex flex-col sm:flex-row items-center p-4 gap-4">
+                                    <div className="h-20 w-20 bg-slate-200 rounded-md shrink-0 overflow-hidden relative">
+                                        {/* Ideally use Next.js Image here in production */}
+                                        <img
+                                            src={item.image || "/images/placeholder.svg"}
+                                            alt={item.title}
+                                            className="w-full h-full object-cover"
+                                        />
                                     </div>
-                                    <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => removeFromCart(item.id)}>
-                                        <Trash2 className="h-5 w-5" />
-                                    </Button>
-                                </div>
-                            </Card>
-                        ))}
+                                    <div className="flex-1 text-center sm:text-left">
+                                        <h3 className="font-bold">{item.title}</h3>
+                                        <p className="text-sm text-muted-foreground">₹{item.price} x {item.quantity}</p>
+                                    </div>
+
+                                    <div className="flex items-center gap-4">
+                                        <div className="flex items-center border border-slate-200 rounded-md">
+                                            <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-3 py-1 hover:bg-slate-50">-</button>
+                                            <span className="px-2">{item.quantity}</span>
+                                            <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-3 py-1 hover:bg-slate-50">+</button>
+                                        </div>
+                                        <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => removeFromCart(item.id)}>
+                                            <Trash2 className="h-5 w-5" />
+                                        </Button>
+                                    </div>
+                                </Card>
+                            ))}
+                        </div>
+
+                        {/* Add More to Your Impact */}
+                        <div className="bg-slate-50 p-6 rounded-lg border border-slate-200">
+                            <h3 className="text-xl font-bold mb-6">Add More to Your Impact</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {recommendations.map((item) => (
+                                    <DonationCard
+                                        key={item.id}
+                                        id={item.id}
+                                        title={item.title}
+                                        price={item.price}
+                                        variants={item.variants}
+                                        description={item.desc}
+                                        type={item.variants ? "pack" : "unit"}
+                                        image={item.image}
+                                    />
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Summary */}
-                    <div className="lg:col-span-4">
-                        <Card className="sticky top-24">
+                    {/* RIGHT COLUMN: Summary */}
+                    <div className="lg:col-span-4 sticky top-24">
+                        <Card>
                             <CardHeader>
                                 <CardTitle>Donation Summary</CardTitle>
                             </CardHeader>
