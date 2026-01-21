@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { HeroSection } from "@/components/home/HeroSection";
+import { BannerCarousel } from "@/components/home/BannerCarousel";
 import { MissionSection } from "@/components/home/MissionSection";
 import { StorySection } from "@/components/home/StorySection";
 import { ProgramSection } from "@/components/home/ProgramSection";
@@ -13,7 +13,7 @@ export default function Home() {
       <Navbar />
 
       <main className="flex-1">
-        <HeroSection />
+        <BannerCarousel />
         <MissionSection />
         <StorySection />
         <ProgramSection />

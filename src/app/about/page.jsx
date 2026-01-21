@@ -4,31 +4,16 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import Image from "next/image";
 
+import { HeroSection } from "@/components/home/HeroSection";
+
 export default function AboutPage() {
     return (
         <div className="flex min-h-screen flex-col bg-slate-50 font-sans">
             <Navbar />
 
             <main className="flex-1">
-                {/* About Hero */}
-                <section className="relative h-[400px] w-full overflow-hidden flex items-center justify-center text-white">
-                    <div className="absolute inset-0 bg-black/60 z-10" />
-                    <Image
-                        src="/images/helping-hands.png"
-                        alt="About Us Hero"
-                        fill
-                        className="object-cover"
-                        priority
-                    />
-                    <div className="relative z-20 text-center max-w-3xl px-4">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-4">About MKF Trust</h1>
-                        <p className="text-lg md:text-xl text-slate-200">
-                            Dedicated to transforming lives through food, education, and healthcare.
-                        </p>
-                    </div>
-                </section>
+                <HeroSection />
 
-                {/* Our Journey / History */}
                 <section className="py-16 bg-white">
                     <div className="container mx-auto px-4 max-w-4xl">
                         <div className="text-center mb-12">

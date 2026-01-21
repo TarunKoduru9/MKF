@@ -13,9 +13,11 @@ export function proxy(request) {
     img-src 'self' blob: data: https://firebasestorage.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; 
+    media-src 'self' https://mkftrustindia.org;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
+    frame-src 'self' https://www.instagram.com;
     frame-ancestors 'none';
     block-all-mixed-content;
     upgrade-insecure-requests;

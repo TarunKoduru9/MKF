@@ -270,18 +270,91 @@ function ProfileField({ label, name, value, isEditing, onChange, disabled }) {
 }
 
 function DonationsSection() {
-    return (
-        <Card className="border-0 shadow-sm min-h-[400px] flex items-center justify-center">
-            <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto text-primary">
-                    <Heart className="h-8 w-8" />
-                </div>
-                <h3 className="text-lg font-bold">No Donations Yet</h3>
-                <p className="text-muted-foreground max-w-sm mx-auto">
-                    Your generous contributions will appear here. Start making a difference today!
-                </p>
-                <Button>Donate Now</Button>
+    const [donations, setDonations] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchDonations = async () => {
+            try {
+                const res = await axios.get("/api/donations");
+                setDonations(res.data.donations || []);
+            } catch (error) {
+                console.error("Failed to fetch donations:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchDonations();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center p-12">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
             </div>
+        );
+    }
+
+    if (donations.length === 0) {
+        return (
+            <Card className="border-0 shadow-sm min-h-[400px] flex items-center justify-center">
+                <div className="text-center space-y-4">
+                    <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto text-primary">
+                        <Heart className="h-8 w-8" />
+                    </div>
+                    <h3 className="text-lg font-bold">No Donations Yet</h3>
+                    <p className="text-muted-foreground max-w-sm mx-auto">
+                        Your generous contributions will appear here. Start making a difference today!
+                    </p>
+                    <Button onClick={() => window.location.href = '/donate'}>Donate Now</Button>
+                </div>
+            </Card>
+        );
+    }
+
+    return (
+        <Card className="border-0 shadow-sm">
+            <CardHeader>
+                <CardTitle>My Donation History</CardTitle>
+                <CardDescription>Thank you for supporting our cause.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="rounded-md border">
+                    <table className="w-full text-sm">
+                        <thead className="bg-slate-50 border-b">
+                            <tr>
+                                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Date</th>
+                                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Purpose</th>
+                                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Order ID</th>
+                                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Amount</th>
+                                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {donations.map((d) => (
+                                <tr key={d.id} className="border-b transition-colors hover:bg-slate-50/50">
+                                    <td className="p-4 align-middle">
+                                        {new Date(d.created_at).toLocaleDateString()}
+                                    </td>
+                                    <td className="p-4 align-middle font-medium">{d.purpose}</td>
+                                    <td className="p-4 align-middle text-muted-foreground font-mono text-xs">{d.order_id}</td>
+                                    <td className="p-4 align-middle font-bold text-green-600">
+                                        ₹{d.amount}
+                                    </td>
+                                    <td className="p-4 align-middle">
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${d.payment_status === 'success' ? 'bg-green-100 text-green-800' :
+                                                d.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                    'bg-red-100 text-red-800'
+                                            }`}>
+                                            {d.payment_status.charAt(0).toUpperCase() + d.payment_status.slice(1)}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </CardContent>
         </Card>
     );
 }

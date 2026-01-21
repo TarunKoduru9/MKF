@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { jwtVerify } from 'jose';
 
 export async function POST(request) {
     try {
@@ -25,5 +26,30 @@ export async function POST(request) {
 
     } catch (error) {
         return NextResponse.json({ error: 'Processing failed' }, { status: 500 });
+    }
+}
+
+export async function GET(request) {
+    try {
+        const session = request.cookies.get("session")?.value;
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        // Verify Token & Get UID
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
+        const { payload } = await jwtVerify(session, secret);
+        const uid = payload.uid;
+
+        // Fetch Donations
+        const donations = await query(
+            "SELECT * FROM donations WHERE uid = ? ORDER BY created_at DESC",
+            [uid]
+        );
+
+        return NextResponse.json({ donations });
+    } catch (error) {
+        console.error("Fetch Donations Error:", error);
+        return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
     }
 }

@@ -10,6 +10,8 @@ import useStore from "@/lib/store";
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const cart = useStore((state) => state.cart);
+    const isAuthenticated = useStore((state) => state.isAuthenticated);
 
     const navLinks = [
         { name: "About", href: "/about" },
@@ -23,13 +25,12 @@ export function Navbar() {
             <div className="container mx-auto flex h-20 items-center justify-between px-4">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
-                    {/* Use an image or icon here if available, for now text/svg placeholder */}
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
                         <Image
                             src="/images/logo.jpg"
                             alt="Logo"
-                            width={40}
-                            height={40}
+                            width={100}
+                            height={100}
                             className="w-full h-full object-contain"
                         />
                     </div>
@@ -57,15 +58,15 @@ export function Navbar() {
                     <Link href="/cart">
                         <Button variant="ghost" size="icon" className="relative text-foreground hover:text-primary">
                             <ShoppingCart className="h-5 w-5" />
-                            {useStore((state) => state.cart.length) > 0 && (
+                            {cart.length > 0 && (
                                 <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
-                                    {useStore((state) => state.cart.reduce((acc, item) => acc + item.quantity, 0))}
+                                    {cart.reduce((acc, item) => acc + item.quantity, 0)}
                                 </span>
                             )}
                         </Button>
                     </Link>
 
-                    {useStore((state) => state.isAuthenticated) ? (
+                    {isAuthenticated ? (
                         <Link href="/my-account">
                             <Button variant="ghost" className="gap-2 text-foreground hover:text-primary">
                                 <User className="h-5 w-5" />
