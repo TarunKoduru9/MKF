@@ -102,6 +102,10 @@ export function Footer() {
 
                 <div className="border-t border-border pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
                     <p>Copyright © 2026 MKF Trust. All rights reserved.</p>
+                    <div className="flex gap-4">
+                        <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
+                        <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+                    </div>
                     <p>Design & Developed by Arora Tech Solutions Pvt Ltd</p>
                 </div>
             </div>
