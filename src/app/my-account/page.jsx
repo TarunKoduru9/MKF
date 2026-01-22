@@ -95,7 +95,12 @@ export default function MyAccountPage() {
                             isActive={activeTab === "profile"}
                             onClick={() => setActiveTab("profile")}
                         />
-                        {/* Repeats... */}
+                        <NavCard
+                            icon={Heart}
+                            title="My Donations"
+                            isActive={activeTab === "donations"}
+                            onClick={() => setActiveTab("donations")}
+                        />
                     </div>
 
                     {/* Main Content */}
@@ -343,8 +348,8 @@ function DonationsSection() {
                                     </td>
                                     <td className="p-4 align-middle">
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${d.payment_status === 'success' ? 'bg-green-100 text-green-800' :
-                                                d.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                                    'bg-red-100 text-red-800'
+                                            d.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                'bg-red-100 text-red-800'
                                             }`}>
                                             {d.payment_status.charAt(0).toUpperCase() + d.payment_status.slice(1)}
                                         </span>

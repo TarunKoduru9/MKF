@@ -52,7 +52,7 @@ export function StorySection() {
                                 />
                             </div>
                             {/* Floating Image 1 */}
-                            <div className="absolute -bottom-8 -left-8 w-1/2 aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 shadow-xl border-4 border-white">
+                            <div className="absolute -bottom-4 -left-4 md:-bottom-8 md:-left-8 w-1/2 aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 shadow-xl border-4 border-white">
                                 <img
                                     src="/images/education_class_kids.png"
                                     alt="Classroom"
@@ -60,7 +60,7 @@ export function StorySection() {
                                 />
                             </div>
                             {/* Floating Image 2 */}
-                            <div className="absolute -top-8 -right-8 w-1/2 aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 shadow-xl border-4 border-white">
+                            <div className="absolute -top-4 -right-4 md:-top-8 md:-right-8 w-1/2 aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 shadow-xl border-4 border-white">
                                 <img
                                     src="/images/healthcare_camp_kids.png"
                                     alt="Medical Camp"

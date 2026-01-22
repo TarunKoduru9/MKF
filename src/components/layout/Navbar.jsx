@@ -119,11 +119,19 @@ export function Navbar() {
                                 </Link>
                             ))}
                             <div className="flex flex-col gap-2 pt-4 border-t">
-                                <Link href="/login" onClick={() => setIsOpen(false)}>
-                                    <Button variant="outline" className="w-full justify-start gap-2">
-                                        <User className="h-4 w-4" /> Login
-                                    </Button>
-                                </Link>
+                                {isAuthenticated ? (
+                                    <Link href="/my-account" onClick={() => setIsOpen(false)}>
+                                        <Button variant="outline" className="w-full justify-start gap-2">
+                                            <User className="h-4 w-4" /> My Account
+                                        </Button>
+                                    </Link>
+                                ) : (
+                                    <Link href="/login" onClick={() => setIsOpen(false)}>
+                                        <Button variant="outline" className="w-full justify-start gap-2">
+                                            <User className="h-4 w-4" /> Login
+                                        </Button>
+                                    </Link>
+                                )}
                                 <Link href="/donate" onClick={() => setIsOpen(false)}>
                                     <Button className="w-full">Donate Now</Button>
                                 </Link>

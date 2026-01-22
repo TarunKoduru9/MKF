@@ -111,7 +111,7 @@ export default function ContactPage() {
                         </div>
 
                         {/* Right Side: Message Form */}
-                        <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
+                        <div className="bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-100">
                             <h2 className="text-2xl font-bold mb-6">Send us a Message</h2>
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="space-y-2">
