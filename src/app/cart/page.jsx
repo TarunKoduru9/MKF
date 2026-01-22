@@ -97,12 +97,33 @@ export default function CartPage() {
                 description: "Donation for a cause",
                 image: "/logo.png", // Add logo in public folder
                 order_id: data.orderId,
-                handler: function (response) {
-                    // Payment Success
-                    alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
-                    // Verify payment on server here
-                    clearCart();
-                    // Redirect to success page
+                handler: async function (response) {
+                    // Payment Success - Call Verification API
+                    try {
+                        const verifyRes = await fetch("/api/donations/verify", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                orderId: data.orderId,
+                                paymentId: response.razorpay_payment_id,
+                                signature: response.razorpay_signature
+                            }),
+                        });
+
+                        const verifyData = await verifyRes.json();
+
+                        if (verifyData.success) {
+                            alert(`Payment Successful! Email sent.`);
+                            clearCart();
+                            // router.push('/success'); // Optional: Redirect to a success page
+                        } else {
+                            alert("Payment success, but verification failed. Please contact support.");
+                        }
+
+                    } catch (error) {
+                        console.error(error);
+                        alert("Error verifying payment.");
+                    }
                 },
                 prefill: {
                     name: user?.name || "",

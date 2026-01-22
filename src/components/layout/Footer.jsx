@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Youtube } from "lucide-react";
 
 export function Footer() {
     return (
@@ -21,17 +21,14 @@ export function Footer() {
                             and creating sustainable change through targeted programs.
                         </p>
                         <div className="flex gap-4">
-                            <Link href="#" className="p-2 rounded-full bg-white text-gray-500 hover:text-primary hover:shadow-md transition-all">
+                            <Link href="https://www.facebook.com/p/MKF-TRUST-61555264095906/" className="p-2 rounded-full bg-white text-gray-500 hover:text-primary hover:shadow-md transition-all">
                                 <Facebook className="h-4 w-4" />
                             </Link>
-                            <Link href="#" className="p-2 rounded-full bg-white text-gray-500 hover:text-primary hover:shadow-md transition-all">
-                                <Twitter className="h-4 w-4" />
+                            <Link href="https://www.youtube.com/@mkftrust" className="p-2 rounded-full bg-white text-gray-500 hover:text-primary hover:shadow-md transition-all">
+                                <Youtube className="h-4 w-4" />
                             </Link>
-                            <Link href="#" className="p-2 rounded-full bg-white text-gray-500 hover:text-primary hover:shadow-md transition-all">
+                            <Link href="https://www.instagram.com/mkftrust?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" className="p-2 rounded-full bg-white text-gray-500 hover:text-primary hover:shadow-md transition-all">
                                 <Instagram className="h-4 w-4" />
-                            </Link>
-                            <Link href="#" className="p-2 rounded-full bg-white text-gray-500 hover:text-primary hover:shadow-md transition-all">
-                                <Linkedin className="h-4 w-4" />
                             </Link>
                         </div>
                     </div>
@@ -40,13 +37,26 @@ export function Footer() {
                     <div>
                         <h3 className="font-semibold text-foreground mb-4">Quick Links</h3>
                         <ul className="space-y-2">
-                            {["Contact Us", "Our Programs", "Our Impact", "Get Involved"].map((item) => (
-                                <li key={item}>
-                                    <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                        {item}
-                                    </Link>
-                                </li>
-                            ))}
+                            <li>
+                                <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                                    Contact Us
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/#programs" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                                    Our Programs
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/#story" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                                    Our Impact
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/#involved" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                                    Get Involved
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 
@@ -54,10 +64,16 @@ export function Footer() {
                     <div>
                         <h3 className="font-semibold text-foreground mb-4">Information</h3>
                         <ul className="space-y-2">
-                            {["Education Support", "Healthcare Initiative", "Food & Nutrition", "Skill Development", "Women Empowerment"].map((item) => (
-                                <li key={item}>
-                                    <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                        {item}
+                            {[
+                                { name: "Education Support", href: "/#education-support" },
+                                { name: "Healthcare Initiative", href: "/#healthcare-initiative" },
+                                { name: "Food & Nutrition", href: "/#food-nutrition" },
+                                { name: "Skill Development", href: "/#skill-development" },
+                                { name: "Women Empowerment", href: "/#programs" }
+                            ].map((item) => (
+                                <li key={item.name}>
+                                    <Link href={item.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                                        {item.name}
                                     </Link>
                                 </li>
                             ))}

@@ -26,7 +26,7 @@ const features = [
 
 export function MissionSection() {
     return (
-        <section className="py-24 bg-white">
+        <section id="mission" className="py-24 bg-white">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16">
                     <span className="inline-block px-4 py-1.5 rounded-full bg-red-100 text-primary font-bold text-xs mb-4">

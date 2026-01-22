@@ -22,6 +22,7 @@ export default function LoginPage() {
     // Form States
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
+    const [dob, setDob] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [otp, setOtp] = useState("");
@@ -53,6 +54,7 @@ export default function LoginPage() {
                     password,
                     name,
                     phone,
+                    dob,
                     role: "user"
                 });
 
@@ -139,6 +141,14 @@ export default function LoginPage() {
                                                 placeholder="Phone Number"
                                                 className="h-11" required
                                                 value={phone} onChange={(e) => setPhone(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Input
+                                                type="date"
+                                                placeholder="Date of Birth"
+                                                className="h-11" required
+                                                value={dob} onChange={(e) => setDob(e.target.value)}
                                             />
                                         </div>
                                     </>

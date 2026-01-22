@@ -10,7 +10,7 @@ const ways = [
 
 export function InvolvedSection() {
     return (
-        <section className="py-24 bg-white">
+        <section id="involved" className="py-24 bg-white">
             <div className="container mx-auto px-4 text-center">
                 <span className="inline-block px-4 py-1.5 rounded-full bg-red-600 text-white font-bold text-xs mb-4 shadow-md shadow-red-200">
                     Get Involved

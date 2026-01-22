@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const banners = [
     {
@@ -141,11 +142,13 @@ export function BannerCarousel() {
                                 <p className="text-xl md:text-2xl text-slate-700 font-medium mb-8 max-w-xl">
                                     {banner.subtitle}
                                 </p>
-                                <Button
-                                    className={`${banner.btnColor} text-lg font-bold px-8 py-6 rounded-full shadow-md hover:shadow-lg transition-all`}
-                                >
-                                    Donate Now
-                                </Button>
+                                <Link href="/donate">
+                                    <Button
+                                        className={`${banner.btnColor} text-lg font-bold px-8 py-6 rounded-full shadow-md hover:shadow-lg transition-all`}
+                                    >
+                                        Donate Now
+                                    </Button>
+                                </Link>
                             </div>
 
                             {/* Image */}
@@ -170,8 +173,8 @@ export function BannerCarousel() {
                             key={idx}
                             onClick={() => scrollToIndex(idx)}
                             className={`w-3 h-3 md:w-4 md:h-4 rounded-full transition-all duration-300 border-2 border-slate-300 ${currentIndex === idx
-                                    ? "bg-red-500 w-8 md:w-10 border-red-500"
-                                    : "bg-transparent hover:bg-slate-200"
+                                ? "bg-red-500 w-8 md:w-10 border-red-500"
+                                : "bg-transparent hover:bg-slate-200"
                                 }`}
                             aria-label={`Go to slide ${idx + 1}`}
                         />

@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 export async function POST(req) {
     try {
         const body = await req.json();
-        const { email, password, name, phone, role = "user" } = body;
+        const { email, password, name, phone, dob, role = "user" } = body;
 
         // Basic Validation
         if (!email || !password || !name) {
@@ -27,8 +27,8 @@ export async function POST(req) {
 
         // Insert new user
         await query(
-            "INSERT INTO users (uid, email, password_hash, name, phone, role) VALUES (?, ?, ?, ?, ?, ?)",
-            [uid, email, hashedPassword, name, phone, role]
+            "INSERT INTO users (uid, email, password_hash, name, phone, dob, role) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [uid, email, hashedPassword, name, phone, dob || null, role]
         );
 
         return NextResponse.json({ message: "User created successfully" });

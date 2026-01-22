@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export function HeroSection() {
     return (
@@ -20,12 +21,11 @@ export function HeroSection() {
                         sustainable education, healthcare, and social welfare initiatives. Join us in our mission.
                     </p>
                     <div className="flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
-                        <Button size="lg" className="rounded-full px-8 text-lg shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5 transition-all">
-                            Donate Now
-                        </Button>
-                        <Button size="lg" variant="outline" className="rounded-full px-8 text-lg border-2 hover:bg-secondary">
-                            Learn More
-                        </Button>
+                        <Link href="/donate">
+                            <Button size="lg" className="rounded-full px-8 text-lg shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5 transition-all">
+                                Donate Now
+                            </Button>
+                        </Link>
                     </div>
                     {/* Stats Floating Cards */}
                     <div className="flex flex-col gap-4 mt-4 sm:flex-row sm:justify-center lg:justify-start">

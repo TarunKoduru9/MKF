@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export function StorySection() {
     return (
-        <section className="py-24 bg-white overflow-hidden">
+        <section id="story" className="story py-24 bg-white overflow-hidden">
             <div className="container mx-auto px-4">
                 <div className="flex flex-col lg:flex-row gap-16 items-center">
                     {/* Content */}
@@ -31,9 +32,11 @@ export function StorySection() {
                             </p>
                         </div>
                         <div className="mt-8">
-                            <Button variant="link" className="text-primary text-lg p-0 h-auto font-semibold">
-                                Read Our Full History &rarr;
-                            </Button>
+                            <Link href="/about#journey">
+                                <Button variant="link" className="text-primary text-lg p-0 h-auto font-semibold">
+                                    Read Our Full History &rarr;
+                                </Button>
+                            </Link>
                         </div>
                     </div>
 
@@ -43,7 +46,7 @@ export function StorySection() {
                             {/* Main Image */}
                             <div className="absolute inset-0 rounded-2xl overflow-hidden bg-slate-200">
                                 <img
-                                    src="/images/hero_community_v2.png"
+                                    src="/images/bi.png"
                                     alt="Community"
                                     className="w-full h-full object-cover"
                                 />

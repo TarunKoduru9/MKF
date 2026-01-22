@@ -29,7 +29,7 @@ const programs = [
 
 export function ProgramSection() {
     return (
-        <section className="py-24 bg-slate-50">
+        <section id="programs" className="py-24 bg-slate-50">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16">
                     <span className="inline-block px-4 py-1.5 rounded-full bg-red-600 text-white font-bold text-xs mb-4">
@@ -43,7 +43,11 @@ export function ProgramSection() {
 
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                     {programs.map((program, index) => (
-                        <Card key={index} className="overflow-hidden bg-white border-0 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+                        <Card
+                            key={index}
+                            id={program.title.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}
+                            className="overflow-hidden bg-white border-0 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full scroll-mt-24"
+                        >
                             <div className="aspect-[4/3] w-full bg-gray-200 relative overflow-hidden group">
                                 <Image
                                     src={program.image}

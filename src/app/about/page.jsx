@@ -14,7 +14,7 @@ export default function AboutPage() {
             <main className="flex-1">
                 <HeroSection />
 
-                <section className="py-16 bg-white">
+                <section id="journey" className="py-16 bg-white">
                     <div className="container mx-auto px-4 max-w-4xl">
                         <div className="text-center mb-12">
                             <span className="text-primary font-bold tracking-wider uppercase text-sm">Our Journey</span>
