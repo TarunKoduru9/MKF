@@ -11,6 +11,9 @@ const outfit = Outfit({
 export const metadata = {
   title: "MKF Trust | Making a Difference",
   description: "Empowering communities through education, healthcare, and social welfare.",
+  icons: {
+    icon: "/logo.ico",
+  },
 };
 
 import AuthCheck from "@/components/auth/AuthCheck";
