@@ -5,18 +5,21 @@ import { ArrowUpRight } from "lucide-react";
 
 export function HeroSection() {
     return (
-        <section className="relative flex flex-col justify-center overflow-visible bg-white pt-20 pb-48 lg:pt-16 lg:pb-64">
+        <section className="relative flex flex-col justify-center overflow-visible bg-white pt-12 pb-32 lg:pt-12 lg:pb-36">
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
 
-            <div className="container relative z-10 mx-auto max-w-7xl px-4">
+            <div className="container relative z-10 mx-auto px-4 pb-12 lg:pb-24">
                 <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-                    <div className="relative mx-auto w-full max-w-[500px] lg:max-w-none order-2 lg:order-1">
+                    <div className="relative mx-auto w-full max-w-[400px] lg:max-w-[480px] order-2 lg:order-1">
                         {/* Gray Box Placeholder matching reference */}
                         <div className="relative rounded-[2.5rem] overflow-hidden shadow-none bg-gray-300 aspect-[4/3] w-full flex items-center justify-center">
-                            {/* Placeholder Icon similar to reference */}
-                            <div className="text-white opacity-50 transform scale-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
-                            </div>
+                            <Image
+                                src="/images/helping-hands.png"
+                                alt="Empowering Lives"
+                                fill
+                                className="object-cover"
+                                priority
+                            />
                         </div>
                     </div>
 
@@ -24,7 +27,7 @@ export function HeroSection() {
                         <h2 className="text-blue-600 font-semibold tracking-normal text-lg">
                             Together We Make A Difference
                         </h2>
-                        <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl lg:text-7xl leading-[1.1]">
+                        <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl leading-[1.1]">
                             Empowering Lives, <br />
                             <span className="text-slate-900">Building Futures</span>
                         </h1>
@@ -36,7 +39,7 @@ export function HeroSection() {
                                 </Button>
                             </Link>
                             <Link href="/programs">
-                                <Button variant="outline" size="lg" className="rounded-full px-8 h-12 text-base font-semibold border-2 border-slate-300 hover:bg-slate-50 text-slate-700 w-full sm:w-auto">
+                                <Button variant="outline" size="lg" className="rounded-full px-8 h-12 text-base font-semibold border border-slate-300 hover:bg-slate-50 text-slate-700 w-full sm:w-auto">
                                     View Our Program
                                 </Button>
                             </Link>
@@ -46,7 +49,7 @@ export function HeroSection() {
             </div>
 
             {/* Overlapping Cards Section */}
-            <div className="relative z-20 container mx-auto max-w-7xl px-4 -mt-24 mb-20">
+            <div className="relative z-20 container mx-auto px-4 -mt-20 mb-12">
                 <div className="grid gap-6 md:grid-cols-3">
                     <HeroCard
                         category="Education"

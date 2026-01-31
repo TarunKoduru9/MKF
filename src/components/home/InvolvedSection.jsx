@@ -1,41 +1,36 @@
-import { Button } from "@/components/ui/button";
-import { HandHeart, Users, Handshake, Share2 } from "lucide-react";
-
-const ways = [
-    { title: "Donate", icon: HandHeart, action: "Donate Now" },
-    { title: "Volunteer", icon: Users, action: "Join Us" },
-    { title: "Partner", icon: Handshake, action: "Partner With Us" },
-    { title: "Spread Awareness", icon: Share2, action: "Share" },
-];
+import { Play } from "lucide-react";
 
 export function InvolvedSection() {
     return (
-        <section id="involved" className="py-24 bg-white">
+        <section id="involved" className="py-24 bg-zinc-50">
             <div className="container mx-auto px-4 text-center">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-red-600 text-white font-bold text-xs mb-4 shadow-md shadow-red-200">
-                    Get Involved
-                </span>
-                <h2 className="text-3xl font-bold text-foreground md:text-4xl mb-4">Be Part of the Change</h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto mb-16">
-                    There are many ways you can contribute to our mission and help create a better future for those in need.
-                </p>
 
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    {ways.map((way, index) => (
-                        <div key={index} className="flex flex-col items-center p-8 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg hover:border-red-100 transition-all group">
-                            <div className="mb-6 h-16 w-16 rounded-full bg-red-50 flex items-center justify-center text-primary group-hover:bg-red-600 group-hover:text-white transition-colors">
-                                <way.icon className="h-8 w-8" />
-                            </div>
-                            <h3 className="text-lg font-bold mb-2">{way.title}</h3>
-                            <p className="text-sm text-muted-foreground mb-6">
-                                Join our team and make a direct impact.
-                            </p>
-                            <Button variant="outline" className="w-full border-red-200 text-primary hover:bg-red-50">
-                                {way.action}
-                            </Button>
-                        </div>
-                    ))}
+                {/* Header */}
+                <div className="text-center mb-16 space-y-2">
+                    <span className="text-blue-600 font-bold text-sm tracking-wide uppercase">
+                        Get Involved
+                    </span>
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-[#DC2626] leading-tight">
+                        Be Part Of The Change
+                    </h2>
+                    <p className="mt-4 text-slate-500 max-w-2xl mx-auto">
+                        There are many ways you can contribute to our mission and help create a better future for
+                        those in need.
+                    </p>
                 </div>
+
+                {/* Video Placeholder Container */}
+                <div className="relative w-full max-w-5xl mx-auto aspect-video bg-black rounded-[2rem] shadow-xl overflow-hidden group">
+                    <video
+                        controls
+                        className="w-full h-full object-cover"
+                        poster="/images/helping-hands.png"
+                    >
+                        <source src="/videos/intro.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
             </div>
         </section>
     );

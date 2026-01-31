@@ -1,21 +1,55 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Link from "next/link";
 
 export function StorySection() {
     return (
-        <section id="story" className="story py-24 bg-white overflow-hidden">
+        <section id="story" className="story py-20 bg-white">
             <div className="container mx-auto px-4">
-                <div className="flex flex-col lg:flex-row gap-16 items-center">
-                    {/* Content */}
-                    <div className="flex-1">
-                        <span className="inline-block px-4 py-1.5 rounded-full bg-red-100 text-primary font-bold text-xs mb-6">
-                            Our Story
-                        </span>
-                        <h2 className="text-3xl font-bold text-foreground md:text-4xl mb-6">
-                            From a Small Initiative to a Movement
-                        </h2>
-                        <div className="space-y-6 text-muted-foreground text-lg leading-relaxed">
+                {/* Centered Heading */}
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-[#DC2626] uppercase tracking-wide">
+                        Our Story
+                    </h2>
+                </div>
+
+                <div className="flex flex-col lg:flex-row gap-12 lg:items-start">
+                    {/* Left Side: Image & Stats */}
+                    <div className="lg:w-1/2">
+                        {/* Gray Placeholder Image */}
+                        <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-gray-300 md:bg-[#BDBdbd] mb-8 flex items-center justify-center">
+                            {/* Placeholder Icon similar to reference */}
+                            <div className="text-white opacity-60 transform scale-150">
+                                <Image
+                                    src="/images/helping-hands.png"
+                                    alt="Our Story"
+                                    width={500}
+                                    height={500}
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                />
+                              </div>
+                        </div>
+
+                        {/* Stats Row */}
+                        <div className="grid grid-cols-3 gap-4 text-center">
+                            <div className="flex flex-col items-center">
+                                <span className="text-4xl md:text-5xl font-extrabold text-slate-900">10k</span>
+                                <span className="text-blue-600 font-bold text-sm mt-1">Lives Impacted</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-4xl md:text-5xl font-extrabold text-slate-900">10+</span>
+                                <span className="text-blue-600 font-bold text-sm mt-1">Programs</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-4xl md:text-5xl font-extrabold text-slate-900">15+</span>
+                                <span className="text-blue-600 font-bold text-sm mt-1">Active Years</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Side: Text Content with Divider */}
+                    <div className="lg:w-1/2 lg:pl-12 lg:border-l lg:border-slate-200">
+                        <div className="space-y-6 text-slate-500 text-lg leading-relaxed">
                             <p>
                                 Founded with a vision to create meaningful change, MKF Trust has been at the forefront
                                 of community development for over 15 years. What started as a small initiative has
@@ -30,43 +64,6 @@ export function StorySection() {
                                 Through education, healthcare, livelihood support, and social welfare initiatives,
                                 we're building a foundation for stronger, more resilient communities.
                             </p>
-                        </div>
-                        <div className="mt-8">
-                            <Link href="/about#journey">
-                                <Button variant="link" className="text-primary text-lg p-0 h-auto font-semibold">
-                                    Read Our Full History &rarr;
-                                </Button>
-                            </Link>
-                        </div>
-                    </div>
-
-                    {/* Image Grid / Collage */}
-                    <div className="flex-1 w-full relative">
-                        <div className="relative aspect-square w-full max-w-lg mx-auto">
-                            {/* Main Image */}
-                            <div className="absolute inset-0 rounded-2xl overflow-hidden bg-slate-200">
-                                <img
-                                    src="/images/bi.png"
-                                    alt="Community"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            {/* Floating Image 1 */}
-                            <div className="absolute -bottom-4 -left-4 md:-bottom-8 md:-left-8 w-1/2 aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 shadow-xl border-4 border-white">
-                                <img
-                                    src="/images/education_class_kids.png"
-                                    alt="Classroom"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            {/* Floating Image 2 */}
-                            <div className="absolute -top-4 -right-4 md:-top-8 md:-right-8 w-1/2 aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 shadow-xl border-4 border-white">
-                                <img
-                                    src="/images/healthcare_camp_kids.png"
-                                    alt="Medical Camp"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
                         </div>
                     </div>
                 </div>

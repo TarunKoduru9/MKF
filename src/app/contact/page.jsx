@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Globe } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
 
 export default function ContactPage() {
     const [loading, setLoading] = useState(false);
@@ -23,21 +24,20 @@ export default function ContactPage() {
         };
 
         try {
-            const res = await fetch("/api/contact", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
+            const res = await axios.post("/api/contact", formData);
 
-            const data = await res.json();
+            // Accessing data directly from response
+            const data = res.data;
 
-            if (!res.ok) throw new Error(data.error || "Failed to send message");
+            if (res.status !== 201) throw new Error(data.error || "Failed to send message");
 
             alert("Message sent successfully!");
             e.target.reset();
         } catch (error) {
             console.error(error);
-            alert(error.message);
+            // Handling axios error response
+            const msg = error.response?.data?.error || error.message;
+            alert(msg);
         } finally {
             setLoading(false);
         }

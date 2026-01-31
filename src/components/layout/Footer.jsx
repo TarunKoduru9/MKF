@@ -1,112 +1,163 @@
+"use client";
+
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Youtube } from "lucide-react";
+import Image from "next/image";
+import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import axios from "axios";
 
 export function Footer() {
+    const [email, setEmail] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSubscribe = async () => {
+        if (!email) return;
+        setLoading(true);
+        try {
+            const res = await axios.post("/api/newsletter", { email });
+            if (res.status === 201) {
+                alert("Subscribed successfully!");
+                setEmail("");
+            } else {
+                alert("Failed to subscribe.");
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <footer className="bg-secondary pt-16 pb-8 border-t border-border">
-            <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-                    {/* Brand */}
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-2">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                                <span className="text-xl font-bold text-primary">MKF</span>
-                            </div>
-                            <div>
-                                <span className="text-xl font-bold leading-none text-primary block">MKF TRUST</span>
-                            </div>
+        <footer className="bg-[#111] text-white pt-10 pb-6 font-sans">
+            <div className="container mx-auto px-4 max-w-7xl">
+
+                {/* Top Section: Logo & Headlines */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-8">
+                    {/* Logo Area */}
+                    <div className="flex items-center gap-4">
+                        <div className="relative w-16 h-16 rounded-full bg-white border-2 border-green-600 flex items-center justify-center p-1 overflow-hidden">
+                            <Image
+                                src="/images/logo.jpg"
+                                alt="MKF Trust"
+                                width={60}
+                                height={60}
+                                className="object-contain"
+                            />
                         </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                            MKF Trust is a registered charitable organization committed to uplifting communities
-                            and creating sustainable change through targeted programs.
-                        </p>
-                        <div className="flex gap-4">
-                            <Link href="https://www.facebook.com/p/MKF-TRUST-61555264095906/" className="p-2 rounded-full bg-white text-gray-500 hover:text-primary hover:shadow-md transition-all">
-                                <Facebook className="h-4 w-4" />
-                            </Link>
-                            <Link href="https://www.youtube.com/@mkftrust" className="p-2 rounded-full bg-white text-gray-500 hover:text-primary hover:shadow-md transition-all">
-                                <Youtube className="h-4 w-4" />
-                            </Link>
-                            <Link href="https://www.instagram.com/mkftrust?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" className="p-2 rounded-full bg-white text-gray-500 hover:text-primary hover:shadow-md transition-all">
-                                <Instagram className="h-4 w-4" />
-                            </Link>
+                        <div>
+                            <h2 className="text-3xl font-bold tracking-tight text-white mb-1">MKF TRUST</h2>
+                            <p className="text-gray-400 text-sm tracking-wide">Together We Make Difference</p>
                         </div>
                     </div>
 
-                    {/* Quick Links */}
-                    <div>
-                        <h3 className="font-semibold text-foreground mb-4">Quick Links</h3>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                    Contact Us
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/#programs" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                    Our Programs
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/#story" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                    Our Impact
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/#involved" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                    Get Involved
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Programs */}
-                    <div>
-                        <h3 className="font-semibold text-foreground mb-4">Information</h3>
-                        <ul className="space-y-2">
-                            {[
-                                { name: "Education Support", href: "/#education-support" },
-                                { name: "Healthcare Initiative", href: "/#healthcare-initiative" },
-                                { name: "Food & Nutrition", href: "/#food-nutrition" },
-                                { name: "Skill Development", href: "/#skill-development" },
-                                { name: "Women Empowerment", href: "/#programs" }
-                            ].map((item) => (
-                                <li key={item.name}>
-                                    <Link href={item.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                        {item.name}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Contact Details */}
-                    <div>
-                        <h3 className="font-semibold text-foreground mb-4">Contact Details</h3>
-                        <ul className="space-y-4">
-                            <li className="flex items-start gap-3 text-sm text-muted-foreground">
-                                <MapPin className="h-4 w-4 text-primary mt-1 shrink-0" />
-                                <span>Hyderabad, Telangana</span>
-                            </li>
-                            <li className="flex items-center gap-3 text-sm text-muted-foreground">
-                                <Phone className="h-4 w-4 text-primary shrink-0" />
-                                <span>+91 99662 22532</span>
-                            </li>
-                            <li className="flex items-center gap-3 text-sm text-muted-foreground">
-                                <Mail className="h-4 w-4 text-primary shrink-0" />
-                                <span>mkfcharitabletrust@gmail.com</span>
-                            </li>
-                        </ul>
+                    {/* Impact Headline */}
+                    <div className="text-left md:text-right max-w-md">
+                        <h3 className="text-3xl md:text-4xl font-bold leading-tight">
+                            Join Us And Make <br />
+                            An Impact!
+                        </h3>
                     </div>
                 </div>
 
-                <div className="border-t border-border pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-                    <p>Copyright © 2026 MKF Trust. All rights reserved.</p>
-                    <div className="flex gap-4">
-                        <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
-                        <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+                {/* Main Content Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 mb-8">
+
+                    {/* Newsletter Section (Left Side - spans 4 cols) */}
+                    <div className="lg:col-span-4 space-y-6">
+                        <h4 className="text-xl font-bold">Join Our Newsletter</h4>
+                        <div className="flex bg-white rounded-full p-1 shadow-lg w-full max-w-sm items-center">
+                            <input
+                                type="email"
+                                placeholder="Your Email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="flex-1 bg-transparent px-4 py-2 text-slate-800 placeholder:text-slate-400 outline-none text-base w-full min-w-0"
+                            />
+                            <button
+                                onClick={handleSubscribe}
+                                disabled={loading}
+                                className="bg-[#DC2626] hover:bg-red-700 text-white font-bold px-6 py-2 rounded-full transition-all flex items-center gap-2 whitespace-nowrap shadow-md m-0.5"
+                            >
+                                {loading ? "..." : (
+                                    <>
+                                        Submit <ArrowRight className="w-4 h-4" />
+                                    </>
+                                )}
+                            </button>
+                        </div>
                     </div>
-                    <p>Design & Developed by Arora Tech Solutions Pvt Ltd</p>
+
+                    {/* Links Columns (Right Side - spans 8 cols) */}
+                    <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+
+                        {/* Information */}
+                        <div className="space-y-6">
+                            <h4 className="text-xl font-bold">Information</h4>
+                            <ul className="space-y-4 text-gray-400 text-sm">
+                                <li className="flex items-start gap-3">
+                                    <MapPin className="w-4 h-4 mt-1 text-white shrink-0" />
+                                    <span>
+                                        Hyderaabad, <br />
+                                        Telangana
+                                    </span>
+                                </li>
+                                <li className="flex items-center gap-3">
+                                    <Phone className="w-4 h-4 text-white shrink-0" />
+                                    <span>+91 9966222532</span>
+                                </li>
+                                <li className="flex items-center gap-5">
+                                    <Mail className="w-4 h-4 text-white shrink-0" />
+                                    <a href="mailto:mkfcharitabletrust@gmail.com" className="hover:text-white transition-colors break-all">
+                                        mkfcharitabletrust@gmail.com
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Quick Links */}
+                        <div className="space-y-6">
+                            <h4 className="text-xl font-bold">Quick Links</h4>
+                            <ul className="space-y-3 text-gray-400 text-sm">
+                                <li><Link href="/#programs" className="hover:text-white transition-colors">Campaigns</Link></li>
+                                <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                                <li><Link href="/#involved" className="hover:text-white transition-colors">Get Involved</Link></li>
+                                <li><Link href="/donate" className="hover:text-white transition-colors">Donate</Link></li>
+                            </ul>
+                        </div>
+
+                        {/* Resources */}
+                        <div className="space-y-6">
+                            <h4 className="text-xl font-bold">Resources</h4>
+                            <ul className="space-y-3 text-gray-400 text-sm">
+                                <li><Link href="/#programs" className="hover:text-white transition-colors">Success Story</Link></li>
+                                <li><Link href="/#faq" className="hover:text-white transition-colors">Help and FAQ</Link></li>
+                            </ul>
+                        </div>
+
+                        {/* Follow Us */}
+                        <div className="space-y-6">
+                            <h4 className="text-xl font-bold">Follow Us</h4>
+                            <ul className="space-y-3 text-gray-400 text-sm">
+                                <li>
+                                    <Link href="https://www.facebook.com/p/MKF-TRUST-61555264095906/" className="flex items-center gap-2 hover:text-white transition-colors">
+                                        Facebook
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="https://www.instagram.com/mkftrust?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" className="flex items-center gap-2 hover:text-white transition-colors">
+                                        Instagram
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="https://www.youtube.com/@mkftrust" className="flex items-center gap-2 hover:text-white transition-colors">
+                                        Youtube
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </footer>

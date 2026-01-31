@@ -11,6 +11,7 @@ import { loadRazorpay } from "@/lib/razorpay";
 import { useState, useEffect } from "react";
 import { API_ROUTES } from "@/lib/routes";
 import { DonationCard } from "@/components/donate/DonationCard";
+import axios from "axios";
 
 const allSuggestions = [
     {
@@ -72,15 +73,12 @@ export default function CartPage() {
             }
 
             // 3. Create Order on Server
-            const res = await fetch(API_ROUTES.DONATION.CREATE, {
-                method: 'POST',
-                body: JSON.stringify({
-                    amount: totalAmount,
-                    purpose: "Cart Donation", // Could be list of items
-                    uid: user?.uid || "guest"
-                })
+            const res = await axios.post(API_ROUTES.DONATION.CREATE, {
+                amount: totalAmount,
+                purpose: "Cart Donation", // Could be list of items
+                uid: user?.uid || "guest"
             });
-            const data = await res.json();
+            const data = res.data;
 
             if (!data.success) {
                 alert("Server error processing donation. Please try again.");
@@ -100,17 +98,13 @@ export default function CartPage() {
                 handler: async function (response) {
                     // Payment Success - Call Verification API
                     try {
-                        const verifyRes = await fetch("/api/donations/verify", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                orderId: data.orderId,
-                                paymentId: response.razorpay_payment_id,
-                                signature: response.razorpay_signature
-                            }),
+                        const verifyRes = await axios.post("/api/donations/verify", {
+                            orderId: data.orderId,
+                            paymentId: response.razorpay_payment_id,
+                            signature: response.razorpay_signature
                         });
 
-                        const verifyData = await verifyRes.json();
+                        const verifyData = verifyRes.data;
 
                         if (verifyData.success) {
                             alert(`Payment Successful! Email sent.`);
