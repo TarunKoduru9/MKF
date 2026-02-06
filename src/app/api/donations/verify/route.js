@@ -3,11 +3,25 @@ import { query } from "@/lib/db";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
+import { z } from "zod";
+
+const verifySchema = z.object({
+    orderId: z.string().min(1, "Order ID is required"),
+    paymentId: z.string().min(1, "Payment ID is required"),
+    signature: z.string().min(1, "Signature is required"),
+});
 
 export async function POST(req) {
     try {
         const body = await req.json();
-        const { orderId, paymentId, signature } = body;
+
+        // --- ZOD VALIDATION ---
+        const parseResult = verifySchema.safeParse(body);
+        if (!parseResult.success) {
+            return NextResponse.json({ error: "Invalid Input", details: parseResult.error.flatten() }, { status: 400 });
+        }
+
+        const { orderId, paymentId, signature } = parseResult.data;
 
         // --- PRODUCTION SECURITY CHECK ---
         if (!process.env.RAZORPAY_KEY_SECRET) {

@@ -12,38 +12,25 @@ import { useRouter } from "next/navigation";
 import { API_ROUTES } from "@/lib/routes";
 import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
+import { useUser } from "@/hooks/useUser";
+import { useDonations } from "@/hooks/useDonations";
 
 export default function MyAccountPage() {
     const [activeTab, setActiveTab] = useState("profile");
-    const [loading, setLoading] = useState(true);
-    const [profile, setProfile] = useState(null);
-    const setUser = useStore((state) => state.setUser);
+    const { data: profile, isLoading: loading, error } = useUser();
     const logout = useStore((state) => state.logout);
     const router = useRouter();
-    const { toast } = useToast();
 
-    // Fetch User Data
+    // Redirect if not logged in
     useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const res = await axios.get(API_ROUTES.AUTH.ME);
-                setProfile(res.data.user);
-                setUser(res.data.user); // Sync global store
-            } catch (error) {
-                console.error("Auth Error:", error);
-                // If 401, redirect to login
-                router.push("/login");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProfile();
-    }, [router, setUser]);
+        if (!loading && !profile) {
+            router.push("/login"); // or handle error
+        }
+    }, [loading, profile, router]);
 
     const handleLogout = async () => {
         logout();
-        router.push("/login"); // Redirect to Login page actually
+        router.push("/login");
     };
 
     if (loading) {
@@ -57,7 +44,7 @@ export default function MyAccountPage() {
         );
     }
 
-    if (!profile) return null; // Or handled by redirect
+    if (!profile) return null;
 
     const renderContent = () => {
         switch (activeTab) {
@@ -65,7 +52,6 @@ export default function MyAccountPage() {
                 return <ProfileSection user={profile} />;
             case "donations":
                 return <DonationsSection />;
-            // ... other cases
             default:
                 return <ProfileSection user={profile} />;
         }
@@ -142,7 +128,6 @@ function ProfileSection({ user }) {
     const { toast } = useToast();
     const router = useRouter();
 
-    // Update local state when user prop changes (e.g. initial load)
     useEffect(() => {
         setFormData({ ...user });
     }, [user]);
@@ -156,12 +141,11 @@ function ProfileSection({ user }) {
         try {
             await axios.post(API_ROUTES.USER, {
                 ...formData,
-                uid: user.uid // Ensure UID is sent for identification
+                uid: user.uid
             });
             toast({ title: "Success", description: "Profile updated successfully." });
             setIsEditing(false);
-            // Optional: Trigger a refresh or just rely on local update since we updated optimistic
-            router.refresh();
+            router.refresh(); // Or better yet, we could invalidate queries here!
         } catch (error) {
             console.error(error);
             toast({ variant: "destructive", title: "Error", description: "Failed to update profile." });
@@ -210,7 +194,7 @@ function ProfileSection({ user }) {
                         label="Email"
                         name="email"
                         value={formData.email}
-                        isEditing={false} // Email typically not editable
+                        isEditing={false}
                         disabled={true}
                     />
                     <ProfileField
@@ -223,7 +207,7 @@ function ProfileSection({ user }) {
                     <ProfileField
                         label="Address"
                         name="address"
-                        value={formData.address_line || formData.address} // Handle both naming conventions if any
+                        value={formData.address_line || formData.address}
                         isEditing={isEditing}
                         onChange={(e) => setFormData({ ...formData, address: e.target.value, address_line: e.target.value })}
                     />
@@ -275,22 +259,7 @@ function ProfileField({ label, name, value, isEditing, onChange, disabled }) {
 }
 
 function DonationsSection() {
-    const [donations, setDonations] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchDonations = async () => {
-            try {
-                const res = await axios.get("/api/donations");
-                setDonations(res.data.donations || []);
-            } catch (error) {
-                console.error("Failed to fetch donations:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchDonations();
-    }, []);
+    const { data: donations = [], isLoading: loading } = useDonations();
 
     if (loading) {
         return (

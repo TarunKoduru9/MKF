@@ -24,14 +24,17 @@ export const metadata = {
 };
 
 import AuthCheck from "@/components/auth/AuthCheck";
+import TanStackProvider from "@/components/providers/TanStackProvider";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${montserrat.variable} ${poppins.variable} antialiased`}>
-        <AuthCheck />
-        {children}
-        <Toaster />
+        <TanStackProvider>
+          <AuthCheck />
+          {children}
+          <Toaster />
+        </TanStackProvider>
       </body>
     </html>
   );
