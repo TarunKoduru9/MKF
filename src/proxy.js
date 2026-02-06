@@ -62,6 +62,52 @@ export async function proxy(request) {
     const session = request.cookies.get("session")?.value;
     const { pathname } = request.nextUrl;
 
+    // --- ADMIN ROUTE PROTECTION START ---
+    if (pathname.startsWith("/admin")) {
+        // Prevent caching for all admin pages
+        response.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+        response.headers.set("Pragma", "no-cache");
+        response.headers.set("Expires", "0");
+        response.headers.set("Surrogate-Control", "no-store");
+
+        // Allow access to login page
+        if (pathname === "/admin/login") {
+            // If already logged in as admin, redirect to dashboard
+            if (session) {
+                try {
+                    const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
+                    const { payload } = await jwtVerify(session, secret);
+                    if (payload.role === 'admin') {
+                        return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+                    }
+                } catch (e) {
+                    // Invalid session, let them login
+                }
+            }
+            return response;
+        }
+
+        // For all other /admin routes, enforce Admin Role
+        if (!session) {
+            return NextResponse.redirect(new URL("/admin/login", request.url));
+        }
+
+        try {
+            const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
+            const { payload } = await jwtVerify(session, secret);
+
+            if (payload.role !== 'admin') {
+                // Logged in but not admin -> Redirect to home or show 403
+                // ideally show a "Access Denied" page, but for now redirecting home
+                return NextResponse.redirect(new URL("/", request.url));
+            }
+        } catch (error) {
+            // Invalid token -> Redirect to login
+            return NextResponse.redirect(new URL("/admin/login", request.url));
+        }
+    }
+    // --- ADMIN ROUTE PROTECTION END ---
+
     if (session) {
         try {
             const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
