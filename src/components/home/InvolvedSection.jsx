@@ -2,7 +2,7 @@ import { Play } from "lucide-react";
 
 export function InvolvedSection() {
     return (
-        <section id="involved" className="py-24 bg-zinc-50">
+        <section id="involved" className="py-10 bg-zinc-50">
             <div className="container mx-auto px-4 text-center">
 
                 {/* Header */}

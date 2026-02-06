@@ -42,7 +42,7 @@ export function FaqSection() {
     };
 
     return (
-        <section id="faq" className="py-24 bg-white">
+        <section id="faq" className="py-10 bg-white">
             <div className="container mx-auto px-4 max-w-4xl">
                 {/* Header */}
                 <div className="text-center mb-16 space-y-2">

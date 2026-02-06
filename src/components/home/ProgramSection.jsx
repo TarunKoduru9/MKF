@@ -49,7 +49,7 @@ export function ProgramSection() {
     };
 
     return (
-        <section id="programs" className="py-24 bg-white overflow-hidden">
+        <section id="programs" className="py-10 bg-white overflow-hidden">
             <div className="container mx-auto px-4">
                 {/* Header */}
                 <div className="text-center mb-16 space-y-2">

@@ -6,7 +6,7 @@ import Razorpay from 'razorpay';
 export async function POST(request) {
     try {
         const body = await request.json();
-        const { amount, purpose, uid } = body;
+        const { amount, purpose, uid, guest_name, guest_email, guest_phone, anonymous } = body;
 
         if (!amount || !purpose) {
             return NextResponse.json({ error: 'Amount and Purpose required' }, { status: 400 });
@@ -36,10 +36,11 @@ export async function POST(request) {
 
         const orderId = order.id;
 
-        // 2. Save "Pending" transaction to DB
+        // 2. Save "Pending" transaction to DB. Use 'guest' UID if not provided.
+        // Ensure guest_name/email are saved if provided.
         await query(
-            'INSERT INTO donations (uid, amount, purpose, payment_status, order_id) VALUES (?, ?, ?, ?, ?)',
-            [uid, amount, purpose, 'pending', orderId]
+            'INSERT INTO donations (uid, amount, purpose, payment_status, order_id, guest_name, guest_email, guest_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [uid || 'guest', amount, purpose, 'pending', orderId, guest_name || null, guest_email || null, guest_phone || null]
         );
 
         return NextResponse.json({
@@ -66,11 +67,12 @@ export async function GET(request) {
         const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
         const { payload } = await jwtVerify(session, secret);
         const uid = payload.uid;
+        const email = payload.email;
 
-        // Fetch Donations
+        // Fetch Donations (Include those made as guest with same email)
         const donations = await query(
-            "SELECT * FROM donations WHERE uid = ? ORDER BY created_at DESC",
-            [uid]
+            "SELECT * FROM donations WHERE uid = ? OR (guest_email = ? AND guest_email IS NOT NULL) ORDER BY created_at DESC",
+            [uid, email]
         );
 
         return NextResponse.json({ donations });

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Target, Eye, Award, Users, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -26,8 +29,10 @@ const features = [
 ];
 
 export function MissionSection() {
+    const [activeIndex, setActiveIndex] = useState(0);
+
     return (
-        <section id="mission" className="py-24 bg-slate-50/50">
+        <section id="mission" className="py-10 bg-slate-50/50">
             <div className="container mx-auto px-4 text-center">
                 <div className="mb-20 space-y-4">
                     <span className="text-blue-600 font-bold text-sm tracking-wide uppercase">
@@ -45,12 +50,13 @@ export function MissionSection() {
                     <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-full bg-gradient-to-r from-transparent via-white/50 to-transparent blur-3xl -z-10"></div>
 
                     {features.map((feature, index) => {
-                        const isHighlighted = index === 1; // "Our Vision" is 2nd item (index 1)
+                        const isHighlighted = index === activeIndex;
                         return (
                             <div
                                 key={index}
+                                onClick={() => setActiveIndex(index)}
                                 className={`
-                                    relative flex flex-col items-center text-center transition-all duration-300
+                                    relative flex flex-col items-center text-center transition-all duration-300 cursor-pointer
                                     ${isHighlighted
                                         ? "bg-white p-8 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] scale-110 z-10 border border-slate-100"
                                         : "p-4 hover:translate-y-[-5px] z-0"
@@ -59,7 +65,7 @@ export function MissionSection() {
                             >
                                 <div className={`
                                     mb-6 inline-flex p-3 rounded-full 
-                                    ${isHighlighted ? "text-red-600" : "text-red-500"}
+                                    ${isHighlighted ? "text-red-600" : "text-red-600"}
                                 `}>
                                     <feature.icon className={`${isHighlighted ? "h-12 w-12" : "h-10 w-10"}`} strokeWidth={1.5} />
                                 </div>
@@ -74,7 +80,7 @@ export function MissionSection() {
                     })}
                 </div>
 
-                <Link href="/categories">
+                <Link href="/about">
                     <Button size="lg" className="rounded-full bg-red-600 hover:bg-red-700 text-white px-8 h-12 text-base font-bold shadow-lg hover:shadow-red-500/25 transition-all">
                         View All Category <ArrowUpRight className="ml-2 h-4 w-4" strokeWidth={3} />
                     </Button>

@@ -89,7 +89,7 @@ export function BannerCarousel() {
 
     return (
         <section
-            className="relative py-8 md:py-12 bg-white overflow-hidden"
+            className="relative bg-white overflow-hidden pb-28"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -98,14 +98,14 @@ export function BannerCarousel() {
                 {/* Arrow Navigation */}
                 <button
                     onClick={handlePrev}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-amber-400 hover:bg-amber-500 text-black p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626] hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
                     aria-label="Previous Slide"
                 >
                     <ChevronLeft className="w-6 h-6" />
                 </button>
                 <button
                     onClick={handleNext}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-amber-400 hover:bg-amber-500 text-black p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626] hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
                     aria-label="Next Slide"
                 >
                     <ChevronRight className="w-6 h-6" />
@@ -158,7 +158,7 @@ export function BannerCarousel() {
                                     className={`
                                         transition-all duration-700 ease-in-out cursor-pointer
                                         ${isActive
-                                            ? "w-full md:w-[900px] shadow-2xl"
+                                            ? "w-full md:w-[1000px] shadow-2xl"
                                             : "w-[300px] md:w-[800px] shadow-lg grayscale hover:grayscale-0"
                                         }
                                         ${positionClass} ${zIndex} ${opacity}
@@ -166,10 +166,6 @@ export function BannerCarousel() {
                                         ${banner.bgClass} ${banner.accent} relative overflow-hidden
                                     `}
                                 >
-                                    {/* Content (Only show full content for active if desired, or simplified for others. 
-                                        Based on 'half visible', probably show minimal on sides or full but clipped) 
-                                        Let's keep full content but opacity handles visual focus.
-                                    */}
 
                                     {/* Decorative Background Elements */}
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -192,7 +188,7 @@ export function BannerCarousel() {
                                     </div>
 
                                     {/* Image */}
-                                    <div className="flex-1 relative w-full h-[250px] md:h-[350px] max-w-sm mx-auto md:mx-0 z-10">
+                                    <div className="flex-1 relative w-full h-[280px] md:h-[380px] max-w-sm mx-auto md:mx-0 z-10">
                                         <div className="absolute inset-0 rounded-full border-[10px] border-white/50 shadow-inner overflow-hidden">
                                             <Image
                                                 src={banner.img}

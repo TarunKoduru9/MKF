@@ -28,7 +28,7 @@ const occasions = [
 
 export function OccasionsSection() {
     return (
-        <section className="py-24 bg-white relative overflow-hidden">
+        <section className="py-10 bg-white relative overflow-hidden">
             {/* Background glow effect similar to screenshot */}
             <div className="absolute inset-0 bg-white" />
 

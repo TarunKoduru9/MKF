@@ -46,6 +46,9 @@ CREATE TABLE donations (
     purpose VARCHAR(255) NOT NULL,
     payment_status ENUM('pending', 'success', 'failed') DEFAULT 'pending',
     order_id VARCHAR(100), 
+    guest_name VARCHAR(255),
+    guest_email VARCHAR(255),
+    guest_phone VARCHAR(50),
     transaction_id VARCHAR(100), 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE

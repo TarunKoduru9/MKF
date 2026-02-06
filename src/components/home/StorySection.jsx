@@ -1,10 +1,8 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 export function StorySection() {
     return (
-        <section id="story" className="story py-20 bg-white">
+        <section id="story" className="story py-10 bg-white">
             <div className="container mx-auto px-4">
                 {/* Centered Heading */}
                 <div className="text-center mb-16">
@@ -27,7 +25,7 @@ export function StorySection() {
                                     height={500}
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
-                              </div>
+                            </div>
                         </div>
 
                         {/* Stats Row */}

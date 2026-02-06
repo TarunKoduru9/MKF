@@ -125,7 +125,7 @@ export default function CartPage() {
                     contact: user?.phone || ""
                 },
                 theme: {
-                    color: "#e11d48" // Primary Red
+                    color: "#DC2626" // Primary Red
                 }
             };
 
@@ -194,7 +194,7 @@ export default function CartPage() {
                                             <span className="px-2">{item.quantity}</span>
                                             <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-3 py-1 hover:bg-slate-50">+</button>
                                         </div>
-                                        <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => removeFromCart(item.id)}>
+                                        <Button variant="ghost" size="icon" className="text-red-600 hover:text-red-600 hover:bg-red-50" onClick={() => removeFromCart(item.id)}>
                                             <Trash2 className="h-5 w-5" />
                                         </Button>
                                     </div>

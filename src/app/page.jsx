@@ -7,6 +7,7 @@ import { ProgramSection } from "@/components/home/ProgramSection";
 import { OccasionsSection } from "@/components/home/OccasionsSection";
 import { InvolvedSection } from "@/components/home/InvolvedSection";
 import { FaqSection } from "@/components/home/FaqSection";
+import { HeroSection } from "@/components/home/HeroSection";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
 
       <main className="flex-1">
         <BannerCarousel />
+        <HeroSection />
         <MissionSection />
         <StorySection />
         <ProgramSection />

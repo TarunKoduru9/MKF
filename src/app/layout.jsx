@@ -1,9 +1,16 @@
-import { Outfit } from "next/font/google";
+import { Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const outfit = Outfit({
+const montserrat = Montserrat({
   subsets: ["latin"],
+  variable: "--font-heading",
+  display: "swap",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-sans",
   display: "swap",
 });
@@ -21,7 +28,7 @@ import AuthCheck from "@/components/auth/AuthCheck";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} antialiased`}>
+      <body className={`${montserrat.variable} ${poppins.variable} antialiased`}>
         <AuthCheck />
         {children}
         <Toaster />

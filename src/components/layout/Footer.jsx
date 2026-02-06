@@ -160,6 +160,10 @@ export function Footer() {
                     </div>
                 </div>
             </div>
+            <div className="flex justify-between items-center px-12">
+                <p className="text-white text-sm tracking-wide">Copyright © 2026 MKF Trust, All rights reserved.</p>
+                <p className="text-white text-sm tracking-wide">Design & Developed by Arora Tech Solutions Pvt Ltd</p>
+            </div>
         </footer>
     );
 }

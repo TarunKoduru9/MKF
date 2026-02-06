@@ -10,14 +10,14 @@ export function proxy(request) {
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.google-analytics.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    img-src 'self' blob: data: https://firebasestorage.googleapis.com;
+    img-src 'self' blob: data: https://firebasestorage.googleapis.com https://maps.googleapis.com https://maps.gstatic.com;
     font-src 'self' https://fonts.gstatic.com;
-    connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; 
+    connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.facebook.com; 
     media-src 'self' https://mkftrustindia.org;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
-    frame-src 'self' https://www.instagram.com;
+    frame-src 'self' https://www.instagram.com https://www.google.com https://maps.google.com https://www.facebook.com https://web.facebook.com;
     frame-ancestors 'none';
     block-all-mixed-content;
     upgrade-insecure-requests;
