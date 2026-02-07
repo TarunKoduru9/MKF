@@ -7,24 +7,12 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Play } from "lucide-react";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 // Mock Data for Gallery
-const galleryItems = [
-    { id: 1, type: "image", category: "distribution", src: "/images/food_distribution_kids.png", title: "Food Distribution Drive" },
-    { id: 2, type: "image", category: "education", src: "/images/education_class_kids.png", title: "Evening Classes" },
-    { id: 3, type: "image", category: "events", src: "/images/birthday_party_kids.png", title: "Birthday Celebration" },
-    { id: 4, type: "image", category: "distribution", src: "/images/food_packets.png", title: "Meal Prep" },
-    { id: 5, type: "image", category: "education", src: "/images/skill_training_kids.png", title: "Skill Development" },
-    { id: 6, type: "video", category: "health", src: "https://mkftrustindia.org/wp-content/uploads/2026/01/snapsave-app_3887410368216924_hd.mp4", title: "Health Checkup Camp" },
-    { id: 7, type: "video", category: "videos", src: "https://mkftrustindia.org/wp-content/uploads/2026/01/snapsave-app_3887410368216924_hd.mp4", title: "Community Impact" },
-    { id: 8, type: "video", category: "videos", src: "https://mkftrustindia.org/wp-content/uploads/2026/01/snapsave-app_3887410368216924_hd.mp4", title: "Smiles & Joy" },
-    { id: 9, type: "video", category: "videos", src: "https://mkftrustindia.org/wp-content/uploads/2026/01/snapsave-app_3887410368216924_hd.mp4", title: "Sharing Happiness" },
-    { id: 10, type: "video", category: "health", src: "https://mkftrustindia.org/wp-content/uploads/2026/01/snapsave-app_3887410368216924_hd.mp4", title: "Health Checkup Camp" },
-    { id: 11, type: "video", category: "health", src: "https://mkftrustindia.org/wp-content/uploads/2026/01/snapsave-app_3887410368216924_hd.mp4", title: "Health Checkup Camp" },
-    { id: 12, type: "video", category: "videos", src: "https://mkftrustindia.org/wp-content/uploads/2026/01/snapsave-app_3887410368216924_hd.mp4", title: "Community Impact" },
-    { id: 13, type: "video", category: "videos", src: "https://mkftrustindia.org/wp-content/uploads/2026/01/snapsave-app_3887410368216924_hd.mp4", title: "Smiles & Joy" },
-    { id: 14, type: "video", category: "videos", src: "https://mkftrustindia.org/wp-content/uploads/2026/01/snapsave-app_3887410368216924_hd.mp4", title: "Sharing Happiness" },
-];
+
 
 const VideoCard = ({ item, className, showOverlay = true }) => {
     const videoRef = useRef(null);
@@ -89,9 +77,24 @@ const VideoCard = ({ item, className, showOverlay = true }) => {
 };
 
 export default function GalleryPage() {
-    const photoItems = galleryItems.filter(item => item.type === 'image');
-    // Using placeholders for Instagram links as requested, currently mapping existing video items
-    const videoItems = galleryItems.filter(item => item.type === 'video');
+    const { data: items = [], isLoading, isError } = useQuery({
+        queryKey: ['gallery'],
+        queryFn: async () => {
+            const res = await axios.get("/api/gallery");
+            return res.data;
+        }
+    });
+
+    const photoItems = items.filter(item => item.type === 'image');
+    const videoItems = items.filter(item => item.type === 'video');
+
+    if (isLoading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-slate-50">
+                <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
+            </div>
+        );
+    }
 
     return (
         <div className="flex min-h-screen flex-col bg-slate-50 font-sans">

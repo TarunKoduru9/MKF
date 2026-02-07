@@ -3,6 +3,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trash2, ShoppingCart, ArrowRight } from "lucide-react";
 import useStore from "@/lib/store";
@@ -177,7 +178,7 @@ export default function CartPage() {
                                 <Card key={item.id} className="flex flex-col sm:flex-row items-center p-4 gap-4">
                                     <div className="h-20 w-20 bg-slate-200 rounded-md shrink-0 overflow-hidden relative">
                                         {/* Ideally use Next.js Image here in production */}
-                                        <img
+                                        <Image
                                             src={item.image || "/images/placeholder.svg"}
                                             alt={item.title}
                                             className="w-full h-full object-cover"

@@ -62,3 +62,13 @@ CREATE TABLE messages (
     message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE gallery_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type ENUM('image', 'video') NOT NULL,
+    category VARCHAR(50) DEFAULT 'general',
+    src TEXT NOT NULL,
+    public_id VARCHAR(255),
+    title VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
