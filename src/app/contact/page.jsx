@@ -103,19 +103,8 @@ export default function ContactPage() {
                             </div>
 
                             {/* Right: Placeholder Image */}
-                            <div className="flex-1 relative min-h-[400px] lg:min-h-auto">
-                                <div className="absolute inset-0 bg-[#A3A3A3] rounded-3xl overflow-hidden flex items-center justify-center">
-                                    {/* This simulates the grey placeholder in the screenshot */}
-                                    {/* User can replace this with an actual image later */}
-                                    <div className="text-white/50 flex flex-col items-center">
-                                        <div className="w-24 h-24 border-4 border-white/50 border-dashed rounded-xl mb-4 flex items-center justify-center">
-                                            <div className="flex gap-1 items-end">
-                                                <div className="w-8 h-8 bg-white/50 rounded-sm"></div>
-                                                <div className="w-5 h-5 bg-white/50 rounded-sm"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="flex-1 relative mt-10">
+                                <Image src="/images/register-image.jpg" alt="Contact" width={400} height={400} className="rounded-xl" />
                             </div>
                         </div>
                     </div>
