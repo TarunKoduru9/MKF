@@ -55,7 +55,7 @@ export async function proxy(request) {
     headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), unload=*");
     headers.set(
         "Content-Security-Policy",
-        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://*.googleapis.com https://*.facebook.net https://connect.facebook.net https://*.facebook.com https://*.fbcdn.net; connect-src 'self' https://lumberjack.razorpay.com https://*.googleapis.com https://*.facebook.com https://*.fbcdn.net; img-src 'self' data: https://*.facebook.com https://platform-lookaside.fbsbx.com https://*.googleusercontent.com https://*.fbcdn.net; style-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://www.facebook.com https://web.facebook.com;"
+        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://*.googleapis.com https://*.facebook.net https://connect.facebook.net https://*.facebook.com https://*.fbcdn.net; connect-src 'self' https://lumberjack.razorpay.com https://*.googleapis.com https://*.facebook.com https://*.fbcdn.net; img-src 'self' data: https://*.facebook.com https://platform-lookaside.fbsbx.com https://*.googleusercontent.com https://*.fbcdn.net; style-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://www.facebook.com https://web.facebook.com; media-src 'self' https://res.cloudinary.com https://mkftrustindia.org;"
     );
 
     // 4. Auth Logic & Inner Rate Limiting

@@ -160,7 +160,7 @@ export function Footer() {
                     </div>
                 </div>
             </div>
-            <div className="lg:flex justify-between items-center px-12">
+            <div className="lg:flex justify-between items-center px-4">
                 <p className="text-white text-sm tracking-wide mb-2 lg:mb-0">Copyright © 2026 MKF Trust, All rights reserved.</p>
                 <p className="text-white text-sm tracking-wide">Design & Developed by Arora Tech Solutions Pvt Ltd</p>
             </div>

@@ -30,7 +30,7 @@ export async function POST(req) {
             // Upload to Cloudinary using a promise wrapper
             const uploadResult = await new Promise((resolve, reject) => {
                 cloudinary.uploader.upload_stream(
-                    { folder: 'mkf_gallery' }, // Optional: organize in a folder
+                    { folder: 'mkf_gallery' },
                     (error, result) => {
                         if (error) reject(error);
                         else resolve(result);
@@ -42,11 +42,13 @@ export async function POST(req) {
             public_id = uploadResult.public_id;
 
         } else if (type === 'video') {
-            src = formData.get('src');
-            if (!src) {
+            const videoUrl = formData.get('src');
+            if (!videoUrl) {
                 return NextResponse.json({ error: 'No video URL provided' }, { status: 400 });
             }
-            // Basic validation for URLs could be added here
+
+            src = videoUrl.trim();
+            public_id = null; // No Cloudinary public_id for external links
         } else {
             return NextResponse.json({ error: 'Invalid type' }, { status: 400 });
         }

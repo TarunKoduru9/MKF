@@ -13,7 +13,7 @@ export function proxy(request) {
     img-src 'self' blob: data: https://firebasestorage.googleapis.com https://maps.googleapis.com https://maps.gstatic.com;
     font-src 'self' https://fonts.gstatic.com;
     connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.facebook.com; 
-    media-src 'self' https://mkftrustindia.org;
+    media-src 'self' https://res.cloudinary.com https://mkftrustindia.org;
     object-src 'none';
     base-uri 'self';
     form-action 'self';

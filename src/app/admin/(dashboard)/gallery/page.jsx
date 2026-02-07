@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import axios from "axios";
+import Image from "next/image";
 import { Plus, Trash2, Image as ImageIcon, Video, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -118,8 +119,13 @@ export default function GalleryManagementPage() {
                         <div key={item.id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-100 group">
                             <div className="aspect-video relative bg-slate-100">
                                 {item.type === "image" ? (
-                                    <img src={item.src} alt={item.title} className="w-full h-full object-cover" />
-                                ) : (
+                                    <Image
+                                        src={item.src}
+                                        alt={item.title}
+                                        fill
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    />) : (
                                     <div className="w-full h-full flex items-center justify-center bg-black">
                                         <Video className="w-12 h-12 text-white/50" />
                                         <div className="absolute inset-0 flex items-center justify-center">
@@ -195,7 +201,7 @@ export default function GalleryManagementPage() {
                                     type="text"
                                     required
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    value={title}
+                                    value={title || ""}
                                     onChange={(e) => setTitle(e.target.value)}
                                     placeholder="Enter a title..."
                                 />
@@ -205,7 +211,7 @@ export default function GalleryManagementPage() {
                                 <label className="text-sm font-medium">Category</label>
                                 <select
                                     className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    value={category}
+                                    value={category || "general"}
                                     onChange={(e) => setCategory(e.target.value)}
                                 >
                                     <option value="general">General</option>
@@ -217,7 +223,7 @@ export default function GalleryManagementPage() {
                             </div>
 
                             {uploadType === "image" ? (
-                                <div className="space-y-2">
+                                <div key="image-upload" className="space-y-2">
                                     <label className="text-sm font-medium">Image File (JPG, PNG)</label>
                                     <input
                                         type="file"
@@ -227,13 +233,13 @@ export default function GalleryManagementPage() {
                                     />
                                 </div>
                             ) : (
-                                <div className="space-y-2">
+                                <div key="video-upload" className="space-y-2">
                                     <label className="text-sm font-medium">Instagram Video URL</label>
                                     <input
                                         type="url"
                                         required
                                         className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        value={videoUrl}
+                                        value={videoUrl || ""}
                                         onChange={(e) => setVideoUrl(e.target.value)}
                                         placeholder="https://instagram.com/..."
                                     />
