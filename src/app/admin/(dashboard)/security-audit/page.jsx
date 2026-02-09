@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { Shield, Search, Calendar, AlertCircle, CheckCircle2, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import axios from "@/lib/axios";
+import { API_ROUTES } from "@/lib/routes";
 
 export default function SecurityAuditPage() {
     const [logs, setLogs] = useState([]);
@@ -22,28 +24,24 @@ export default function SecurityAuditPage() {
     const fetchLogs = async () => {
         setLoading(true);
         try {
-            const params = new URLSearchParams({
+            const params = {
                 page: page.toString(),
                 limit: "50"
-            });
+            };
 
-            if (emailFilter) params.append("email", emailFilter);
-            if (statusFilter !== "all") params.append("status", statusFilter);
-            if (dateFromFilter) params.append("dateFrom", dateFromFilter);
-            if (dateToFilter) params.append("dateTo", dateToFilter);
+            if (emailFilter) params.email = emailFilter;
+            if (statusFilter !== "all") params.status = statusFilter;
+            if (dateFromFilter) params.dateFrom = dateFromFilter;
+            if (dateToFilter) params.dateTo = dateToFilter;
 
-            const res = await fetch(`/api/admin/audit-logs?${params.toString()}`);
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.error || "Failed to fetch logs");
-            }
+            const { data } = await axios.get(API_ROUTES.ADMIN.AUDIT_LOGS, { params });
 
             setLogs(data.logs);
             setTotal(data.total);
             setTotalPages(data.totalPages);
         } catch (error) {
-            toast({ title: "Error", description: error.message, variant: "destructive" });
+            const message = error.response?.data?.error || error.message || "Failed to fetch logs";
+            toast({ title: "Error", description: message, variant: "destructive" });
         } finally {
             setLoading(false);
         }

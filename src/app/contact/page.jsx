@@ -9,6 +9,7 @@ import { MapPin, Phone, Mail, Globe, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import { API_ROUTES } from "@/lib/routes";
 
 export default function ContactPage() {
     const [loading, setLoading] = useState(false);
@@ -25,7 +26,7 @@ export default function ContactPage() {
         };
 
         try {
-            const res = await axios.post("/api/contact", formData);
+            const res = await axios.post(API_ROUTES.CONTACT, formData);
             const data = res.data;
 
             if (res.status !== 201) throw new Error(data.error || "Failed to send message");

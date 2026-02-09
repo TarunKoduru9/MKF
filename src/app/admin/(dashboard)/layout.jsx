@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import axios from "@/lib/axios";
+import { API_ROUTES } from "@/lib/routes";
 
 export default function AdminDashboardLayout({ children }) {
     const router = useRouter();
@@ -20,8 +22,7 @@ export default function AdminDashboardLayout({ children }) {
         // Double-check session on client-side
         const verifySession = async () => {
             try {
-                const res = await fetch("/api/admin/stats");
-                if (!res.ok) throw new Error("Session invalid");
+                await axios.get(API_ROUTES.ADMIN.STATS);
             } catch (e) {
                 window.location.href = "/admin/login"; // Force full reload to login
             }

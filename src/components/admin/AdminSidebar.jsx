@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Heart, Users, LogOut, KeyRound, Images, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
+import axios from "@/lib/axios";
+import { API_ROUTES } from "@/lib/routes";
 
 const sidebarLinks = [
     {
@@ -74,7 +76,7 @@ export function AdminSidebar() {
                 <div className="px-4">
                     <button
                         onClick={async () => {
-                            await fetch('/api/auth/logout', { method: 'POST' });
+                            await axios.post(API_ROUTES.AUTH.LOGOUT);
                             window.location.replace('/admin/login');
                         }}
                         className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#DC2626] hover:bg-red-50 transition-colors"

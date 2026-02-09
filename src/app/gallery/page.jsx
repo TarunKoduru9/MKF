@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { API_ROUTES } from "@/lib/routes";
 
 // Mock Data for Gallery
 
@@ -80,7 +81,7 @@ export default function GalleryPage() {
     const { data: items = [], isLoading, isError } = useQuery({
         queryKey: ['gallery'],
         queryFn: async () => {
-            const res = await axios.get("/api/gallery");
+            const res = await axios.get(API_ROUTES.GALLERY.GET);
             return res.data;
         }
     });

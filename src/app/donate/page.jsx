@@ -14,6 +14,7 @@ import { Minus, Plus, Heart } from "lucide-react";
 import useStore from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { API_ROUTES } from "@/lib/routes";
 
 // Data
 const foodPackages = [
@@ -145,7 +146,7 @@ export default function DonatePage() {
             const isLoaded = await loadRazorpay();
             if (!isLoaded) return alert('Razorpay SDK failed to load.');
 
-            const res = await axios.post("/api/donations", {
+            const res = await axios.post(API_ROUTES.DONATION.CREATE, {
                 amount: finalAmount,
                 purpose: "General Donation",
                 guest_name: userData.anonymous ? "Anonymous" : userData.name,
@@ -167,7 +168,7 @@ export default function DonatePage() {
                 order_id: data.orderId,
                 handler: async function (response) {
                     try {
-                        const verifyRes = await axios.post("/api/donations/verify", {
+                        const verifyRes = await axios.post(API_ROUTES.DONATION.VERIFY, {
                             orderId: data.orderId,
                             paymentId: response.razorpay_payment_id,
                             signature: response.razorpay_signature

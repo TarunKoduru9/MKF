@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 import Image from "next/image";
+import { API_ROUTES } from "@/lib/routes";
 
 export default function ForgotPasswordPage() {
     const [step, setStep] = useState(1); // 1: Email, 2: OTP & New Password
@@ -30,7 +31,7 @@ export default function ForgotPasswordPage() {
         setLoading(true);
 
         try {
-            await axios.post("/api/auth/forgot-password/init", { email });
+            await axios.post(API_ROUTES.AUTH.FORGOT_PASSWORD.INIT, { email });
             toast({ title: "OTP Sent", description: "Check your email for the verification code." });
             setStep(2);
         } catch (error) {
@@ -47,7 +48,7 @@ export default function ForgotPasswordPage() {
         setLoading(true);
 
         try {
-            await axios.post("/api/auth/forgot-password/confirm", { email, code: otp, newPassword });
+            await axios.post(API_ROUTES.AUTH.FORGOT_PASSWORD.CONFIRM, { email, code: otp, newPassword });
             toast({ title: "Success", description: "Password reset successfully. Please login." });
             router.push("/login"); // Redirect to login
         } catch (error) {

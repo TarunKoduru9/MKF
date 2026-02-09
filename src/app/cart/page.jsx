@@ -99,7 +99,7 @@ export default function CartPage() {
                 handler: async function (response) {
                     // Payment Success - Call Verification API
                     try {
-                        const verifyRes = await axios.post("/api/donations/verify", {
+                        const verifyRes = await axios.post(API_ROUTES.DONATION.VERIFY, {
                             orderId: data.orderId,
                             paymentId: response.razorpay_payment_id,
                             signature: response.razorpay_signature

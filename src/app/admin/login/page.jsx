@@ -10,6 +10,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
+import axios from "@/lib/axios";
+import { API_ROUTES } from "@/lib/routes";
 
 export default function AdminLoginPage() {
     const router = useRouter();
@@ -20,13 +22,9 @@ export default function AdminLoginPage() {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                // Try to access a protected route to verify session
-                const res = await fetch("/api/admin/stats");
-                if (res.ok) {
-                    router.replace("/admin/dashboard");
-                }
+                await axios.get(API_ROUTES.ADMIN.STATS);
+                router.replace("/admin/dashboard");
             } catch (e) {
-                // Not logged in, stay here
             }
         };
         checkAuth();
@@ -44,24 +42,15 @@ export default function AdminLoginPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/admin/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            });
+            await axios.post(API_ROUTES.ADMIN.AUTH.LOGIN, { email, password });
 
-            if (!res.ok) {
-                const data = await res.json();
-                throw new Error(data.error || "Login failed");
-            }
-
-            toast({ title: "Welcome Admin", description: "Login successful." });
             toast({ title: "Welcome Admin", description: "Login successful." });
             router.replace("/admin/dashboard");
             router.refresh();
 
         } catch (error) {
-            toast({ variant: "destructive", title: "Access Denied", description: error.message });
+            const message = error.response?.data?.error || error.message || "Login failed";
+            toast({ variant: "destructive", title: "Access Denied", description: message });
         } finally {
             setLoading(false);
         }
@@ -71,8 +60,8 @@ export default function AdminLoginPage() {
         <div className="flex min-h-screen flex-col bg-slate-50 font-sans">
             <Navbar />
 
-            <main className="flex-1 flex items-center justify-center py-10 pb-30">
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col lg:flex-row w-full max-w-4xl h-full lg:max-h-[600px]">
+            <main className="flex-1 flex items-center justify-center py-20">
+                <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col lg:flex-row w-full max-w-4xl h-full p-10 lg:max-h-[600px]">
 
                     {/* Left Side - Image & Overlay */}
                     <div className="relative w-full lg:w-[45%] h-[300px] lg:h-auto flex-shrink-0">
@@ -80,7 +69,7 @@ export default function AdminLoginPage() {
                             src="/images/login-image.jpg"
                             alt="Admin Login"
                             fill
-                            className="object-cover"
+                            className="object-cover rounded-2xl"
                             priority
                         />
                         <div className="absolute inset-0 bg-red-600/10 mix-blend-multiply" />
