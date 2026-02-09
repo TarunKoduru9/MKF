@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Heart, Users, LogOut, KeyRound, Images } from "lucide-react";
+import { LayoutDashboard, Heart, Users, LogOut, KeyRound, Images, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const sidebarLinks = [
@@ -25,6 +25,11 @@ const sidebarLinks = [
         title: "Gallery",
         href: "/admin/gallery",
         icon: Images,
+    },
+    {
+        title: "Security Audit",
+        href: "/admin/security-audit",
+        icon: Shield,
     },
     {
         title: "Forgot Password",

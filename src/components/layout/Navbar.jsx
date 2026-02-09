@@ -14,6 +14,7 @@ export function Navbar() {
     const isAuthenticated = useStore((state) => state.isAuthenticated);
 
     const navLinks = [
+        { name: "Home", href: "/" },
         { name: "About", href: "/about" },
         { name: "Donate", href: "/donate" },
         { name: "Gallery", href: "/gallery" },

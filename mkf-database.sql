@@ -72,3 +72,19 @@ CREATE TABLE gallery_items (
     title VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE login_audit_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    user_name VARCHAR(255),
+    uid VARCHAR(255),
+    ip_address VARCHAR(45) NOT NULL,
+    user_agent TEXT,
+    login_status ENUM('success', 'failed') NOT NULL,
+    failure_reason VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_email (email),
+    INDEX idx_uid (uid),
+    INDEX idx_status (login_status),
+    INDEX idx_created_at (created_at)
+);

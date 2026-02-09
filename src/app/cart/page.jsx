@@ -181,6 +181,8 @@ export default function CartPage() {
                                         <Image
                                             src={item.image || "/images/placeholder.svg"}
                                             alt={item.title}
+                                            width={400}
+                                            height={400}
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
