@@ -18,7 +18,7 @@ const allSuggestions = [
     {
         id: "food-20",
         title: "Food Packets (20 People)",
-        variants: { veg: 1500, nonveg: 2000 },
+        variants: { veg: 1, nonveg: 2000 },
         desc: "Complete meal distribution for 20 people.",
         image: "/images/food_distribution_kids.png"
     },

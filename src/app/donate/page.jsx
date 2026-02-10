@@ -21,7 +21,7 @@ const foodPackages = [
     {
         id: "food-20",
         title: "Food Packets (20 People)",
-        variants: { veg: 1500, nonveg: 2000 },
+        variants: { veg: 1, nonveg: 2000 },
         desc: "Complete meal distribution for 20 people.",
         image: "/images/food_distribution_kids.png" // Using placeholder from context
     },
@@ -130,7 +130,7 @@ const PackageCard = ({ item }) => {
 
 
 export default function DonatePage() {
-    const [amount, setAmount] = useState(1500);
+    const [amount, setAmount] = useState(1);
     const [customAmount, setCustomAmount] = useState("");
     const [loading, setLoading] = useState(false);
     const [userData, setUserData] = useState({ name: "", email: "", phone: "", anonymous: false });
@@ -229,7 +229,7 @@ export default function DonatePage() {
 
                             {/* Preset Buttons */}
                             <div className="grid grid-cols-4 gap-2 mb-4">
-                                {[1500, 2500, 5000, 10000].map((val) => (
+                                {[1, 2500, 5000, 10000].map((val) => (
                                     <button
                                         key={val}
                                         onClick={() => { setAmount(val); setCustomAmount(""); }}
