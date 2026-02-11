@@ -8,16 +8,16 @@ export function proxy(request) {
     // but strictly should be removed in prod. For this demo, we keep it permissible but structured.
     const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.google-analytics.com;
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.google-analytics.com https://checkout.razorpay.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     img-src 'self' blob: data: https://firebasestorage.googleapis.com https://maps.googleapis.com https://maps.gstatic.com;
     font-src 'self' https://fonts.gstatic.com;
-    connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.facebook.com; 
+    connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.facebook.com https://api.razorpay.com https://lumberjack.razorpay.com; 
     media-src 'self' https://res.cloudinary.com https://mkftrustindia.org;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
-    frame-src 'self' https://www.instagram.com https://www.google.com https://maps.google.com https://www.facebook.com https://web.facebook.com;
+    frame-src 'self' https://www.instagram.com https://www.google.com https://maps.google.com https://www.facebook.com https://web.facebook.com https://api.razorpay.com;
     frame-ancestors 'none';
     block-all-mixed-content;
     upgrade-insecure-requests;

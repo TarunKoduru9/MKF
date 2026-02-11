@@ -35,8 +35,8 @@ export function Footer() {
                 {/* Top Section: Logo & Headlines */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-8">
                     {/* Logo Area */}
-                    <div className="flex items-center gap-4">
-                        <div className="relative w-16 h-16 rounded-full bg-white border-2 border-green-600 flex items-center justify-center p-1 overflow-hidden">
+                    <Link href="/" className="flex items-center gap-4 group">
+                        <div className="relative w-16 h-16 rounded-full bg-white border-2 border-green-600 flex items-center justify-center p-1 overflow-hidden transition-transform group-hover:scale-105">
                             <Image
                                 src="/images/logo.jpg"
                                 alt="MKF Trust"
@@ -46,10 +46,10 @@ export function Footer() {
                             />
                         </div>
                         <div>
-                            <h2 className="text-3xl font-bold tracking-tight text-white mb-1">MKF TRUST</h2>
+                            <h2 className="text-3xl font-bold tracking-tight text-white mb-1 group-hover:text-gray-200 transition-colors">MKF TRUST</h2>
                             <p className="text-gray-400 text-sm tracking-wide">Together We Make Difference</p>
                         </div>
-                    </div>
+                    </Link>
 
                     {/* Impact Headline */}
                     <div className="text-left md:text-right max-w-md">
@@ -159,10 +159,10 @@ export function Footer() {
 
                     </div>
                 </div>
-            </div>
-            <div className="lg:flex justify-between items-center px-4">
-                <p className="text-white text-sm tracking-wide mb-2 lg:mb-0">Copyright © 2026 MKF Trust, All rights reserved.</p>
-                <p className="text-white text-sm tracking-wide">Design & Developed by Arora Tech Solutions Pvt Ltd</p>
+                <div className="lg:flex justify-between items-center px-4 border-t border-gray-800 pt-6 mt-4">
+                    <p className="text-white text-sm tracking-wide mb-2 lg:mb-0">Copyright © 2026 MKF Trust, All rights reserved.</p>
+                    <p className="text-white text-sm tracking-wide">Design & Developed by Arora Tech Solutions Pvt Ltd</p>
+                </div>
             </div>
         </footer>
     );

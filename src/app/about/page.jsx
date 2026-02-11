@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, HeartHandshake, Earth, Shield, ThumbsUp } from "lucide-react";
 import Image from "next/image";
 
 
@@ -34,7 +34,7 @@ export default function AboutPage() {
                                             Donate Now! <ArrowUpRight className="ml-2 h-4 w-4" strokeWidth={3} />
                                         </Button>
                                     </Link>
-                                    <Link href="/donate">
+                                    <Link href="/gallery">
                                         <Button variant="outline" size="lg" className="rounded-full px-8 h-12 text-base font-semibold border border-slate-300 hover:bg-slate-50 text-slate-700 w-full sm:w-auto">
                                             View Our Program
                                         </Button>
@@ -45,7 +45,7 @@ export default function AboutPage() {
                                     <div className="flex justify-between items-center text-center">
                                         <div>
                                             <div className="text-3xl md:text-4xl font-bold text-[#DC2626]">10k</div>
-                                            <div className="text-sm font-medium text-slate-600">Lives Impacted</div>
+                                            <div className="text-sm font-medium text-slate-600">We Served</div>
                                         </div>
                                         <div className="w-px h-12 bg-slate-200"></div>
                                         <div>
@@ -55,7 +55,7 @@ export default function AboutPage() {
                                         <div className="w-px h-12 bg-slate-200"></div>
                                         <div>
                                             <div className="text-3xl md:text-4xl font-bold text-[#DC2626]">15+</div>
-                                            <div className="text-sm font-medium text-slate-600">Active Years</div>
+                                            <div className="text-sm font-medium text-slate-600">Experience</div>
                                         </div>
                                     </div>
                                 </div>
@@ -146,18 +146,22 @@ export default function AboutPage() {
                         </div>
                         <div className="grid md:grid-cols-4 gap-8">
                             <div className="p-6 bg-[#FFFFFF] rounded-xl text-center shadow-2xl transition-colors">
+                                <Shield className="h-10 w-10 text-[#DC2626] mb-4 mx-auto" />
                                 <h3 className="font-bold text-xl text-[#DC2626] mb-2">Transparency</h3>
                                 <p className="text-[#000000] text-sm">100% donation transparency with regular impact reports.</p>
                             </div>
                             <div className="p-6 bg-[#FFFFFF] rounded-xl text-center shadow-2xl transition-colors">
+                                <HeartHandshake className="h-10 w-10 text-[#DC2626] mb-4 mx-auto" />
                                 <h3 className="font-bold text-xl text-[#DC2626] mb-2">Compassion</h3>
                                 <p className="text-[#000000] text-sm">Treating every individual with dignity and kindness.</p>
                             </div>
                             <div className="p-6 bg-[#FFFFFF] rounded-xl text-center shadow-2xl transition-colors">
+                                <ThumbsUp className="h-10 w-10 text-[#DC2626] mb-4 mx-auto" />
                                 <h3 className="font-bold text-xl text-[#DC2626] mb-2">Impact</h3>
                                 <p className="text-[#000000] text-sm">Focusing on sustainable, long-term solutions, not just aid.</p>
                             </div>
                             <div className="p-6 bg-[#FFFFFF] rounded-xl text-center shadow-2xl transition-colors">
+                                <Earth className="h-10 w-10 text-[#DC2626] mb-4 mx-auto" />
                                 <h3 className="font-bold text-xl text-[#DC2626] mb-2">Community</h3>
                                 <p className="text-[#000000] text-sm">Building a network of care that empowers everyone.</p>
                             </div>

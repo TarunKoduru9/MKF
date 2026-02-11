@@ -156,7 +156,7 @@ export default function ContactPage() {
                                 <iframe
                                     src="https://www.instagram.com/mkftrust/embed"
                                     width="400"
-                                    height="600" // Embedding limit
+                                    height="600"
                                     frameBorder="0"
                                     scrolling="no"
                                     allowtransparency="true"
@@ -213,17 +213,6 @@ export default function ContactPage() {
                                     <div>
                                         <h3 className="font-bold text-slate-900">Email</h3>
                                         <p className="text-sm text-slate-500">mkfcharitabletrust@gmail.com</p>
-                                    </div>
-                                </div>
-
-                                {/* Website */}
-                                <div className="bg-white p-6 rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] border border-slate-50 flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center shrink-0">
-                                        <Globe className="text-red-600 w-5 h-5" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-bold text-slate-900">Website</h3>
-                                        <p className="text-sm text-slate-500">www.mkftrustindia.org</p>
                                     </div>
                                 </div>
                             </div>

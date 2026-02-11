@@ -14,36 +14,7 @@ import { API_ROUTES } from "@/lib/routes";
 import { DonationCard } from "@/components/donate/DonationCard";
 import axios from "axios";
 
-const allSuggestions = [
-    {
-        id: "food-20",
-        title: "Food Packets (20 People)",
-        variants: { veg: 1, nonveg: 2000 },
-        desc: "Complete meal distribution for 20 people.",
-        image: "/images/food_distribution_kids.png"
-    },
-    {
-        id: "food-50",
-        title: "Food Packets (50 People)",
-        variants: { veg: 3500, nonveg: 4500 },
-        desc: "Complete meal distribution for 50 people.",
-        image: "/images/food_distribution_kids.png"
-    },
-    {
-        id: "combo-20",
-        title: "20 Food + Cake + Wishes",
-        price: 2000,
-        desc: "20 Food + Cake + Wishes from Kids",
-        image: "/images/birthday_party_kids.png"
-    },
-    {
-        id: "cake-500",
-        title: "Cake (Add-on)",
-        price: 500,
-        desc: "Optional Add-on: Cake",
-        image: "/images/birthday_party_kids.png"
-    }
-];
+import { foodPackages, specialPackages } from "@/lib/constants";
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, clearCart, user } = useStore();
@@ -51,9 +22,12 @@ export default function CartPage() {
     const [recommendations, setRecommendations] = useState([]);
 
     useEffect(() => {
-        // Shuffle and pick 2 random items
-        const shuffled = [...allSuggestions].sort(() => 0.5 - Math.random());
-        setRecommendations(shuffled.slice(0, 2));
+        // 1. Get all special packages (fixed)
+        // 2. Get 2 random food packages
+        const shuffledFood = [...foodPackages].sort(() => 0.5 - Math.random());
+        const randomFood = shuffledFood.slice(0, 2);
+
+        setRecommendations([...specialPackages, ...randomFood]);
     }, []);
 
     const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -73,10 +47,15 @@ export default function CartPage() {
                 return;
             }
 
+            // Construct detailed purpose string
+            const purposeDetails = cart.map(item =>
+                `${item.title} (x${item.quantity})`
+            ).join(", ");
+
             // 3. Create Order on Server
             const res = await axios.post(API_ROUTES.DONATION.CREATE, {
                 amount: totalAmount,
-                purpose: "Cart Donation", // Could be list of items
+                purpose: purposeDetails, // Send detailed item list
                 uid: user?.uid || "guest"
             });
             const data = res.data;

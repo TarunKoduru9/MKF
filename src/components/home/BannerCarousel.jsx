@@ -89,8 +89,9 @@ export function BannerCarousel() {
 
     return (
         <section
-            className="relative bg-white overflow-hidden pb-28"
+            className="relative bg-white overflow-hidden pb-12 md:pb-28 md:pt-20"
             onMouseEnter={() => setIsHovered(true)}
+            
             onMouseLeave={() => setIsHovered(false)}
         >
             <div className="container mx-auto px-4 relative">
@@ -111,8 +112,7 @@ export function BannerCarousel() {
                     <ChevronRight className="w-6 h-6" />
                 </button>
 
-                {/* Carousel Container - Absolute Positioning Layout */}
-                <div className="relative w-full h-[550px] flex justify-center items-center overflow-hidden">
+                <div className="relative w-full h-[550px] md:h-[550px] flex justify-center items-center overflow-hidden">
                     <div className="absolute inset-0 flex justify-center items-center">
                         {banners.map((banner, index) => {
                             const isActive = index === currentIndex;
@@ -131,18 +131,18 @@ export function BannerCarousel() {
                                 transform = "translate(-50%, -50%) scale(1)";
                             } else if (index === (currentIndex - 1 + banners.length) % banners.length) {
                                 // Previous (Left)
-                                positionClass = "block";
+                                positionClass = "hidden md:block"; // Hide on mobile unique fix
                                 zIndex = "z-10";
-                                opacity = "opacity-50";
-                                // Shift Left: 50% offset + extra to peek
-                                transform = "translate(-50%, -50%) translateX(-650px) scale(0.85)";
+                                opacity = "opacity-40";
+                                // Shift Left - pushed further
+                                transform = "translate(-50%, -50%) translateX(-650px) scale(0.8)";
                             } else if (index === (currentIndex + 1) % banners.length) {
                                 // Next (Right)
-                                positionClass = "block";
+                                positionClass = "hidden md:block"; // Hide on mobile unique fix
                                 zIndex = "z-10";
-                                opacity = "opacity-50";
-                                // Shift Right
-                                transform = "translate(-50%, -50%) translateX(650px) scale(0.85)";
+                                opacity = "opacity-40";
+                                // Shift Right - pushed further
+                                transform = "translate(-50%, -50%) translateX(650px) scale(0.8)";
                             }
 
                             return (
@@ -162,7 +162,7 @@ export function BannerCarousel() {
                                             : "w-[300px] md:w-[800px] shadow-lg grayscale hover:grayscale-0"
                                         }
                                         ${positionClass} ${zIndex} ${opacity}
-                                        flex flex-col md:flex-row items-center justify-between p-8 md:p-14 gap-8 rounded-[2.5rem]
+                                        flex flex-col md:flex-row items-center justify-between p-6 md:p-14 gap-6 md:gap-8 rounded-[2rem] md:rounded-[2.5rem]
                                         ${banner.bgClass} ${banner.accent} relative overflow-hidden
                                     `}
                                 >
@@ -171,16 +171,16 @@ export function BannerCarousel() {
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 
                                     {/* Content */}
-                                    <div className="flex-1 z-10 text-center md:text-left">
-                                        <h2 className={`text-3xl md:text-5xl font-extrabold mb-4 leading-tight ${banner.highlightColor}`}>
+                                    <div className="flex-1 z-10 text-center md:text-left order-2 md:order-1">
+                                        <h2 className={`text-2xl md:text-5xl font-extrabold mb-3 md:mb-4 leading-tight ${banner.highlightColor}`}>
                                             {banner.title}
                                         </h2>
-                                        <p className="text-lg md:text-xl text-slate-700 font-medium mb-8 max-w-xl">
+                                        <p className="text-base md:text-xl text-slate-700 font-medium mb-6 md:mb-8 max-w-xl mx-auto md:mx-0">
                                             {banner.subtitle}
                                         </p>
                                         <Link href="/donate">
                                             <Button
-                                                className={`${banner.btnColor} text-lg font-bold px-8 py-4 rounded-full shadow-md hover:shadow-lg transition-all`}
+                                                className={`${banner.btnColor} text-base md:text-lg font-bold px-6 md:px-8 py-3 md:py-4 rounded-full shadow-md hover:shadow-lg transition-all`}
                                             >
                                                 Donate Now
                                             </Button>
@@ -188,8 +188,8 @@ export function BannerCarousel() {
                                     </div>
 
                                     {/* Image */}
-                                    <div className="flex-1 relative w-full h-[280px] md:h-[380px] max-w-sm mx-auto md:mx-0 z-10">
-                                        <div className="absolute inset-0 rounded-full border-[10px] border-white/50 shadow-inner overflow-hidden">
+                                    <div className="w-full h-[220px] md:h-[380px] md:flex-1 relative max-w-[280px] md:max-w-sm mx-auto md:mx-0 z-10 order-1 md:order-2 shrink-0">
+                                        <div className="absolute inset-0 rounded-full border-[8px] md:border-[10px] border-white/50 shadow-inner overflow-hidden">
                                             <Image
                                                 src={banner.img}
                                                 alt={banner.title}

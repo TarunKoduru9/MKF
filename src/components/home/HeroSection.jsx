@@ -38,7 +38,7 @@ export function HeroSection() {
                                     Donate Now! <ArrowUpRight className="ml-2 h-4 w-4" strokeWidth={3} />
                                 </Button>
                             </Link>
-                            <Link href="/donate">
+                            <Link href="/gallery">
                                 <Button variant="outline" size="lg" className="rounded-full px-8 h-12 text-base font-semibold border border-slate-300 hover:bg-slate-50 text-slate-700 w-full sm:w-auto cursor-pointer">
                                     View Our Program
                                 </Button>
@@ -55,21 +55,21 @@ export function HeroSection() {
                         category="Education"
                         title="Books For Hope"
                         image="/images/education_class_kids.png"
-                        goalPercentage={56}
+                        goalPercentage={62}
                         description="Providing education access for underprivileged children."
                     />
                     <HeroCard
                         category="Healthcare"
                         title="Healthy Tomorrow"
                         image="/images/healthcare_camp_kids.png"
-                        goalPercentage={56}
+                        goalPercentage={92}
                         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
                     />
                     <HeroCard
                         category="Clean Water Access"
                         title="Water For Life"
                         image="/images/food_distribution_kids.png"
-                        goalPercentage={56}
+                        goalPercentage={84}
                         description="Ensuring clean water for remote communities."
                     />
                 </div>
