@@ -8,7 +8,7 @@ import { foodPackages, specialPackages } from '@/lib/constants';
 export async function POST(request) {
     try {
         const body = await request.json();
-        const { amount, purpose, uid, guest_name, guest_email, guest_phone, anonymous, cart } = body;
+        let { amount, purpose, uid, guest_name, guest_email, guest_phone, anonymous, cart } = body;
 
         let finalAmount = amount;
 
