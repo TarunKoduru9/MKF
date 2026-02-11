@@ -25,15 +25,15 @@ export async function GET(req) {
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: process.env.EMAIL_USER, // e.g., your-email@gmail.com
-                pass: process.env.EMAIL_PASS, // App Password
+                user: process.env.SMTP_EMAIL || process.env.EMAIL_USER,
+                pass: process.env.SMTP_PASSWORD || process.env.EMAIL_PASS,
             },
         });
 
         // 3. Send Emails
         const results = await Promise.allSettled(users.map(async (user) => {
             const mailOptions = {
-                from: process.env.EMAIL_USER,
+                from: process.env.SMTP_EMAIL || process.env.EMAIL_USER,
                 to: user.email,
                 subject: `Happy Birthday, ${user.name}! 🎉`,
                 html: `

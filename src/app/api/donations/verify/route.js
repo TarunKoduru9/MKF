@@ -60,35 +60,53 @@ export async function POST(req) {
         let isNewAccount = false;
         let generatedPassword = "";
 
-        // 3. User Check & Auto-Creation Logic
-        // Only if it was a guest donation (uid='guest') and we have an email
         if (finalUid === 'guest' && email) {
-            const existingUsers = await query("SELECT * FROM users WHERE email = ?", [email]);
+            let checkQuery = "SELECT * FROM users WHERE email = ?";
+            let checkParams = [email];
+
+            if (guestPhone && guestPhone !== "0000000000") {
+                checkQuery += " OR phone = ?";
+                checkParams.push(guestPhone);
+            }
+
+            const existingUsers = await query(checkQuery, checkParams);
 
             if (existingUsers.length > 0) {
-                // User Exists: Link donation to this user
                 finalUid = existingUsers[0].uid;
                 await query("UPDATE donations SET uid = ? WHERE order_id = ?", [finalUid, orderId]);
             } else {
-                // New User: Create Account
                 isNewAccount = true;
                 finalUid = crypto.randomUUID();
-                generatedPassword = Math.random().toString(36).slice(-8) + "!Aa"; // Random 8 chars + complexity
-                const salt = await bcrypt.genSalt(10);
-                const hashedPassword = await bcrypt.hash(generatedPassword, salt);
+                generatedPassword = Math.random().toString(36).slice(-8) + "!Aa";
 
-                await query(
-                    "INSERT INTO users (uid, email, password_hash, name, phone, role) VALUES (?, ?, ?, ?, ?, ?)",
-                    [finalUid, email, hashedPassword, guestName, guestPhone, 'user']
-                );
+                try {
+                    const salt = await bcrypt.genSalt(10);
+                    const hashedPassword = await bcrypt.hash(generatedPassword, salt);
 
-                // Update donation to link to new user
-                await query("UPDATE donations SET uid = ? WHERE order_id = ?", [finalUid, orderId]);
+                    await query(
+                        "INSERT INTO users (uid, email, password_hash, name, phone, role) VALUES (?, ?, ?, ?, ?, ?)",
+                        [finalUid, email, hashedPassword, guestName, guestPhone, 'user']
+                    );
+
+                    await query("UPDATE donations SET uid = ? WHERE order_id = ?", [finalUid, orderId]);
+
+                } catch (insertError) {
+                    console.error("User Creation Failed (Collision?):", insertError);
+                    const retryUsers = await query(checkQuery, checkParams);
+                    if (retryUsers.length > 0) {
+                        finalUid = retryUsers[0].uid;
+                        isNewAccount = false;
+                        await query("UPDATE donations SET uid = ? WHERE order_id = ?", [finalUid, orderId]);
+                    } else {
+                        console.error("Could not create user or link to existing one. Keeping as guest.");
+                        finalUid = 'guest';
+                        isNewAccount = false;
+                    }
+                }
             }
         }
 
         // 4. Prepare Email Content
-        // Wrap email sending in try/catch so it doesn't fail the verification response
         try {
             const transporter = nodemailer.createTransport({
                 service: "gmail",
@@ -147,7 +165,7 @@ export async function POST(req) {
             `;
 
             const mailOptions = {
-                from: process.env.EMAIL_USER,
+                from: process.env.SMTP_EMAIL || process.env.EMAIL_USER,
                 to: email,
                 subject: isNewAccount ? `Donation Receipt & Account Detail` : `Thank You for Your Donation! ❤️`,
                 html: emailHtml,
