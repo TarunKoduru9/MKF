@@ -168,7 +168,9 @@ export default function CartPage() {
                                     </div>
                                     <div className="flex-1 text-center sm:text-left">
                                         <h3 className="font-bold">{item.title}</h3>
-                                        <p className="text-sm text-muted-foreground">₹{item.price} x {item.quantity}</p>
+                                        <p className="text-sm text-muted-foreground">
+                                            ₹{item.price} x {item.quantity} = <span className="font-bold text-slate-900">₹{item.price * item.quantity}</span>
+                                        </p>
                                     </div>
 
                                     <div className="flex items-center gap-4">

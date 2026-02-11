@@ -55,7 +55,11 @@ const PackageCard = ({ item }) => {
 
             <div className="p-5 flex flex-col flex-1">
                 <h3 className="font-bold text-slate-900 mb-1">{title}</h3>
-                <div className="text-xl font-bold text-red-600 mb-4">₹{price}<span className="text-xs text-slate-400 font-normal"> /Pack</span></div>
+                <div className="text-xl font-bold text-red-600 mb-4">
+                    ₹{price * quantity}
+                    {quantity > 1 && <span className="text-sm font-normal text-slate-500 ml-2">(₹{price} x {quantity})</span>}
+                    <span className="text-xs text-slate-400 font-normal"> /Pack</span>
+                </div>
 
                 {/* Variant Toggle for Food */}
                 {item.variants && (
