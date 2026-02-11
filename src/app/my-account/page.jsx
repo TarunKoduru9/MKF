@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { User, Heart, FileText, HelpCircle, LogOut, ChevronRight, PenSquare, Download, Loader2 } from "lucide-react";
 import useStore from "@/lib/store";
+import { Modal } from "@/components/ui/modal";
 import { useRouter } from "next/navigation";
 import { API_ROUTES } from "@/lib/routes";
 import { useToast } from "@/components/ui/use-toast";
@@ -260,6 +261,7 @@ function ProfileField({ label, name, value, isEditing, onChange, disabled }) {
 
 function DonationsSection() {
     const { data: donations = [], isLoading: loading } = useDonations();
+    const [selectedDonation, setSelectedDonation] = useState(null);
 
     if (loading) {
         return (
@@ -287,49 +289,102 @@ function DonationsSection() {
     }
 
     return (
-        <Card className="border-0 shadow-sm">
-            <CardHeader>
-                <CardTitle>My Donation History</CardTitle>
-                <CardDescription>Thank you for supporting our cause.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="rounded-md border">
-                    <table className="w-full text-sm">
-                        <thead className="bg-slate-50 border-b">
-                            <tr>
-                                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Date</th>
-                                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Purpose</th>
-                                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Order ID</th>
-                                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Amount</th>
-                                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {donations.map((d) => (
-                                <tr key={d.id} className="border-b transition-colors hover:bg-slate-50/50">
-                                    <td className="p-4 align-middle">
-                                        {new Date(d.created_at).toLocaleDateString()}
-                                    </td>
-                                    <td className="p-4 align-middle font-medium">{d.purpose}</td>
-                                    <td className="p-4 align-middle text-muted-foreground font-mono text-xs">{d.order_id}</td>
-                                    <td className="p-4 align-middle font-bold text-green-600">
-                                        ₹{d.amount}
-                                    </td>
-                                    <td className="p-4 align-middle">
-                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${d.payment_status === 'success' ? 'bg-green-100 text-green-800' :
-                                            d.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                                'bg-red-100 text-red-800'
-                                            }`}>
-                                            {d.payment_status.charAt(0).toUpperCase() + d.payment_status.slice(1)}
-                                        </span>
-                                    </td>
+        <>
+            <Card className="border-0 shadow-sm">
+                <CardHeader>
+                    <CardTitle>My Donation History</CardTitle>
+                    <CardDescription>Thank you for supporting our cause.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="rounded-md border">
+                        <table className="w-full text-sm">
+                            <thead className="bg-slate-50 border-b">
+                                <tr>
+                                    <th className="h-12 px-4 text-left font-medium text-muted-foreground">Date</th>
+                                    <th className="h-12 px-4 text-left font-medium text-muted-foreground">Purpose</th>
+                                    <th className="h-12 px-4 text-left font-medium text-muted-foreground">Order ID</th>
+                                    <th className="h-12 px-4 text-left font-medium text-muted-foreground">Amount</th>
+                                    <th className="h-12 px-4 text-left font-medium text-muted-foreground">Status</th>
+                                    <th className="h-12 px-4 text-left font-medium text-muted-foreground">Action</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </CardContent>
-        </Card>
+                            </thead>
+                            <tbody>
+                                {donations.map((d) => (
+                                    <tr key={d.id} className="border-b transition-colors hover:bg-slate-50/50">
+                                        <td className="p-4 align-middle">
+                                            {new Date(d.created_at).toLocaleDateString()}
+                                        </td>
+                                        <td className="p-4 align-middle font-medium max-w-[200px] truncate" title={d.purpose}>
+                                            {d.purpose}
+                                        </td>
+                                        <td className="p-4 align-middle text-muted-foreground font-mono text-xs">{d.order_id}</td>
+                                        <td className="p-4 align-middle font-bold text-green-600">
+                                            ₹{d.amount}
+                                        </td>
+                                        <td className="p-4 align-middle">
+                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${d.payment_status === 'success' ? 'bg-green-100 text-green-800' :
+                                                d.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                    'bg-red-100 text-red-800'
+                                                }`}>
+                                                {d.payment_status.charAt(0).toUpperCase() + d.payment_status.slice(1)}
+                                            </span>
+                                        </td>
+                                        <td className="p-4 align-middle">
+                                            <Button variant="outline" size="sm" onClick={() => setSelectedDonation(d)}>View</Button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Modal isOpen={!!selectedDonation} onClose={() => setSelectedDonation(null)} title="Donation Details">
+                {selectedDonation && (
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <h4 className="font-semibold text-gray-500">Amount</h4>
+                                <p className="text-xl font-bold text-green-600">₹{selectedDonation.amount}</p>
+                            </div>
+                            <div>
+                                <h4 className="font-semibold text-gray-500">Status</h4>
+                                <p className={`font-medium ${selectedDonation.payment_status === 'success' ? 'text-green-600' : 'text-yellow-600'}`}>
+                                    {selectedDonation.payment_status.toUpperCase()}
+                                </p>
+                            </div>
+                            <div>
+                                <h4 className="font-semibold text-gray-500">Date</h4>
+                                <p>{new Date(selectedDonation.created_at).toLocaleString()}</p>
+                            </div>
+                            <div>
+                                <h4 className="font-semibold text-gray-500">Order ID</h4>
+                                <p className="font-mono text-xs">{selectedDonation.order_id}</p>
+                            </div>
+                        </div>
+
+                        <div className="border-t pt-4">
+                            <h4 className="font-semibold text-gray-500 mb-2">Purpose / Items</h4>
+                            <div className="bg-slate-50 p-3 rounded-md border border-slate-100 text-sm">
+                                {selectedDonation.purpose}
+                            </div>
+                        </div>
+
+                        {selectedDonation.transaction_id && (
+                            <div className="border-t pt-4">
+                                <h4 className="font-semibold text-gray-500 mb-1">Transaction ID</h4>
+                                <p className="font-mono text-xs text-slate-600">{selectedDonation.transaction_id}</p>
+                            </div>
+                        )}
+
+                        <div className="flex justify-end pt-4">
+                            <Button onClick={() => setSelectedDonation(null)}>Close</Button>
+                        </div>
+                    </div>
+                )}
+            </Modal>
+        </>
     );
 }
 

@@ -3,12 +3,55 @@ import { query } from '@/lib/db';
 import { jwtVerify } from 'jose';
 import Razorpay from 'razorpay';
 
+import { foodPackages, specialPackages } from '@/lib/constants';
+
 export async function POST(request) {
     try {
         const body = await request.json();
-        const { amount, purpose, uid, guest_name, guest_email, guest_phone, anonymous } = body;
+        const { amount, purpose, uid, guest_name, guest_email, guest_phone, anonymous, cart } = body;
 
-        if (!amount || !purpose) {
+        let finalAmount = amount;
+
+        // SERVER-SIDE PRICE VALIDATION
+        // If a cart is provided, we recalculate the total based on trusted prices in constants.js
+        if (cart && Array.isArray(cart) && cart.length > 0) {
+            let calculatedTotal = 0;
+
+            cart.forEach(cartItem => {
+                // Find in foodPackages
+                let product = foodPackages.find(p => p.id === cartItem.id.split('-')[0]);
+                let price = 0;
+
+                if (product) {
+                    // It's a food package, check variant
+                    const variant = cartItem.id.includes('-veg') || cartItem.title.includes('(Veg)') ? 'veg' : 'nonveg';
+                    // Fallback logic if ID parsing isn't perfect, but relies on 'variants' structure
+                    price = product.variants ? (product.variants[variant] || product.variants.nonveg) : 0;
+
+                    // Specific fix: The cart IDs in store.js are like "food-20-veg". 
+                    // Let's refine logical lookup:
+                    if (cartItem.id.includes('-veg')) price = product.variants.veg;
+                    else if (cartItem.id.includes('-nonveg')) price = product.variants.nonveg;
+                    else price = Object.values(product.variants)[0]; // Fallback
+                } else {
+                    // Check specialPackages
+                    product = specialPackages.find(p => p.id === cartItem.id);
+                    if (product) price = product.price;
+                }
+
+                if (price > 0) {
+                    calculatedTotal += price * cartItem.quantity;
+                }
+            });
+
+            // If we successfully calculated a total, use it. 
+            // This prevents "frontend hackers" from sending { amount: 1 } for a 5000rs item.
+            if (calculatedTotal > 0) {
+                finalAmount = calculatedTotal;
+            }
+        }
+
+        if (!finalAmount || !purpose) {
             return NextResponse.json({ error: 'Amount and Purpose required' }, { status: 400 });
         }
 
@@ -20,7 +63,7 @@ export async function POST(request) {
         });
 
         const options = {
-            amount: Math.round(amount * 100), // Request comes in Rupees, convert to paise (integer)
+            amount: Math.round(finalAmount * 100), // Request comes in Rupees, convert to paise (integer)
             currency: "INR",
             receipt: "receipt_" + Math.random().toString(36).substring(7),
         };

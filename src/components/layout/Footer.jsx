@@ -98,7 +98,7 @@ export function Footer() {
                                 <li className="flex items-start gap-3">
                                     <MapPin className="w-4 h-4 mt-1 text-white shrink-0" />
                                     <span>
-                                        Hyderaabad, <br />
+                                        Hyderabad, <br />
                                         Telangana
                                     </span>
                                 </li>

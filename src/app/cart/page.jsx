@@ -56,7 +56,8 @@ export default function CartPage() {
             const res = await axios.post(API_ROUTES.DONATION.CREATE, {
                 amount: totalAmount,
                 purpose: purposeDetails, // Send detailed item list
-                uid: user?.uid || "guest"
+                uid: user?.uid || "guest",
+                cart: cart // Send cart for backend validation
             });
             const data = res.data;
 

@@ -55,6 +55,7 @@ export async function POST(req) {
         const donation = donations[0];
         const email = donation.guest_email; // Priority to guest email
         const guestName = donation.guest_name || "Donor";
+        const guestPhone = donation.guest_phone || "0000000000"; // Fallback phone
         let finalUid = donation.uid;
         let isNewAccount = false;
         let generatedPassword = "";
@@ -77,8 +78,8 @@ export async function POST(req) {
                 const hashedPassword = await bcrypt.hash(generatedPassword, salt);
 
                 await query(
-                    "INSERT INTO users (uid, email, password_hash, name, role) VALUES (?, ?, ?, ?, ?)",
-                    [finalUid, email, hashedPassword, guestName, 'user']
+                    "INSERT INTO users (uid, email, password_hash, name, phone, role) VALUES (?, ?, ?, ?, ?, ?)",
+                    [finalUid, email, hashedPassword, guestName, guestPhone, 'user']
                 );
 
                 // Update donation to link to new user
@@ -87,74 +88,80 @@ export async function POST(req) {
         }
 
         // 4. Prepare Email Content
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: process.env.SMTP_EMAIL || process.env.EMAIL_USER,
-                pass: process.env.SMTP_PASSWORD || process.env.EMAIL_PASS,
-            },
-        });
+        // Wrap email sending in try/catch so it doesn't fail the verification response
+        try {
+            const transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: process.env.SMTP_EMAIL || process.env.EMAIL_USER,
+                    pass: process.env.SMTP_PASSWORD || process.env.EMAIL_PASS,
+                },
+            });
 
-        let emailHtml = `
-            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
-                <div style="background-color: #dc2626; padding: 24px; text-align: center; color: white;">
-                    <h1 style="margin: 0; font-size: 24px;">Thank You!</h1>
-                </div>
-                <div style="padding: 32px; background-color: white;">
-                    <p style="font-size: 16px; color: #334155; margin-bottom: 24px;">Dear <strong>${guestName}</strong>,</p>
-                    
-                    <p style="font-size: 16px; color: #334155; line-height: 1.6;">
-                        We are incredibly grateful for your generous donation of <strong>₹${donation.amount}</strong> for <strong>${donation.purpose}</strong>. 
-                        Your kindness directly supports our mission.
-                    </p>
-
-                    <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 24px 0;">
-                        <p style="margin: 5px 0; font-size: 14px; color: #64748b;"><strong>Transaction ID:</strong> ${paymentId}</p>
-                        <p style="margin: 5px 0; font-size: 14px; color: #64748b;"><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+            let emailHtml = `
+                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+                    <div style="background-color: #dc2626; padding: 24px; text-align: center; color: white;">
+                        <h1 style="margin: 0; font-size: 24px;">Thank You!</h1>
                     </div>
-        `;
+                    <div style="padding: 32px; background-color: white;">
+                        <p style="font-size: 16px; color: #334155; margin-bottom: 24px;">Dear <strong>${guestName}</strong>,</p>
+                        
+                        <p style="font-size: 16px; color: #334155; line-height: 1.6;">
+                            We are incredibly grateful for your generous donation of <strong>₹${donation.amount}</strong> for <strong>${donation.purpose}</strong>. 
+                            Your kindness directly supports our mission.
+                        </p>
 
-        if (isNewAccount) {
-            emailHtml += `
-                    <div style="background-color: #eff6ff; border: 1px solid #dbeafe; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
-                        <h3 style="margin-top: 0; color: #1e40af; font-size: 18px;">Account Created</h3>
-                        <p style="font-size: 14px; color: #1e3a8a;">We have created an account for you to track your donations.</p>
-                        <p style="margin: 5px 0; font-size: 14px; color: #334155;"><strong>Email:</strong> ${email}</p>
-                        <p style="margin: 5px 0; font-size: 14px; color: #334155;"><strong>Password:</strong> ${generatedPassword}</p>
-                        <p style="font-size: 12px; color: #64748b; margin-top: 10px;">Please login and change your password immediately.</p>
-                        <div style="text-align: center; margin-top: 15px;">
-                             <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login" style="display: inline-block; background-color: #2563eb; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold;">Login Now</a>
+                        <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 24px 0;">
+                            <p style="margin: 5px 0; font-size: 14px; color: #64748b;"><strong>Transaction ID:</strong> ${paymentId}</p>
+                            <p style="margin: 5px 0; font-size: 14px; color: #64748b;"><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
                         </div>
-                    </div>
             `;
-        } else {
+
+            if (isNewAccount) {
+                emailHtml += `
+                        <div style="background-color: #eff6ff; border: 1px solid #dbeafe; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+                            <h3 style="margin-top: 0; color: #1e40af; font-size: 18px;">Account Created</h3>
+                            <p style="font-size: 14px; color: #1e3a8a;">We have created an account for you to track your donations.</p>
+                            <p style="margin: 5px 0; font-size: 14px; color: #334155;"><strong>Email:</strong> ${email}</p>
+                            <p style="margin: 5px 0; font-size: 14px; color: #334155;"><strong>Password:</strong> ${generatedPassword}</p>
+                            <p style="font-size: 12px; color: #64748b; margin-top: 10px;">Please login and change your password immediately.</p>
+                            <div style="text-align: center; margin-top: 15px;">
+                                 <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login" style="display: inline-block; background-color: #2563eb; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold;">Login Now</a>
+                            </div>
+                        </div>
+                `;
+            } else {
+                emailHtml += `
+                        <p style="font-size: 14px; color: #64748b; margin-top: 20px;">
+                            This donation has been linked to your registered account <strong>${email}</strong>. 
+                            You can view your donation history by logging in.
+                        </p>
+                `;
+            }
+
             emailHtml += `
-                    <p style="font-size: 14px; color: #64748b; margin-top: 20px;">
-                        This donation has been linked to your registered account <strong>${email}</strong>. 
-                        You can view your donation history by logging in.
-                    </p>
-            `;
-        }
-
-        emailHtml += `
-                    <p style="font-size: 16px; color: #334155; margin-top: 32px;">With gratitude,</p>
-                    <p style="font-size: 16px; font-weight: bold; color: #dc2626;">MKF Trust Team</p>
+                        <p style="font-size: 16px; color: #334155; margin-top: 32px;">With gratitude,</p>
+                        <p style="font-size: 16px; font-weight: bold; color: #dc2626;">MKF Trust Team</p>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: isNewAccount ? `Donation Receipt & Account Detail` : `Thank You for Your Donation! ❤️`,
-            html: emailHtml,
-        };
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: isNewAccount ? `Donation Receipt & Account Detail` : `Thank You for Your Donation! ❤️`,
+                html: emailHtml,
+            };
 
-        if (email) {
-            await transporter.sendMail(mailOptions);
+            if (email) {
+                await transporter.sendMail(mailOptions);
+            }
+        } catch (emailError) {
+            console.error("Email sending failed:", emailError);
+            // Continue execution to return success for the payment verification
         }
 
-        return NextResponse.json({ success: true, message: "Verified and Email Sent" });
+        return NextResponse.json({ success: true, message: "Verified and Email Sent (or attempted)" });
 
     } catch (error) {
         console.error("Verification Error:", error);
