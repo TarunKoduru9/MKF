@@ -1,18 +1,12 @@
 import { NextResponse } from "next/server";
-import { query } from "@/lib/db"; // Using query helper like other routes
+import { query } from "@/lib/db"; 
 import nodemailer from "nodemailer";
 
-// This route should be triggered daily by an external cron/scheduler
 export async function GET(req) {
-    // Optional: Add a secret key check to prevent unauthorized triggers
-    // const authHeader = req.headers.get('authorization');
-    // if (authHeader !== \`Bearer \${process.env.CRON_SECRET}\`) {
-    //     return new NextResponse('Unauthorized', { status: 401 });
-    // }
+
 
     try {
-        // 1. Find users with birthday today
-        // MySQL: MONTH(dob) = MONTH(NOW()) AND DAY(dob) = DAY(NOW())
+
         const users = await query(
             "SELECT email, name FROM users WHERE MONTH(dob) = MONTH(NOW()) AND DAY(dob) = DAY(NOW())"
         );

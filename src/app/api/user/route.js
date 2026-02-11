@@ -9,7 +9,8 @@ const userSchema = z.object({
     address: z.string().optional().nullable().or(z.literal("")),
     district: z.string().optional().nullable().or(z.literal("")),
     state: z.string().optional().nullable().or(z.literal("")),
-    pincode: z.string().optional().nullable().or(z.literal(""))
+    pincode: z.string().optional().nullable().or(z.literal("")),
+    dob: z.string().optional().nullable().or(z.literal(""))
 });
 
 export async function GET(request) {
@@ -40,14 +41,14 @@ export async function POST(request) {
         const body = await request.json();
         // Validate input
         const validatedData = userSchema.parse(body);
-        const { uid, name, phone, address, district, state, pincode } = validatedData;
+        const { uid, name, phone, address, district, state, pincode, dob } = validatedData;
 
         // DB Update
         await query(
             `UPDATE users 
-             SET name = ?, phone = ?, address_line = ?, district = ?, state = ?, pincode = ? 
+             SET name = ?, phone = ?, address_line = ?, district = ?, state = ?, pincode = ?, dob = ? 
              WHERE uid = ?`,
-            [name, phone || null, address || null, district || null, state || null, pincode || null, uid]
+            [name, phone || null, address || null, district || null, state || null, pincode || null, dob || null, uid]
         );
 
         // Fetch updated user

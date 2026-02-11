@@ -233,19 +233,28 @@ function ProfileSection({ user }) {
                         isEditing={isEditing}
                         onChange={handleChange}
                     />
+                    <ProfileField
+                        label="Date of Birth"
+                        name="dob"
+                        value={formData.dob ? new Date(formData.dob).toISOString().split('T')[0] : ''}
+                        isEditing={isEditing}
+                        onChange={handleChange}
+                        type="date"
+                    />
                 </div>
             </CardContent>
         </Card>
     );
 }
 
-function ProfileField({ label, name, value, isEditing, onChange, disabled }) {
+function ProfileField({ label, name, value, isEditing, onChange, disabled, type = "text" }) {
     return (
         <div className="space-y-1">
             <span className="text-sm font-medium text-muted-foreground">{label}:</span>
             {isEditing && !disabled ? (
                 <Input
                     name={name}
+                    type={type}
                     value={value || ""}
                     onChange={onChange}
                     className="h-10 border-slate-200"
