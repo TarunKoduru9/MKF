@@ -33,8 +33,8 @@ export default function CartPage() {
     const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
 
     const handleCheckout = async () => {
-        // 1. Check Auth (Optional for donations, but good for tracking)
-        // if (!user) return router.push('/login');
+        // 1. Check Auth
+        if (!user) return window.location.href = '/login';
 
         setLoading(true);
 

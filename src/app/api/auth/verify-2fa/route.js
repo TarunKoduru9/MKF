@@ -12,6 +12,30 @@ export async function POST(req) {
             return NextResponse.json({ error: "Missing fields" }, { status: 400 });
         }
 
+        // Log Audit Helper
+        const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
+        const userAgent = req.headers.get("user-agent") || "Unknown";
+
+        const logAudit = async (status, reason, userDetails = {}) => {
+            try {
+                await query(
+                    `INSERT INTO login_audit_logs (email, user_name, uid, ip_address, user_agent, login_status, failure_reason) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    [
+                        email,
+                        userDetails.name || null,
+                        userDetails.uid || null,
+                        ip,
+                        userAgent,
+                        status,
+                        reason
+                    ]
+                );
+            } catch (e) {
+                console.error("Audit Log Failed:", e);
+            }
+        };
+
         // Verify OTP
         const codes = await query(
             "SELECT * FROM verification_codes WHERE email = ? AND code = ? AND expires_at > NOW() ORDER BY created_at DESC LIMIT 1",
@@ -19,12 +43,14 @@ export async function POST(req) {
         );
 
         if (codes.length === 0) {
+            await logAudit('failed', 'Invalid or expired OTP');
             return NextResponse.json({ error: "Invalid or expired code" }, { status: 401 });
         }
 
         // Get User
         const users = await query("SELECT * FROM users WHERE email = ?", [email]);
         if (users.length === 0) {
+            await logAudit('failed', 'User record missing during 2FA');
             return NextResponse.json({ error: "User record not found" }, { status: 404 });
         }
         const user = users[0];
@@ -76,6 +102,9 @@ export async function POST(req) {
 
         // Cleanup used code
         await query("DELETE FROM verification_codes WHERE id = ?", [codes[0].id]);
+
+        // Log Success
+        await logAudit('success', null, user);
 
         return NextResponse.json({ message: "Login successful", user });
 

@@ -32,7 +32,7 @@ export function StorySection() {
                         <div className="grid grid-cols-3 gap-4 text-center">
                             <div className="flex flex-col items-center">
                                 <span className="text-4xl md:text-5xl font-extrabold text-slate-900">10k</span>
-                                <span className="text-blue-600 font-bold text-sm mt-1">Lives Impacted</span>
+                                <span className="text-blue-600 font-bold text-sm mt-1">We Served</span>
                             </div>
                             <div className="flex flex-col items-center">
                                 <span className="text-4xl md:text-5xl font-extrabold text-slate-900">10+</span>
@@ -40,7 +40,7 @@ export function StorySection() {
                             </div>
                             <div className="flex flex-col items-center">
                                 <span className="text-4xl md:text-5xl font-extrabold text-slate-900">15+</span>
-                                <span className="text-blue-600 font-bold text-sm mt-1">Active Years</span>
+                                <span className="text-blue-600 font-bold text-sm mt-1">Experience</span>
                             </div>
                         </div>
                     </div>

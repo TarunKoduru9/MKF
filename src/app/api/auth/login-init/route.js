@@ -19,21 +19,47 @@ export async function POST(req) {
         const { email, password } = body;
         if (!email || !password) return NextResponse.json({ error: "Email and Password required" }, { status: 400 });
 
+        // Helper to log audit
+        const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
+        const userAgent = req.headers.get("user-agent") || "Unknown";
+
+        const logAudit = async (status, reason, userDetails = {}) => {
+            try {
+                await query(
+                    `INSERT INTO login_audit_logs (email, user_name, uid, ip_address, user_agent, login_status, failure_reason) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    [
+                        email,
+                        userDetails.name || null,
+                        userDetails.uid || null,
+                        ip,
+                        userAgent,
+                        status,
+                        reason
+                    ]
+                );
+            } catch (e) {
+                console.error("Audit Log Failed:", e);
+            }
+        };
+
         // Get User
         const users = await query("SELECT * FROM users WHERE email = ?", [email]);
         if (users.length === 0) {
+            await logAudit('failed', 'User not found');
             return NextResponse.json({ error: "User not found. Please Sign Up." }, { status: 404 });
         }
         const user = users[0];
 
         // Verify Password
         if (!user.password_hash) {
-            // Backward compatibility for old users? Or force reset?
+            await logAudit('failed', 'Legacy account / No password set', user);
             return NextResponse.json({ error: "Please reset your password or sign up again." }, { status: 400 });
         }
 
         const isValid = await bcrypt.compare(password, user.password_hash);
         if (!isValid) {
+            await logAudit('failed', 'Invalid password', user);
             return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
         }
 

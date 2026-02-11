@@ -47,7 +47,7 @@ export function Footer() {
                         </div>
                         <div>
                             <h2 className="text-3xl font-bold tracking-tight text-white mb-1 group-hover:text-gray-200 transition-colors">MKF TRUST</h2>
-                            <p className="text-gray-400 text-sm tracking-wide">Together We Make Difference</p>
+                            <p className="text-gray-400 text-sm tracking-wide">Together We a Make Difference</p>
                         </div>
                     </Link>
 

@@ -142,7 +142,7 @@ export default function LoginPage() {
                                         className="w-full h-11 bg-[#DC2626] hover:bg-red-700 text-white font-bold text-base rounded-md shadow-md mt-2"
                                         disabled={loading}
                                     >
-                                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Proceed To Pay"} <ArrowUpRight className="ml-2 h-4 w-4" />
+                                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Login"} <ArrowUpRight className="ml-2 h-4 w-4" />
                                     </Button>
                                 </form>
 

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { loadRazorpay } from "@/lib/razorpay";
 import axios from "axios";
@@ -99,11 +99,28 @@ export default function DonatePage() {
     const [customAmount, setCustomAmount] = useState("");
     const [loading, setLoading] = useState(false);
     const [userData, setUserData] = useState({ name: "", email: "", phone: "", anonymous: false });
+    const router = useRouter();
+
+    // Pre-fill user data if logged in
+    const { user } = useStore();
+    useEffect(() => {
+        if (user) {
+            setUserData(prev => ({
+                ...prev,
+                name: user.name || "",
+                email: user.email || "",
+                phone: user.phone || ""
+            }));
+        }
+    }, [user]);
 
     const finalAmount = customAmount ? parseInt(customAmount) : amount;
 
     const handleHeroDonate = async () => {
+        // Hero Donation (Custom Amount) = Guest allowed. No login check.
+
         if (!finalAmount || finalAmount <= 0) return alert("Please enter a valid amount");
+        // Require details if guest
         if (!userData.anonymous && (!userData.name || !userData.email)) return alert("Please fill in your details");
 
         setLoading(true);
@@ -284,7 +301,7 @@ export default function DonatePage() {
                     <div className="container mx-auto px-4">
                         <div className="flex items-center gap-3 mb-8">
                             <div className="w-1 h-8 bg-blue-600"></div>
-                            <h3 className="text-2xl font-bold text-slate-900">Special Packages & Adons</h3>
+                            <h3 className="text-2xl font-bold text-slate-900">Special Packages & Add-ons</h3>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             {[...specialPackages].map(pkg => <PackageCard key={pkg.id} item={pkg} />)}
