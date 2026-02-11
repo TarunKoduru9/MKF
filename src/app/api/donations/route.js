@@ -36,11 +36,21 @@ export async function POST(request) {
 
         const orderId = order.id;
 
-        // 2. Save "Pending" transaction to DB. Use 'guest' UID if not provided.
-        // Ensure guest_name/email are saved if provided.
+        // Ensure 'guest' user exists if no uid provided
+        const finalUid = uid || 'guest';
+
+        // Check if user exists, if not create 'guest' placeholder
+        // Using INSERT IGNORE to be safe without select
+        await query(
+            `INSERT IGNORE INTO users (uid, email, password_hash, name, phone, role) 
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            ['guest', 'guest@mkftrust.org', 'guest_placeholder', 'Guest User', '0000000000', 'user']
+        );
+
+        // 2. Save "Pending" transaction to DB.
         await query(
             'INSERT INTO donations (uid, amount, purpose, payment_status, order_id, guest_name, guest_email, guest_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [uid || 'guest', amount, purpose, 'pending', orderId, guest_name || null, guest_email || null, guest_phone || null]
+            [finalUid, amount, purpose, 'pending', orderId, guest_name || null, guest_email || null, guest_phone || null]
         );
 
         return NextResponse.json({
