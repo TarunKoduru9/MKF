@@ -8,6 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Trash2, ShoppingCart, ArrowRight } from "lucide-react";
 import useStore from "@/lib/store";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { loadRazorpay } from "@/lib/razorpay";
 import { useState, useEffect } from "react";
 import { API_ROUTES } from "@/lib/routes";
@@ -32,9 +33,16 @@ export default function CartPage() {
 
     const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
 
+    const router = useRouter(); // Ensure this is imported
+
+    // ...
+
     const handleCheckout = async () => {
-        // 1. Check Auth
-        if (!user) return window.location.href = '/login';
+        // 1. Check Auth - Harden check
+        if (!user || !user.uid) {
+            // Force redirect if not fully authenticated
+            return router.push('/login');
+        }
 
         setLoading(true);
 

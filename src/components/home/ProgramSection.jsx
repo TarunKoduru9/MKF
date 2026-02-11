@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Droplets, HeartPulse, Utensils } from "lucide-react";
+import { ArrowRight, BookOpen, Droplets, HeartPulse, Utensils, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+
 
 const stories = [
     {
@@ -44,6 +45,21 @@ const stories = [
 export function ProgramSection() {
     const [activeIndex, setActiveIndex] = useState(1); // Default to middle item (Food & Nutrition)
 
+    const handleNext = () => {
+        setActiveIndex((prev) => (prev + 1) % stories.length);
+    };
+
+    const handlePrev = () => {
+        setActiveIndex((prev) => (prev - 1 + stories.length) % stories.length);
+    };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveIndex((prev) => (prev + 1) % stories.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
     const handleDotClick = (index) => {
         setActiveIndex(index);
     };
@@ -64,6 +80,22 @@ export function ProgramSection() {
 
                 {/* Carousel */}
                 <div className="relative w-full h-[550px] overflow-hidden flex justify-center items-center">
+                    {/* Arrow Navigation */}
+                    <button
+                        onClick={handlePrev}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
+                        aria-label="Previous Slide"
+                    >
+                        <ChevronLeft className="w-6 h-6" />
+                    </button>
+                    <button
+                        onClick={handleNext}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
+                        aria-label="Next Slide"
+                    >
+                        <ChevronRight className="w-6 h-6" />
+                    </button>
+
                     <div className="absolute inset-0 flex justify-center items-center">
                         {stories.map((story, index) => {
                             const isActive = index === activeIndex;
@@ -83,13 +115,13 @@ export function ProgramSection() {
                                 // Previous (Left)
                                 positionClass = "block";
                                 zIndex = "z-10";
-                                opacity = "opacity-100";
+                                opacity = "opacity-80";
                                 transform = "translate(-50%, -50%) translateX(-600px) scale(0.9)";
                             } else if (index === (activeIndex + 1) % stories.length) {
                                 // Next (Right)
                                 positionClass = "block";
                                 zIndex = "z-10";
-                                opacity = "opacity-100";
+                                opacity = "opacity-80";
                                 transform = "translate(-50%, -50%) translateX(600px) scale(0.9)";
                             }
                             // Else hidden
@@ -141,7 +173,9 @@ export function ProgramSection() {
                                                     {story.description}
                                                 </p>
                                                 <Button variant="outline" className="rounded-full border-slate-300 text-slate-700 hover:bg-slate-50 px-8 w-fit mt-auto font-bold">
+                                                   <Link href="/donate">
                                                     Learn More
+                                                    </Link>
                                                 </Button>
                                             </div>
                                         </div>

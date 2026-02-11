@@ -99,14 +99,14 @@ export function BannerCarousel() {
                 {/* Arrow Navigation */}
                 <button
                     onClick={handlePrev}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626] hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
                     aria-label="Previous Slide"
                 >
                     <ChevronLeft className="w-6 h-6" />
                 </button>
                 <button
                     onClick={handleNext}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626] hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
                     aria-label="Next Slide"
                 >
                     <ChevronRight className="w-6 h-6" />
@@ -133,16 +133,16 @@ export function BannerCarousel() {
                                 // Previous (Left)
                                 positionClass = "hidden md:block"; // Hide on mobile unique fix
                                 zIndex = "z-10";
-                                opacity = "opacity-40";
+                                opacity = "opacity-35";
                                 // Shift Left - pushed further
-                                transform = "translate(-50%, -50%) translateX(-650px) scale(0.8)";
+                                transform = "translate(-50%, -50%) translateX(-650px) scale(0.4)";
                             } else if (index === (currentIndex + 1) % banners.length) {
                                 // Next (Right)
                                 positionClass = "hidden md:block"; // Hide on mobile unique fix
                                 zIndex = "z-10";
-                                opacity = "opacity-40";
+                                opacity = "opacity-35";
                                 // Shift Right - pushed further
-                                transform = "translate(-50%, -50%) translateX(650px) scale(0.8)";
+                                transform = "translate(-50%, -50%) translateX(650px) scale(0.4)";
                             }
 
                             return (
@@ -159,7 +159,7 @@ export function BannerCarousel() {
                                         transition-all duration-700 ease-in-out cursor-pointer
                                         ${isActive
                                             ? "w-full md:w-[1000px] shadow-2xl"
-                                            : "w-[300px] md:w-[800px] shadow-lg grayscale hover:grayscale-0"
+                                            : "w-[300px] md:w-[800px] shadow-lg"
                                         }
                                         ${positionClass} ${zIndex} ${opacity}
                                         flex flex-col md:flex-row items-center justify-between p-6 md:p-14 gap-6 md:gap-8 rounded-[2rem] md:rounded-[2.5rem]
@@ -210,8 +210,8 @@ export function BannerCarousel() {
                         <button
                             key={idx}
                             onClick={() => setCurrentIndex(idx)}
-                            className={`w-3 h-3 md:w-4 md:h-4 rounded-full transition-all duration-300 border-2 border-slate-300 ${currentIndex === idx
-                                ? "bg-red-500 w-8 md:w-10 border-red-500"
+                            className={`w-3 h-3 md:w-4 md:h-4 rounded-full transition-all duration-300 border-1 border-slate-300 ${currentIndex === idx
+                                ? "bg-[#dc2626]/70 w-8 md:w-10 border-[#dc2626]/70"
                                 : "bg-transparent hover:bg-slate-200"
                                 }`}
                             aria-label={`Go to slide ${idx + 1}`}

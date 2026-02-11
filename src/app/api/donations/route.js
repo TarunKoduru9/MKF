@@ -44,10 +44,10 @@ export async function POST(request) {
                 }
             });
 
-            // If we successfully calculated a total, use it. 
-            // This prevents "frontend hackers" from sending { amount: 1 } for a 5000rs item.
             if (calculatedTotal > 0) {
                 finalAmount = calculatedTotal;
+
+                purpose = cart.map(item => `${item.title} (x${item.quantity})`).join(", ");
             }
         }
 
@@ -55,8 +55,6 @@ export async function POST(request) {
             return NextResponse.json({ error: 'Amount and Purpose required' }, { status: 400 });
         }
 
-        // Initialize Razorpay Instance
-        // IMPORTANT: Ensure RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET are in .env
         const instance = new Razorpay({
             key_id: process.env.RAZORPAY_KEY_ID,
             key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -79,11 +77,8 @@ export async function POST(request) {
 
         const orderId = order.id;
 
-        // Ensure 'guest' user exists if no uid provided
         const finalUid = uid || 'guest';
 
-        // Check if user exists, if not create 'guest' placeholder
-        // Using INSERT IGNORE to be safe without select
         await query(
             `INSERT IGNORE INTO users (uid, email, password_hash, name, phone, role) 
              VALUES (?, ?, ?, ?, ?, ?)`,
