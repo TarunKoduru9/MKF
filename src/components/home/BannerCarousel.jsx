@@ -9,8 +9,8 @@ import Link from "next/link";
 const banners = [
     {
         id: 1,
-        title: "Plant Trees, Grow Hope",
-        subtitle: "Help expand green cover where it matters most.",
+        title: "Your Contribution Matters",
+        subtitle: "Every donation helps us bring change to those in need.",
         bgClass: "bg-orange-50",
         img: "/images/3785b985f8dcd25cac23adfc34b286725973f069.png",
         highlightColor: "text-green-700",
@@ -19,8 +19,8 @@ const banners = [
     },
     {
         id: 2,
-        title: "Annadaan & Vastradaan",
-        subtitle: "Honour Your Ancestors by feeding little hungry souls.",
+        title: "Support Our Causes",
+        subtitle: "Join hands with us to make a lasting impact on society.",
         bgClass: "bg-pink-50",
         img: "/images/aceb5753ec4688f80c19a7be4c042823800b5cc51.jpg",
         highlightColor: "text-red-600",
@@ -29,8 +29,8 @@ const banners = [
     },
     {
         id: 3,
-        title: "Educate a Child",
-        subtitle: "Give the gift of knowledge and a brighter future.",
+        title: "Empower Through Giving",
+        subtitle: "Your generosity clears the path for a better future.",
         bgClass: "bg-blue-50",
         img: "/images/e933905819302f6ddd3f23bd9f43bc98ec401420.jpg",
         highlightColor: "text-blue-600",
@@ -39,8 +39,8 @@ const banners = [
     },
     {
         id: 4,
-        title: "Plant Trees, Grow Hope",
-        subtitle: "Help expand green cover where it matters most.",
+        title: "Make a Difference Today",
+        subtitle: "Small acts of kindness create endless ripples of hope.",
         bgClass: "bg-orange-50",
         img: "/images/143b1ea32ff101b5af8784514c5ab1b53621d68d.jpg",
         highlightColor: "text-green-700",
@@ -119,13 +119,13 @@ export function BannerCarousel() {
                                 opacity = "opacity-100";
                                 transform = "translate(-50%, -50%) scale(1)";
                             } else if (index === (currentIndex - 1 + banners.length) % banners.length) {
-                                positionClass = "hidden md:block"; 
+                                positionClass = "hidden md:block";
                                 zIndex = "z-10";
                                 opacity = "opacity-35";
                                 blur = "blur-xs";
                                 transform = "translate(-50%, -50%) translateX(-650px) scale(0.4)";
                             } else if (index === (currentIndex + 1) % banners.length) {
-                                positionClass = "hidden md:block"; 
+                                positionClass = "hidden md:block";
                                 zIndex = "z-10";
                                 opacity = "opacity-35";
                                 blur = "blur-xs";

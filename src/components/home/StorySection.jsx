@@ -59,7 +59,7 @@ export function StorySection() {
                                 create lasting impact, not just temporary relief.
                             </p>
                             <p>
-                                Through education, healthcare, livelihood support, and social welfare initiatives,
+                                Through our dedicated donation drives and community support initiatives,
                                 we're building a foundation for stronger, more resilient communities.
                             </p>
                         </div>

@@ -9,12 +9,13 @@ import Image from "next/image";
 
 const stories = [
     {
-        tag: "Education",
-        title: "Books For Hope",
-        description: "Providing quality education, scholarships, and learning materials to underprivileged children.",
+        tag: "Charity",
+        title: "The Joy of Giving",
+        description: "Witness the transformative power of your donations in changing lives.",
         icon: BookOpen,
         color: "bg-blue-100 text-blue-600",
-        image: "/images/education_class_kids.png",
+        image: "/images/7583809940071ede1dddc2039fe9758b0f67bab4.jpg",
+        // Keeping original image
     },
     {
         tag: "Food & Nutrition",
@@ -23,22 +24,15 @@ const stories = [
         icon: Utensils,
         color: "bg-orange-100 text-orange-600",
         image: "/images/c5678f4e8e1217d90c2f72f72c0655764fa3af2a.jpg",
+        // Using same image
     },
     {
-        tag: "Clean Water Access",
-        title: "Water For Life",
-        description: "Ensuring clean water for remote communities through sustainable water projects.",
-        icon: Droplets,
-        color: "bg-cyan-100 text-cyan-600",
-        image: "/images/skill_training_kids.png",
-    },
-    {
-        tag: "Healthcare",
-        title: "Healthy Tomorrow",
-        description: "Free medical camps and health awareness programs for rural areas.",
+        tag: "Impact",
+        title: "Lives Saved",
+        description: "Celebrating the countless lives touched and improved by your generosity.",
         icon: HeartPulse,
         color: "bg-red-100 text-red-600",
-        image: "/images/338945e620c2e756270ceef9c33075141da32fdf.jpg",
+        image: "/images/aceb5753ec4688f80c19a7be4c042823800b5cc5.jpg",
     },
 ];
 
@@ -173,8 +167,8 @@ export function ProgramSection() {
                                                     {story.description}
                                                 </p>
                                                 <Button variant="outline" className="rounded-full border-slate-300 text-slate-700 hover:bg-slate-50 px-8 w-fit mt-auto font-bold">
-                                                   <Link href="/donate">
-                                                    Learn More
+                                                    <Link href="/donate">
+                                                        Learn More
                                                     </Link>
                                                 </Button>
                                             </div>

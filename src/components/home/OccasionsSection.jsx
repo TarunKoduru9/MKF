@@ -6,22 +6,22 @@ import Image from "next/image";
 const occasions = [
     {
         title: "Birthday Celebration",
-        description: "To empower underprivileged communities through livelihood programs.",
+        description: "Celebrate your special day by sharing your blessings with others.",
         icon: GraduationCap,
     },
     {
         title: "Anniversary",
-        description: "A world where every individual has access to basic necessities and opportunities to thrive.",
+        description: "Mark your milestone by making a difference in someone's life.",
         icon: Target,
     },
     {
         title: "Special Achievement",
-        description: "Integrity, compassion, transparency, and commitment to creating lasting positive change.",
+        description: "Share your success by lifting others up through charitable giving.",
         icon: Leaf,
     },
     {
         title: "In Memory",
-        description: "Dedicated volunteers and professionals working together to make a meaningful difference.",
+        description: "Honor the legacy of your loved ones with a tribute donation.",
         icon: Users,
     },
 ];

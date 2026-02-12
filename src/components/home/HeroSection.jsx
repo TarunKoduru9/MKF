@@ -11,7 +11,7 @@ export function HeroSection() {
             <div className="container relative z-10 mx-auto px-4 pb-12 lg:pb-24">
                 <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
                     <div className="relative mx-auto w-full max-w-[400px] lg:max-w-[480px] order-2 lg:order-1">
-                        {/* Gray Box Placeholder matching reference */}  
+                        {/* Gray Box Placeholder matching reference */}
                         <div className="relative rounded-[2.5rem] overflow-hidden shadow-none bg-gray-300 aspect-[4/3] w-full flex items-center justify-center">
                             <Image
                                 src="/images/helping-hands1.png"
@@ -52,25 +52,25 @@ export function HeroSection() {
             <div className="relative z-20 container mx-auto px-4 -mt-10 mb-12">
                 <div className="grid gap-6 md:grid-cols-3">
                     <HeroCard
-                        category="Education"
-                        title="Books For Hope"
+                        category="General Support"
+                        title="Give Hope"
                         image="/images/a0a21d96e89afd4577c2c8c8c7543e11673c0b2f1.jpg"
                         goalPercentage={62}
-                        description="Providing education access for underprivileged children."
+                        description="Your kind contributions bring smiles to faces and warmth to hearts."
                     />
                     <HeroCard
-                        category="Healthcare"
-                        title="Healthy Tomorrow"
+                        category="Emergency Fund"
+                        title="Urgent Relief"
                         image="/images/143b1ea32ff101b5af8784514c5ab1b53621d68d.jpg"
                         goalPercentage={92}
-                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                        description="Stand with us to provide immediate aid where it is needed most."
                     />
                     <HeroCard
-                        category="Clean Water Access"
-                        title="Water For Life"
+                        category="Community Care"
+                        title="Care For All"
                         image="/images/7583809940071ede1dddc2039fe9758b0f67bab4.jpg"
                         goalPercentage={84}
-                        description="Ensuring clean water for remote communities."
+                        description="Building stronger communities through your continuous support and love."
                     />
                 </div>
             </div>
