@@ -71,7 +71,7 @@ export function OccasionsSection() {
                     <div className="lg:w-[40%]">
                         <div className="w-full h-full min-h-[500px] bg-[#BDBdbd] rounded-[2rem] flex items-center justify-center relative overflow-hidden">
                             <Image
-                                src="/images/birthday_party_kids.png"
+                                src="/images/714d8debe8086b3001b0645ed84f2bf2bb70b97e.jpg"
                                 alt="Occasions"
                                 fill
                                 className="object-cover"

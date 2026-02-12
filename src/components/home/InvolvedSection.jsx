@@ -23,10 +23,13 @@ export function InvolvedSection() {
                 <div className="relative w-full max-w-5xl mx-auto aspect-video bg-black rounded-[2rem] shadow-xl overflow-hidden group">
                     <video
                         controls
+                        autoPlay
+                        muted
+                        loop
                         className="w-full h-full object-cover"
-                        poster="/images/helping-hands.png"
+                        poster="/videos/C4016.mp4"
                     >
-                        <source src="/videos/intro.mp4" type="video/mp4" />
+                        <source autoPlay src="/videos/C4016.mp4" type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 </div>

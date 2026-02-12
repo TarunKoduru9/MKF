@@ -14,7 +14,7 @@ export function HeroSection() {
                         {/* Gray Box Placeholder matching reference */}  
                         <div className="relative rounded-[2.5rem] overflow-hidden shadow-none bg-gray-300 aspect-[4/3] w-full flex items-center justify-center">
                             <Image
-                                src="/images/helping-hands.png"
+                                src="/images/helping-hands1.png"
                                 alt="Empowering Lives"
                                 fill
                                 className="object-cover"
@@ -54,21 +54,21 @@ export function HeroSection() {
                     <HeroCard
                         category="Education"
                         title="Books For Hope"
-                        image="/images/education_class_kids.png"
+                        image="/images/a0a21d96e89afd4577c2c8c8c7543e11673c0b2f1.jpg"
                         goalPercentage={62}
                         description="Providing education access for underprivileged children."
                     />
                     <HeroCard
                         category="Healthcare"
                         title="Healthy Tomorrow"
-                        image="/images/healthcare_camp_kids.png"
+                        image="/images/143b1ea32ff101b5af8784514c5ab1b53621d68d.jpg"
                         goalPercentage={92}
                         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
                     />
                     <HeroCard
                         category="Clean Water Access"
                         title="Water For Life"
-                        image="/images/food_distribution_kids.png"
+                        image="/images/7583809940071ede1dddc2039fe9758b0f67bab4.jpg"
                         goalPercentage={84}
                         description="Ensuring clean water for remote communities."
                     />
@@ -90,7 +90,7 @@ function HeroCard({ category, title, image, goalPercentage, description }) {
             <h3 className="text-2xl font-extrabold text-slate-900 mb-3">{title}</h3>
 
             {/* Card Image */}
-            <div className="relative w-full h-52 mb-5 rounded-2xl overflow-hidden bg-gray-100">
+            <div className="relative w-full h-64 mb-5 rounded-2xl overflow-hidden bg-gray-100">
                 <Image
                     src={image}
                     alt={title}

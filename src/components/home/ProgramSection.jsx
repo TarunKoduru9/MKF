@@ -22,7 +22,7 @@ const stories = [
         description: "Daily meal programs, nutrition awareness, and food distribution to families in need.",
         icon: Utensils,
         color: "bg-orange-100 text-orange-600",
-        image: "/images/food_distribution_kids.png",
+        image: "/images/c5678f4e8e1217d90c2f72f72c0655764fa3af2a.jpg",
     },
     {
         tag: "Clean Water Access",
@@ -38,7 +38,7 @@ const stories = [
         description: "Free medical camps and health awareness programs for rural areas.",
         icon: HeartPulse,
         color: "bg-red-100 text-red-600",
-        image: "/images/healthcare_camp_kids.png",
+        image: "/images/338945e620c2e756270ceef9c33075141da32fdf.jpg",
     },
 ];
 

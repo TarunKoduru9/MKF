@@ -12,7 +12,7 @@ const banners = [
         title: "Plant Trees, Grow Hope",
         subtitle: "Help expand green cover where it matters most.",
         bgClass: "bg-orange-50",
-        img: "/images/skill_training_kids.png",
+        img: "/images/3785b985f8dcd25cac23adfc34b286725973f069.png",
         highlightColor: "text-green-700",
         btnColor: "bg-amber-400 hover:bg-amber-500 text-black",
         accent: "border-l-8 border-green-700"
@@ -22,7 +22,7 @@ const banners = [
         title: "Annadaan & Vastradaan",
         subtitle: "Honour Your Ancestors by feeding little hungry souls.",
         bgClass: "bg-pink-50",
-        img: "/images/food_distribution_kids.png",
+        img: "/images/aceb5753ec4688f80c19a7be4c042823800b5cc51.jpg",
         highlightColor: "text-red-600",
         btnColor: "bg-amber-400 hover:bg-amber-500 text-black",
         accent: "border-l-8 border-red-600"
@@ -32,7 +32,7 @@ const banners = [
         title: "Educate a Child",
         subtitle: "Give the gift of knowledge and a brighter future.",
         bgClass: "bg-blue-50",
-        img: "/images/education_class_kids.png",
+        img: "/images/e933905819302f6ddd3f23bd9f43bc98ec401420.jpg",
         highlightColor: "text-blue-600",
         btnColor: "bg-amber-400 hover:bg-amber-500 text-black",
         accent: "border-l-8 border-blue-600"
@@ -42,17 +42,7 @@ const banners = [
         title: "Plant Trees, Grow Hope",
         subtitle: "Help expand green cover where it matters most.",
         bgClass: "bg-orange-50",
-        img: "/images/skill_training_kids.png",
-        highlightColor: "text-green-700",
-        btnColor: "bg-amber-400 hover:bg-amber-500 text-black",
-        accent: "border-l-8 border-green-700"
-    },
-    {
-        id: 5,
-        title: "Plant Trees, Grow Hope",
-        subtitle: "Help expand green cover where it matters most.",
-        bgClass: "bg-orange-50",
-        img: "/images/skill_training_kids.png",
+        img: "/images/143b1ea32ff101b5af8784514c5ab1b53621d68d.jpg",
         highlightColor: "text-green-700",
         btnColor: "bg-amber-400 hover:bg-amber-500 text-black",
         accent: "border-l-8 border-green-700"
@@ -91,7 +81,7 @@ export function BannerCarousel() {
         <section
             className="relative bg-white overflow-hidden pb-12 md:pb-28 md:pt-20"
             onMouseEnter={() => setIsHovered(true)}
-            
+
             onMouseLeave={() => setIsHovered(false)}
         >
             <div className="container mx-auto px-4 relative">
@@ -117,31 +107,28 @@ export function BannerCarousel() {
                         {banners.map((banner, index) => {
                             const isActive = index === currentIndex;
 
-                            // Positioning logic
                             let positionClass = "hidden";
                             let zIndex = "z-0";
                             let opacity = "opacity-0";
                             let transform = "";
+                            let blur = "";
 
                             if (index === currentIndex) {
-                                // Active Center
                                 positionClass = "block";
                                 zIndex = "z-30";
                                 opacity = "opacity-100";
                                 transform = "translate(-50%, -50%) scale(1)";
                             } else if (index === (currentIndex - 1 + banners.length) % banners.length) {
-                                // Previous (Left)
-                                positionClass = "hidden md:block"; // Hide on mobile unique fix
+                                positionClass = "hidden md:block"; 
                                 zIndex = "z-10";
                                 opacity = "opacity-35";
-                                // Shift Left - pushed further
+                                blur = "blur-xs";
                                 transform = "translate(-50%, -50%) translateX(-650px) scale(0.4)";
                             } else if (index === (currentIndex + 1) % banners.length) {
-                                // Next (Right)
-                                positionClass = "hidden md:block"; // Hide on mobile unique fix
+                                positionClass = "hidden md:block"; 
                                 zIndex = "z-10";
                                 opacity = "opacity-35";
-                                // Shift Right - pushed further
+                                blur = "blur-xs";
                                 transform = "translate(-50%, -50%) translateX(650px) scale(0.4)";
                             }
 
@@ -161,7 +148,7 @@ export function BannerCarousel() {
                                             ? "w-full md:w-[1000px] shadow-2xl"
                                             : "w-[300px] md:w-[800px] shadow-lg"
                                         }
-                                        ${positionClass} ${zIndex} ${opacity}
+                                        ${positionClass} ${zIndex} ${opacity} ${blur}
                                         flex flex-col md:flex-row items-center justify-between p-6 md:p-14 gap-6 md:gap-8 rounded-[2rem] md:rounded-[2.5rem]
                                         ${banner.bgClass} ${banner.accent} relative overflow-hidden
                                     `}

@@ -17,9 +17,9 @@ export function StorySection() {
                         {/* Gray Placeholder Image */}
                         <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-gray-300 md:bg-[#BDBdbd] mb-8 flex items-center justify-center">
                             {/* Placeholder Icon similar to reference */}
-                            <div className="text-white opacity-60 transform scale-150">
+                            <div className="text-white transform scale-150">
                                 <Image
-                                    src="/images/helping-hands.png"
+                                    src="/images/2ab7ca8c2778d9c0a9656aef2343d52d69cb9902.png"
                                     alt="Our Story"
                                     width={500}
                                     height={500}

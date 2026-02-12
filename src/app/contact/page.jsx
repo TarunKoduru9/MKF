@@ -105,7 +105,7 @@ export default function ContactPage() {
 
                             {/* Right: Placeholder Image */}
                             <div className="flex-1 relative mt-10">
-                                <Image src="/images/register-image.jpg" alt="Contact" width={400} height={400} className="rounded-xl" />
+                                <Image src="/images/5955052504a21611f622e8ca84555a8e0a934659.png" alt="Contact" fill className="rounded-xl object-cover" />
                             </div>
                         </div>
                     </div>
