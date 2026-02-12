@@ -75,7 +75,7 @@ export default function MyAccountPage() {
 
                 <div className="grid gap-8 lg:grid-cols-12">
                     {/* Sidebar */}
-                    <div className="lg:col-span-3 space-y-4">
+                    <div className="lg:col-span-3 grid grid-cols-2 lg:block gap-4 lg:gap-0 lg:space-y-4">
                         <NavCard
                             icon={User}
                             title="My Profile"
@@ -157,7 +157,7 @@ function ProfileSection({ user }) {
 
     return (
         <Card className="border-0 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6 border-b">
+            <CardHeader className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 pb-6 border-b">
                 <div className="flex items-center gap-4">
                     <div className="h-16 w-16 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 text-2xl font-bold">
                         {user.name?.charAt(0).toUpperCase()}
@@ -305,7 +305,7 @@ function DonationsSection() {
                     <CardDescription>Thank you for supporting our cause.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="rounded-md border">
+                    <div className="hidden md:block rounded-md border overflow-x-auto">
                         <table className="w-full text-sm">
                             <thead className="bg-slate-50 border-b">
                                 <tr>
@@ -345,6 +345,30 @@ function DonationsSection() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Mobile Card View */}
+                    <div className="md:hidden space-y-4">
+                        {donations.map((d) => (
+                            <div key={d.id} className="p-4 rounded-lg border bg-white shadow-sm space-y-3">
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <p className="font-semibold text-slate-900">{d.purpose}</p>
+                                        <p className="text-xs text-muted-foreground">{new Date(d.created_at).toLocaleDateString()}</p>
+                                    </div>
+                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${d.payment_status === 'success' ? 'bg-green-100 text-green-800' :
+                                        d.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                            'bg-red-100 text-red-800'
+                                        }`}>
+                                        {d.payment_status.charAt(0).toUpperCase() + d.payment_status.slice(1)}
+                                    </span>
+                                </div>
+                                <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+                                    <span className="font-bold text-green-600 text-lg">₹{d.amount}</span>
+                                    <Button variant="outline" size="sm" onClick={() => setSelectedDonation(d)}>View Details</Button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </CardContent>
             </Card>

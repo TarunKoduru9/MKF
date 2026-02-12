@@ -59,10 +59,10 @@ export function ProgramSection() {
     };
 
     return (
-        <section id="programs" className="py-10 bg-white overflow-hidden">
+        <section id="programs" className="py-6 md:py-10 bg-white overflow-hidden">
             <div className="container mx-auto px-4">
                 {/* Header */}
-                <div className="text-center mb-16 space-y-2">
+                <div className="text-center mb-6 md:mb-16 space-y-2">
                     <span className="text-blue-600 font-bold text-sm tracking-wide uppercase">
                         Success Story
                     </span>
@@ -73,21 +73,21 @@ export function ProgramSection() {
                 </div>
 
                 {/* Carousel */}
-                <div className="relative w-full h-[550px] overflow-hidden flex justify-center items-center">
+                <div className="relative w-full h-[500px] md:h-[550px] overflow-hidden flex justify-center items-center ">
                     {/* Arrow Navigation */}
                     <button
                         onClick={handlePrev}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-50 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-2 md:p-3 rounded-full shadow-lg transition-transform hover:scale-110 flex"
                         aria-label="Previous Slide"
                     >
-                        <ChevronLeft className="w-6 h-6" />
+                        <ChevronLeft className="w-4 h-4 md:w-6 md:h-6" />
                     </button>
                     <button
                         onClick={handleNext}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-50 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-2 md:p-3 rounded-full shadow-lg transition-transform hover:scale-110 flex"
                         aria-label="Next Slide"
                     >
-                        <ChevronRight className="w-6 h-6" />
+                        <ChevronRight className="w-4 h-4 md:w-6 md:h-6" />
                     </button>
 
                     <div className="absolute inset-0 flex justify-center items-center">
@@ -107,13 +107,13 @@ export function ProgramSection() {
                                 transform = "translate(-50%, -50%) scale(1)";
                             } else if (index === (activeIndex - 1 + stories.length) % stories.length) {
                                 // Previous (Left)
-                                positionClass = "block";
+                                positionClass = "hidden md:block";
                                 zIndex = "z-10";
                                 opacity = "opacity-80";
                                 transform = "translate(-50%, -50%) translateX(-600px) scale(0.9)";
                             } else if (index === (activeIndex + 1) % stories.length) {
                                 // Next (Right)
-                                positionClass = "block";
+                                positionClass = "hidden md:block";
                                 zIndex = "z-10";
                                 opacity = "opacity-80";
                                 transform = "translate(-50%, -50%) translateX(600px) scale(0.9)";
@@ -133,17 +133,17 @@ export function ProgramSection() {
                                     className={`
                                         transition-all duration-700 ease-in-out cursor-pointer
                                         ${isActive
-                                            ? "w-[800px] h-[450px]"
-                                            : "w-[300px] h-[400px]"
+                                            ? "w-[90vw] md:w-[800px] h-auto md:h-[450px]"
+                                            : "hidden md:block w-[300px] h-[400px]"
                                         } 
                                         ${positionClass} ${zIndex} ${opacity}
                                     `}
                                 >
                                     {isActive ? (
                                         // Active Card: Image Left + Text Right
-                                        <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 h-[450px] flex overflow-hidden">
+                                        <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 h-full md:h-[450px] flex flex-col md:flex-row overflow-hidden">
                                             {/* Left: Image */}
-                                            <div className="w-1/2 relative h-full bg-gray-100">
+                                            <div className="w-full h-48 md:w-1/2 relative md:h-full bg-gray-100">
                                                 <Image
                                                     src={story.image}
                                                     alt={story.title}
@@ -158,7 +158,7 @@ export function ProgramSection() {
                                             </div>
 
                                             {/* Right: Content */}
-                                            <div className="w-1/2 p-8 md:p-10 flex flex-col justify-center text-left">
+                                            <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center text-left">
                                                 <h3 className="text-3xl font-extrabold text-slate-900 mb-4 leading-tight">
                                                     {story.title}
                                                 </h3>
@@ -200,7 +200,7 @@ export function ProgramSection() {
                 </div>
 
                 {/* Dots Navigation */}
-                <div className="flex justify-center gap-3 mt-12">
+                <div className="flex justify-center gap-3 mt-6 md:mt-12">
                     {stories.map((_, index) => (
                         <button
                             key={index}

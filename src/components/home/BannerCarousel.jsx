@@ -89,17 +89,17 @@ export function BannerCarousel() {
                 {/* Arrow Navigation */}
                 <button
                     onClick={handlePrev}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-50 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-2 md:p-3 rounded-full shadow-lg transition-transform hover:scale-110 flex"
                     aria-label="Previous Slide"
                 >
-                    <ChevronLeft className="w-6 h-6" />
+                    <ChevronLeft className="w-4 h-4 md:w-6 md:h-6" />
                 </button>
                 <button
                     onClick={handleNext}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 hidden md:flex"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-50 bg-[#dc2626]/80 hover:bg-[#dc2626] text-white p-2 md:p-3 rounded-full shadow-lg transition-transform hover:scale-110 flex"
                     aria-label="Next Slide"
                 >
-                    <ChevronRight className="w-6 h-6" />
+                    <ChevronRight className="w-4 h-4 md:w-6 md:h-6" />
                 </button>
 
                 <div className="relative w-full h-[550px] md:h-[550px] flex justify-center items-center overflow-hidden">
