@@ -14,7 +14,7 @@ export function HeroSection() {
                         {/* Gray Box Placeholder matching reference */}
                         <div className="relative rounded-[2.5rem] overflow-hidden shadow-none bg-gray-300 aspect-[4/3] w-full flex items-center justify-center">
                             <Image
-                                src="/images/helping-hands1.png"
+                                src="/images/helping-hands.png"
                                 alt="Empowering Lives"
                                 fill
                                 className="object-cover"

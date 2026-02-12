@@ -13,9 +13,9 @@ const banners = [
         subtitle: "Every donation helps us bring change to those in need.",
         bgClass: "bg-orange-50",
         img: "/images/3785b985f8dcd25cac23adfc34b286725973f069.png",
-        highlightColor: "text-green-700",
-        btnColor: "bg-amber-400 hover:bg-amber-500 text-black",
-        accent: "border-l-8 border-green-700"
+        highlightColor: "text-[#dc2626]",
+        btnColor: "bg-[#dc2626] hover:bg-[#dc2626]/80 text-white",
+        accent: "border-l-8 border-[#dc2626]/20"
     },
     {
         id: 2,
@@ -23,9 +23,9 @@ const banners = [
         subtitle: "Join hands with us to make a lasting impact on society.",
         bgClass: "bg-pink-50",
         img: "/images/aceb5753ec4688f80c19a7be4c042823800b5cc51.jpg",
-        highlightColor: "text-red-600",
-        btnColor: "bg-amber-400 hover:bg-amber-500 text-black",
-        accent: "border-l-8 border-red-600"
+        highlightColor: "text-[#dc2626]",
+        btnColor: "bg-[#dc2626] hover:bg-[#dc2626]/80 text-white",
+        accent: "border-l-8 border-[#dc2626]/20"
     },
     {
         id: 3,
@@ -33,9 +33,9 @@ const banners = [
         subtitle: "Your generosity clears the path for a better future.",
         bgClass: "bg-blue-50",
         img: "/images/e933905819302f6ddd3f23bd9f43bc98ec401420.jpg",
-        highlightColor: "text-blue-600",
-        btnColor: "bg-amber-400 hover:bg-amber-500 text-black",
-        accent: "border-l-8 border-blue-600"
+        highlightColor: "text-[#dc2626]",
+        btnColor: "bg-[#dc2626] hover:bg-[#dc2626]/80 text-white",
+        accent: "border-l-8 border-[#dc2626]/20"
     },
     {
         id: 4,
@@ -43,9 +43,9 @@ const banners = [
         subtitle: "Small acts of kindness create endless ripples of hope.",
         bgClass: "bg-orange-50",
         img: "/images/143b1ea32ff101b5af8784514c5ab1b53621d68d.jpg",
-        highlightColor: "text-green-700",
-        btnColor: "bg-amber-400 hover:bg-amber-500 text-black",
-        accent: "border-l-8 border-green-700"
+        highlightColor: "text-[#dc2626]",
+        btnColor: "bg-[#dc2626] hover:bg-[#dc2626]/80 text-white",
+        accent: "border-l-8 border-[#dc2626]/20"
     }
 ];
 
