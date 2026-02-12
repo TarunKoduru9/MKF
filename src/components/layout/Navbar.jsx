@@ -51,7 +51,7 @@ export function Navbar() {
                     </div>
                     <div className="hidden flex-col md:flex">
                         <span className="text-xl font-bold leading-none text-primary">MKF TRUST</span>
-                        <span className="text-[10px] text-muted-foreground">Together we make Change</span>
+                        <span className="text-[10px] text-muted-foreground">Together We Make Change</span>
                     </div>
                 </Link>
 
