@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { query } from "@/lib/db"; 
+import { query } from "@/lib/db";
 import nodemailer from "nodemailer";
 
 export async function GET(req) {
@@ -27,7 +27,7 @@ export async function GET(req) {
         // 3. Send Emails
         const results = await Promise.allSettled(users.map(async (user) => {
             const mailOptions = {
-                from: process.env.SMTP_EMAIL || process.env.EMAIL_USER,
+                from: { name: "MKF Trust India", address: process.env.SMTP_EMAIL || process.env.EMAIL_USER },
                 to: user.email,
                 subject: `Happy Birthday, ${user.name}! 🎉`,
                 html: `

@@ -80,7 +80,7 @@ export async function POST(req) {
             console.log("------------------------------------------");
         } else {
             await transporter.sendMail({
-                from: process.env.SMTP_EMAIL,
+                from: { name: "MKF Trust India", address: process.env.SMTP_EMAIL },
                 to: email,
                 subject: "Your Login Code - MKF Trust",
                 text: `Your verification code is: ${otp}. It expires in 5 minutes.`,

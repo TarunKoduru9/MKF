@@ -12,8 +12,6 @@ export async function POST(req) {
             );
         }
 
-        // Ideally, insert into 'newsletters' table or sending to email service
-        // For now, we simulate success
         console.log(`Newsletter Subscription: ${email}`);
 
         return NextResponse.json(

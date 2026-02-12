@@ -37,7 +37,7 @@ export async function POST(req) {
         });
 
         await transporter.sendMail({
-            from: process.env.SMTP_EMAIL || process.env.EMAIL_USER,
+            from: { name: "MKF Trust India", address: process.env.SMTP_EMAIL || process.env.EMAIL_USER },
             to: email,
             subject: "Reset Your Password - MKF Trust",
             html: `

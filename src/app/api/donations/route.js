@@ -23,16 +23,11 @@ export async function POST(request) {
                 let price = 0;
 
                 if (product) {
-                    // It's a food package, check variant
                     const variant = cartItem.id.includes('-veg') || cartItem.title.includes('(Veg)') ? 'veg' : 'nonveg';
-                    // Fallback logic if ID parsing isn't perfect, but relies on 'variants' structure
                     price = product.variants ? (product.variants[variant] || product.variants.nonveg) : 0;
-
-                    // Specific fix: The cart IDs in store.js are like "food-20-veg". 
-                    // Let's refine logical lookup:
                     if (cartItem.id.includes('-veg')) price = product.variants.veg;
                     else if (cartItem.id.includes('-nonveg')) price = product.variants.nonveg;
-                    else price = Object.values(product.variants)[0]; // Fallback
+                    else price = Object.values(product.variants)[0];
                 } else {
                     // Check specialPackages
                     product = specialPackages.find(p => p.id === cartItem.id);

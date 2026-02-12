@@ -165,7 +165,7 @@ export async function POST(req) {
             `;
 
             const mailOptions = {
-                from: process.env.SMTP_EMAIL || process.env.EMAIL_USER,
+                from: { name: "MKF Trust India", address: process.env.SMTP_EMAIL || process.env.EMAIL_USER },
                 to: email,
                 subject: isNewAccount ? `Donation Receipt & Account Detail` : `Thank You for Your Donation! ❤️`,
                 html: emailHtml,

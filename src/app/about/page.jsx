@@ -21,7 +21,7 @@ export default function AboutPage() {
                             {/* Left Content */}
                             <div className="flex-1 space-y-8">
                                 <div>
-                                    <h4 className="text-blue-600 font-semibold mb-2">Together We Make A Difference</h4>
+                                    <h4 className="text-blue-600 font-semibold mb-2">Together We Make Change</h4>
                                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight">
                                         Empowering Lives,<br />
                                         Building Futures

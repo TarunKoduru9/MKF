@@ -14,7 +14,7 @@ export function HeroSection() {
                         {/* Gray Box Placeholder matching reference */}
                         <div className="relative rounded-[2.5rem] overflow-hidden shadow-none bg-gray-300 aspect-[4/3] w-full flex items-center justify-center">
                             <Image
-                                src="/images/helping-hands.png"
+                                src="/images/helping-hands1.png"
                                 alt="Empowering Lives"
                                 fill
                                 className="object-cover"
@@ -25,7 +25,7 @@ export function HeroSection() {
 
                     <div className="text-center lg:text-left order-1 lg:order-2 space-y-6">
                         <h2 className="text-blue-600 font-semibold tracking-normal text-lg">
-                            Together We Make A Difference
+                            Together We Make Change
                         </h2>
                         <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl leading-[1.1]">
                             Empowering Lives, <br />
@@ -107,7 +107,7 @@ function HeroCard({ category, title, image, goalPercentage, description }) {
                 </div>
                 <div className="w-full bg-slate-100 rounded-full h-1.5">
                     <div
-                        className="bg-emerald-500 h-1.5 rounded-full"
+                        className="bg-blue-600 h-1.5 rounded-full"
                         style={{ width: `${goalPercentage}%` }}
                     ></div>
                 </div>
