@@ -91,7 +91,7 @@ export default function AboutPage() {
 
                                         <h3 className="font-bold text-xl text-slate-900 mb-2">The Beginning</h3>
                                         <p className="text-slate-600 leading-relaxed text-sm">
-                                            Started With A Small Group Volunteers Distributing Food Packets To 50 Homeless Individuals Weekly
+                                            Started With A Small Group Volunteers Distributing Food Support Packages To 50 Homeless Individuals Weekly
                                         </p>
                                     </div>
                                 </div>
