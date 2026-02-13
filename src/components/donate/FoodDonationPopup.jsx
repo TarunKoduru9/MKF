@@ -28,6 +28,12 @@ export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, package
         try {
             const uploadedUrls = [];
             for (const file of files) {
+                // Client-side validation
+                if (!file.type.startsWith("image/")) {
+                    alert(`Skipping ${file.name}: Only images are allowed.`);
+                    continue;
+                }
+
                 const formData = new FormData();
                 formData.append("file", file);
 

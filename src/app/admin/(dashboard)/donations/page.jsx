@@ -8,6 +8,22 @@ import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
+const safeParseImages = (jsonString) => {
+    if (!jsonString) return [];
+    try {
+        const parsed = JSON.parse(jsonString);
+        if (Array.isArray(parsed)) return parsed;
+        if (typeof parsed === 'string') return [parsed];
+        return [];
+    } catch (e) {
+        // If simple string/URL
+        if (typeof jsonString === 'string' && jsonString.startsWith('http')) {
+            return [jsonString];
+        }
+        return [];
+    }
+};
+
 export default function AdminDonationsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedDonation, setSelectedDonation] = useState(null);
@@ -79,6 +95,8 @@ export default function AdminDonationsPage() {
                             ) : (
                                 filteredDonations?.map((donation) => {
                                     const details = donation.food_details?.[0] || {};
+                                    const images = safeParseImages(details.image_urls);
+
                                     return (
                                         <tr key={donation.id} className="hover:bg-gray-50">
                                             <td className="px-6 py-4 whitespace-nowrap">
@@ -110,9 +128,9 @@ export default function AdminDonationsPage() {
                                                 )}
                                             </td>
                                             <td className="px-6 py-4">
-                                                {details.image_urls && JSON.parse(details.image_urls).length > 0 ? (
+                                                {images.length > 0 ? (
                                                     <div className="flex -space-x-2 overflow-hidden">
-                                                        {JSON.parse(details.image_urls).map((url, i) => (
+                                                        {images.map((url, i) => (
                                                             <div key={i} className="inline-block h-8 w-8 rounded-full ring-2 ring-white relative overflow-hidden bg-gray-100">
                                                                 <Image src={url} alt="Proof" fill className="object-cover" />
                                                             </div>
@@ -181,31 +199,34 @@ export default function AdminDonationsPage() {
                             </div>
                         </div>
 
-                        {selectedDonation.food_details?.map((detail, idx) => (
-                            <div key={idx} className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                                <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                                    Event Details
-                                    <span className="text-xs font-normal bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{detail.category}</span>
-                                </h4>
-                                <div className="space-y-2 text-sm">
-                                    {detail.reason && <p><span className="font-medium text-gray-500">Occasion/Reason:</span> {detail.reason}</p>}
-                                    {detail.event_date && <p><span className="font-medium text-gray-500">Event Date:</span> {new Date(detail.event_date).toLocaleDateString()}</p>}
+                        {selectedDonation.food_details?.map((detail, idx) => {
+                            const detailImages = safeParseImages(detail.image_urls);
+                            return (
+                                <div key={idx} className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                        Event Details
+                                        <span className="text-xs font-normal bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{detail.category}</span>
+                                    </h4>
+                                    <div className="space-y-2 text-sm">
+                                        {detail.reason && <p><span className="font-medium text-gray-500">Occasion/Reason:</span> {detail.reason}</p>}
+                                        {detail.event_date && <p><span className="font-medium text-gray-500">Event Date:</span> {new Date(detail.event_date).toLocaleDateString()}</p>}
 
-                                    {detail.image_urls && (
-                                        <div className="mt-3">
-                                            <p className="font-medium text-gray-500 mb-2">Uploaded Images:</p>
-                                            <div className="flex gap-2 bg-white p-2 rounded-md border border-slate-100">
-                                                {JSON.parse(detail.image_urls).map((url, i) => (
-                                                    <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="block relative w-20 h-20 rounded-md overflow-hidden hover:opacity-80 transition-opacity border border-slate-200">
-                                                        <Image src={url} alt={`Upload ${i + 1}`} fill className="object-cover" />
-                                                    </a>
-                                                ))}
+                                        {detailImages.length > 0 && (
+                                            <div className="mt-3">
+                                                <p className="font-medium text-gray-500 mb-2">Uploaded Images:</p>
+                                                <div className="flex gap-2 bg-white p-2 rounded-md border border-slate-100">
+                                                    {detailImages.map((url, i) => (
+                                                        <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="block relative w-20 h-20 rounded-md overflow-hidden hover:opacity-80 transition-opacity border border-slate-200">
+                                                            <Image src={url} alt={`Upload ${i + 1}`} fill className="object-cover" />
+                                                        </a>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            )
+                        })}
 
                         <div>
                             <h4 className="font-semibold text-gray-900 border-b pb-2 mb-3">Items / Purpose</h4>
