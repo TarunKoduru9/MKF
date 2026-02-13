@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
+import { API_ROUTES } from "@/lib/routes";
 
 export function Footer() {
     const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ export function Footer() {
         if (!email) return;
         setLoading(true);
         try {
-            const res = await axios.post("/api/newsletter", { email });
+            const res = await axios.post(API_ROUTES.NEWSLETTER, { email });
             if (res.status === 201) {
                 alert("Subscribed successfully!");
                 setEmail("");

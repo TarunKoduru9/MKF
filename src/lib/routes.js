@@ -33,4 +33,5 @@ export const API_ROUTES = {
     CONTACT: "/api/contact",
     NEWSLETTER: "/api/newsletter",
     USER: "/api/user",
+    UPLOAD: "/api/upload",
 };

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { API_ROUTES } from "@/lib/routes";
 
 const safeParseImages = (jsonString) => {
     if (!jsonString) return [];
@@ -32,7 +33,7 @@ export default function AdminDonationsPage() {
     const { data: donations, isLoading, isError } = useQuery({
         queryKey: ["admin-donations"],
         queryFn: async () => {
-            const { data } = await axios.get("/api/admin/donations");
+            const { data } = await axios.get(API_ROUTES.ADMIN.DONATIONS);
             return data;
         },
     });
@@ -45,10 +46,7 @@ export default function AdminDonationsPage() {
         d.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    console.log("Donations Data:", donations);
-    if (donations && donations.length > 0) {
-        console.log("Sample Details:", donations[0].food_details);
-    }
+
 
     return (
         <div className="space-y-6">

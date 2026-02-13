@@ -3,14 +3,23 @@
 import { useQuery } from "@tanstack/react-query";
 import { DollarSign, Users, Calendar, TrendingUp, Loader2 } from "lucide-react";
 import axios from "axios";
+import { API_ROUTES } from "@/lib/routes";
 
 export default function AdminDashboardPage() {
 
     const { data: stats, isLoading, isError } = useQuery({
         queryKey: ["admin-stats"],
         queryFn: async () => {
-            const { data } = await axios.get("/api/admin/stats");
+            const { data } = await axios.get(API_ROUTES.ADMIN.STATS);
             return data;
+        },
+    });
+
+    const { data: recentDonations, isLoading: isLoadingDonations } = useQuery({
+        queryKey: ["admin-recent-donations"],
+        queryFn: async () => {
+            const { data } = await axios.get(API_ROUTES.ADMIN.DONATIONS);
+            return data.slice(0, 5);
         },
     });
 
@@ -74,7 +83,53 @@ export default function AdminDashboardPage() {
 
             <div className="mt-8 rounded-xl border bg-white p-6 shadow-sm">
                 <h3 className="mb-4 text-lg font-bold text-gray-900">Recent Activity</h3>
-                <p className="text-gray-500">Donations table coming next...</p>
+
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm text-gray-500">
+                        <thead className="bg-gray-50 text-xs uppercase text-gray-700">
+                            <tr>
+                                <th className="px-6 py-3">Date</th>
+                                <th className="px-6 py-3">Donor</th>
+                                <th className="px-6 py-3">Amount</th>
+                                <th className="px-6 py-3">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                            {isLoadingDonations ? (
+                                <tr>
+                                    <td colSpan="4" className="py-4 text-center">
+                                        <Loader2 className="mx-auto h-5 w-5 animate-spin text-primary" />
+                                    </td>
+                                </tr>
+                            ) : recentDonations?.length === 0 ? (
+                                <tr>
+                                    <td colSpan="4" className="py-4 text-center">No recent activity.</td>
+                                </tr>
+                            ) : (
+                                recentDonations?.map((donation) => (
+                                    <tr key={donation.id} className="hover:bg-gray-50">
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            {new Date(donation.created_at).toLocaleDateString()}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {donation.user_name || donation.guest_name || "Anonymous"}
+                                        </td>
+                                        <td className="px-6 py-4 font-medium text-gray-900">
+                                            ₹ {parseFloat(donation.amount).toLocaleString()}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${donation.payment_status === "success" ? "bg-green-100 text-green-800" :
+                                                donation.payment_status === "failed" ? "bg-red-100 text-red-800" : "bg-yellow-100 text-yellow-800"
+                                                }`}>
+                                                {donation.payment_status}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

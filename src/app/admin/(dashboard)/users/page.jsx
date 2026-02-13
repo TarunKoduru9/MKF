@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Loader2, Search, User } from "lucide-react";
 import { useState } from "react";
+import { API_ROUTES } from "@/lib/routes";
 
 export default function AdminUsersPage() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -11,7 +12,7 @@ export default function AdminUsersPage() {
     const { data: users, isLoading, isError } = useQuery({
         queryKey: ["admin-users"],
         queryFn: async () => {
-            const { data } = await axios.get("/api/admin/users");
+            const { data } = await axios.get(API_ROUTES.ADMIN.USERS);
             return data;
         },
     });
@@ -88,8 +89,8 @@ export default function AdminUsersPage() {
                                         <td className="px-6 py-4">
                                             <span
                                                 className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${user.role === "admin"
-                                                        ? "bg-purple-100 text-purple-800"
-                                                        : "bg-blue-100 text-blue-800"
+                                                    ? "bg-purple-100 text-purple-800"
+                                                    : "bg-blue-100 text-blue-800"
                                                     }`}
                                             >
                                                 {user.role}

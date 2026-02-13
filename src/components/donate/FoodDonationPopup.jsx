@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Upload, X, Loader2 } from "lucide-react";
 import axios from "axios";
 import Image from "next/image";
+import { API_ROUTES } from "@/lib/routes";
 
 export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, packageName }) {
     const [category, setCategory] = useState("Birthday");
@@ -37,7 +38,7 @@ export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, package
                 const formData = new FormData();
                 formData.append("file", file);
 
-                const res = await axios.post("/api/upload", formData, {
+                const res = await axios.post(API_ROUTES.UPLOAD, formData, {
                     headers: { "Content-Type": "multipart/form-data" }
                 });
 

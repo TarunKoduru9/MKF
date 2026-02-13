@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Loader2, ArrowLeft, KeyRound, Mail } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
+import { API_ROUTES } from "@/lib/routes";
 
 export default function AdminForgotPasswordPage() {
     const router = useRouter();
@@ -24,7 +25,7 @@ export default function AdminForgotPasswordPage() {
         setMessage("");
 
         try {
-            await axios.post("/api/auth/forgot-password/init", { email });
+            await axios.post(API_ROUTES.AUTH.FORGOT_PASSWORD.INIT, { email });
             setStep(2);
             setMessage("OTP sent to your email. Please check your inbox.");
         } catch (err) {
@@ -40,7 +41,7 @@ export default function AdminForgotPasswordPage() {
         setError("");
 
         try {
-            await axios.post("/api/auth/forgot-password/confirm", {
+            await axios.post(API_ROUTES.AUTH.FORGOT_PASSWORD.CONFIRM, {
                 email,
                 code: otp,
                 newPassword

@@ -7,6 +7,7 @@ import { Plus, Trash2, Image as ImageIcon, Video, X, Loader2 } from "lucide-reac
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_ROUTES } from "@/lib/routes";
 
 export default function GalleryManagementPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +25,7 @@ export default function GalleryManagementPage() {
     const { data: items = [], isLoading } = useQuery({
         queryKey: ['admin-gallery'],
         queryFn: async () => {
-            const res = await axios.get("/api/gallery");
+            const res = await axios.get(API_ROUTES.GALLERY.GET);
             return res.data;
         }
     });
@@ -32,7 +33,7 @@ export default function GalleryManagementPage() {
     // -- Mutations --
     const deleteMutation = useMutation({
         mutationFn: async (id) => {
-            await axios.delete(`/api/admin/gallery/delete?id=${id}`);
+            await axios.delete(`${API_ROUTES.ADMIN.GALLERY.DELETE}?id=${id}`);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['admin-gallery'] });
@@ -46,7 +47,7 @@ export default function GalleryManagementPage() {
 
     const addMutation = useMutation({
         mutationFn: async (formData) => {
-            await axios.post("/api/admin/gallery/add", formData, {
+            await axios.post(API_ROUTES.ADMIN.GALLERY.ADD, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
         },
