@@ -12,24 +12,30 @@ const fetchUser = async () => {
 };
 
 export function useUser() {
-    const setUser = useStore((state) => state.setUser);
+    const { setUser, logout } = useStore((state) => ({
+        setUser: state.setUser,
+        logout: state.logout
+    }));
 
     const query = useQuery({
         queryKey: ["user"],
         queryFn: fetchUser,
-        staleTime: 5 * 60 * 1000, // 5 minutes
-        retry: 1,
-        onError: () => {
-            // Optional: Handle specific auth errors
+        staleTime: 5 * 60 * 1000,
+        retry: false, // Don't retry on auth errors
+        onError: (error) => {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                logout();
+            }
         }
     });
 
-    // Sync with Zustand store if needed for legacy components
     useEffect(() => {
         if (query.data) {
             setUser(query.data);
+        } else if (query.isError && query.error.response?.status === 401) {
+            logout();
         }
-    }, [query.data, setUser]);
+    }, [query.data, query.isError, query.error, setUser, logout]);
 
     return query;
 }
