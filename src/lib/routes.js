@@ -3,6 +3,7 @@ export const API_ROUTES = {
         SIGNUP: "/api/auth/signup",
         LOGIN_INIT: "/api/auth/login-init",
         VERIFY_2FA: "/api/auth/verify-2fa",
+        PHONE_LOGIN: "/api/auth/phone-login",
         ME: "/api/auth/me",
         LOGOUT: "/api/auth/logout",
         FORGOT_PASSWORD: {

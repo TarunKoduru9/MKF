@@ -38,10 +38,25 @@ export async function POST(req) {
         };
 
         // Verify OTP
+        // Fetch latest code regardless of expiration to debug/check in code
         const codes = await query(
-            "SELECT * FROM verification_codes WHERE email = ? AND code = ? AND expires_at > NOW() ORDER BY created_at DESC LIMIT 1",
+            "SELECT * FROM verification_codes WHERE email = ? AND code = ? ORDER BY created_at DESC LIMIT 1",
             [email, code]
         );
+
+        if (codes.length === 0) {
+            await logAudit('failed', 'Invalid OTP');
+            return NextResponse.json({ error: "Invalid code" }, { status: 401 });
+        }
+
+        const otpRecord = codes[0];
+        const now = new Date();
+        const expiresAt = new Date(otpRecord.expires_at);
+
+        if (now > expiresAt) {
+            await logAudit('failed', 'Expired OTP');
+            return NextResponse.json({ error: "Code has expired" }, { status: 401 });
+        }
 
         if (codes.length === 0) {
             await logAudit('failed', 'Invalid or expired OTP');

@@ -119,21 +119,36 @@ export default function LoginPage() {
 
         try {
             const result = await confirmationResult.confirm(otp);
-            const user = result.user;
-            console.log("User verified:", user);
+            const firebaseUser = result.user;
+            console.log("User verified:", firebaseUser);
+
+            // Call backend to set session cookies
+            const res = await axios.post(API_ROUTES.AUTH.PHONE_LOGIN, {
+                uid: firebaseUser.uid,
+                phoneNumber: firebaseUser.phoneNumber,
+                email: firebaseUser.email,
+                displayName: firebaseUser.displayName
+            });
+
+            const user = res.data.user;
 
             setUser({
                 uid: user.uid,
                 email: user.email,
                 phoneNumber: user.phoneNumber,
-                displayName: user.displayName
+                displayName: user.displayName,
+                name: user.name
             });
 
             toast({ title: "Welcome Back!", description: "Login successful." });
             router.push("/my-account");
         } catch (error) {
             console.error(error);
-            toast({ variant: "destructive", title: "Verification Failed", description: "Invalid OTP." });
+            let msg = "Invalid OTP.";
+            if (error.response && error.response.data && error.response.data.error) {
+                msg = error.response.data.error;
+            }
+            toast({ variant: "destructive", title: "Verification Failed", description: msg });
         } finally {
             setLoading(false);
         }
