@@ -23,6 +23,7 @@ export const API_ROUTES = {
             ADD: "/api/admin/gallery/add",
             DELETE: "/api/admin/gallery/delete",
         },
+        MESSAGES: "/api/admin/messages",
     },
     DONATION: {
         CREATE: "/api/donations",
