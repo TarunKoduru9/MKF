@@ -40,11 +40,11 @@ const sidebarLinks = [
     },
 ];
 
-export function AdminSidebar() {
+export function AdminSidebar({ className }) {
     const pathname = usePathname();
 
     return (
-        <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-white font-sans">
+        <aside className={cn("fixed left-0 top-0 z-40 hidden lg:flex h-screen w-64 border-r bg-white font-sans flex-col justify-between", className)}>
             <div className="flex h-16 items-center border-b px-6">
                 <span className="text-xl font-bold text-[#DC2626] font-heading">MKF Admin</span>
             </div>
