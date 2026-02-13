@@ -2,7 +2,7 @@ export const foodPackages = [
     {
         id: "food-20",
         title: "Food Packets (20 People)",
-        variants: { veg: 1, nonveg: 2000 },
+        variants: { veg: 1500, nonveg: 2000 },
         desc: "Complete meal distribution for 20 people.",
         image: "/images/a830971501694f562f827d112d62f4eedaa1fb84.png"
     },

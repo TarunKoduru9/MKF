@@ -102,10 +102,7 @@ export default function SignupPage() {
                             />
                             <Input
                                 name="dob"
-                                placeholder="DOB DD-MM-YY"
-                                type="text"
-                                onFocus={(e) => e.target.type = 'date'}
-                                onBlur={(e) => e.target.type = 'text'}
+                                type="date"
                                 className="h-11 bg-white border-slate-200 placeholder:text-slate-400"
                                 required
                                 value={formData.dob}

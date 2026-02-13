@@ -215,7 +215,7 @@ export default function DonatePage() {
 
                             {/* Preset Buttons */}
                             <div className="grid grid-cols-4 gap-2 mb-4">
-                                {[1, 2500, 5000, 10000].map((val) => (
+                                {[1500, 2500, 5000, 10000].map((val) => (
                                     <button
                                         key={val}
                                         onClick={() => { setAmount(val); setCustomAmount(""); }}

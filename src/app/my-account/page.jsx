@@ -236,7 +236,11 @@ function ProfileSection({ user }) {
                     <ProfileField
                         label="Date of Birth"
                         name="dob"
-                        value={formData.dob ? new Date(formData.dob).toISOString().split('T')[0] : ''}
+                        value={
+                            formData.dob && !isNaN(new Date(formData.dob).getTime())
+                                ? new Date(formData.dob).toISOString().split('T')[0]
+                                : ''
+                        }
                         isEditing={isEditing}
                         onChange={handleChange}
                         type="date"
