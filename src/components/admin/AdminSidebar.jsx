@@ -2,13 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import { LayoutDashboard, Heart, Users, LogOut, KeyRound, Images, Shield, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import axios from "@/lib/axios";
-import { cn } from "@/lib/utils";
-import axios from "@/lib/axios";
+
 import { API_ROUTES } from "@/lib/routes";
 
 const sidebarLinks = [
