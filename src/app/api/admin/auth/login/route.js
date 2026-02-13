@@ -122,7 +122,7 @@ export async function POST(req) {
         })
             .setProtectedHeader({ alg: "HS256" })
             .setIssuedAt()
-            .setExpirationTime("15m")
+            .setExpirationTime("24h")
             .sign(secret);
 
         // Generate REFRESH Token (30 Days)
@@ -144,7 +144,7 @@ export async function POST(req) {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
-            maxAge: 60 * 15, // 15 mins
+            maxAge: 60 * 60 * 24, // 24 hours
             path: "/",
         });
 

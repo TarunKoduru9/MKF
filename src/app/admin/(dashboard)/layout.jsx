@@ -19,10 +19,14 @@ export default function AdminDashboardLayout({ children }) {
         };
         window.addEventListener("pageshow", handlePageShow);
 
-        // Double-check session on client-side
+        // Double-check session on client-side (and refresh if needed)
         const verifySession = async () => {
             try {
-                await axios.get(API_ROUTES.ADMIN.STATS);
+                // Use AUTH.ME because it handles token refreshing
+                const { data } = await axios.get(API_ROUTES.AUTH.ME);
+                if (data.user.role !== 'admin') {
+                    throw new Error("Not authorized");
+                }
             } catch (e) {
                 window.location.href = "/admin/login"; // Force full reload to login
             }
