@@ -12,10 +12,8 @@ const fetchUser = async () => {
 };
 
 export function useUser() {
-    const { setUser, logout } = useStore((state) => ({
-        setUser: state.setUser,
-        logout: state.logout
-    }));
+    const setUser = useStore((state) => state.setUser);
+    const logout = useStore((state) => state.logout);
 
     const query = useQuery({
         queryKey: ["user"],

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { query } from '@/lib/db';
+import pool, { query } from '@/lib/db';
 import { jwtVerify } from 'jose';
 import Razorpay from 'razorpay';
 
@@ -69,33 +69,49 @@ export async function POST(request) {
         }
 
         const orderId = order.id;
-
         const finalUid = uid || 'guest';
 
-        await query(
-            `INSERT IGNORE INTO users (uid, email, password_hash, name, phone, role) 
-             VALUES (?, ?, ?, ?, ?, ?)`,
-            ['guest', 'guest@mkftrust.org', 'guest_placeholder', 'Guest User', '0000000000', 'user']
-        );
+        // ACID Transaction Implementation
+        const connection = await pool.getConnection();
 
-        // 2. Save "Pending" transaction to DB.
-        const result = await query(
-            'INSERT INTO donations (uid, amount, purpose, payment_status, order_id, guest_name, guest_email, guest_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [finalUid, amount, purpose, 'pending', orderId, guest_name || null, guest_email || null, guest_phone || null]
-        );
+        try {
+            await connection.beginTransaction();
 
-        const donationId = result.insertId;
+            // 2. Ensure User Exists (Guest)
+            await connection.execute(
+                `INSERT IGNORE INTO users (uid, email, password_hash, name, phone, role) 
+                 VALUES (?, ?, ?, ?, ?, ?)`,
+                ['guest', 'guest@mkftrust.org', 'guest_placeholder', 'Guest User', '0000000000', 'user']
+            );
 
-        // 3. Save Food Donation Details if available in cart items
-        if (cart && Array.isArray(cart)) {
-            for (const item of cart) {
-                if (item.details) {
-                    await query(
-                        `INSERT INTO food_donation_details (donation_id, category, reason, event_date, image_urls) VALUES (?, ?, ?, ?, ?)`,
-                        [donationId, item.details.category, item.details.reason || null, item.details.eventDate || null, JSON.stringify(item.details.images || [])]
-                    );
+            // 3. Save "Pending" transaction
+            const [result] = await connection.execute(
+                'INSERT INTO donations (uid, amount, purpose, payment_status, order_id, guest_name, guest_email, guest_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                [finalUid, amount, purpose, 'pending', orderId, guest_name || null, guest_email || null, guest_phone || null]
+            );
+
+            const donationId = result.insertId;
+
+            // 4. Save Food Donation Details
+            if (cart && Array.isArray(cart)) {
+                for (const item of cart) {
+                    if (item.details) {
+                        await connection.execute(
+                            `INSERT INTO food_donation_details (donation_id, category, reason, event_date, image_urls) VALUES (?, ?, ?, ?, ?)`,
+                            [donationId, item.details.category, item.details.reason || null, item.details.eventDate || null, JSON.stringify(item.details.images || [])]
+                        );
+                    }
                 }
             }
+
+            await connection.commit();
+
+        } catch (dbError) {
+            await connection.rollback();
+            console.error("Database Transaction Failed:", dbError);
+            throw dbError; // Re-throw to be caught by outer catch
+        } finally {
+            connection.release();
         }
 
         return NextResponse.json({

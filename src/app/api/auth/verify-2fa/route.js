@@ -80,7 +80,28 @@ export async function POST(req) {
             .setExpirationTime("30d") // Long lived
             .sign(secret);
 
-        await query("INSERT INTO refresh_tokens (uid, token_hash, expires_at) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 30 DAY))", [user.uid, refreshToken]);
+        // ACID Transaction for Token Storage & Code Cleanup
+        const connection = await pool.getConnection();
+
+        try {
+            await connection.beginTransaction();
+
+            await connection.execute(
+                "INSERT INTO refresh_tokens (uid, token_hash, expires_at) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 30 DAY))",
+                [user.uid, refreshToken]
+            );
+
+            // Cleanup used code
+            await connection.execute("DELETE FROM verification_codes WHERE id = ?", [codes[0].id]);
+
+            await connection.commit();
+        } catch (dbError) {
+            await connection.rollback();
+            console.error("Database Transaction Failed:", dbError);
+            throw dbError;
+        } finally {
+            connection.release();
+        }
 
         // Set Cookies
         const cookieStore = await cookies();
@@ -99,9 +120,6 @@ export async function POST(req) {
             maxAge: 60 * 60 * 24 * 30, // 30 days
             path: "/",
         });
-
-        // Cleanup used code
-        await query("DELETE FROM verification_codes WHERE id = ?", [codes[0].id]);
 
         // Log Success
         await logAudit('success', null, user);
