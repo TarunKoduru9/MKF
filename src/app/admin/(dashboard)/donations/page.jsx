@@ -10,6 +10,7 @@ import Image from "next/image";
 
 const safeParseImages = (jsonString) => {
     if (!jsonString) return [];
+    if (Array.isArray(jsonString)) return jsonString; // Handle pre-parsed JSON from DB driver
     try {
         const parsed = JSON.parse(jsonString);
         if (Array.isArray(parsed)) return parsed;
@@ -25,8 +26,36 @@ const safeParseImages = (jsonString) => {
 };
 
 export default function AdminDonationsPage() {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedDonation, setSelectedDonation] = useState(null);
+    // ... (rest of the component)
+
+    // ... inside the Modal ...
+
+    {
+        detailImages.length > 0 && (
+            <div className="mt-3">
+                <p className="font-medium text-gray-500 mb-2">Uploaded Images:</p>
+                <div className="flex gap-2 bg-white p-2 rounded-md border border-slate-100">
+                    {detailImages.map((url, i) => (
+                        <div key={i} className="group relative w-20 h-20 rounded-md overflow-hidden border border-slate-200">
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+                                <Image src={url} alt={`Upload ${i + 1}`} fill className="object-cover transition-transform group-hover:scale-105" />
+                            </a>
+                            <a
+                                href={url}
+                                download={`donation-proof-${i + 1}.jpg`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="absolute bottom-1 right-1 bg-white/90 p-1 rounded-full text-slate-700 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity hover:text-blue-600"
+                                title="Download"
+                            >
+                                <Download className="h-3 w-3" />
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )
+    }
 
     const { data: donations, isLoading, isError } = useQuery({
         queryKey: ["admin-donations"],
@@ -43,6 +72,11 @@ export default function AdminDonationsPage() {
         d.order_id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         d.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    console.log("Donations Data:", donations);
+    if (donations && donations.length > 0) {
+        console.log("Sample Details:", donations[0].food_details);
+    }
 
     return (
         <div className="space-y-6">
