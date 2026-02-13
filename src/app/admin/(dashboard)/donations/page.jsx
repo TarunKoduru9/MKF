@@ -26,6 +26,8 @@ const safeParseImages = (jsonString) => {
 };
 
 export default function AdminDonationsPage() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedDonation, setSelectedDonation] = useState(null);
 
     const { data: donations, isLoading, isError } = useQuery({
         queryKey: ["admin-donations"],
