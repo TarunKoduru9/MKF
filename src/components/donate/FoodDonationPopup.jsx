@@ -2,8 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"; // Assuming we have Dialog or similar, but let"s check if Modal uses Dialog
-import { Modal } from "@/components/ui/modal"; // Re-using existing Modal component
+import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -152,12 +151,12 @@ export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, package
                 </div>
             </div>
 
-            <DialogFooter className="mt-6 flex-row gap-2 justify-end">
+            <div className="mt-6 flex flex-row gap-2 justify-end">
                 <Button variant="outline" onClick={onClose} disabled={uploading}>Cancel</Button>
                 <Button onClick={handleSubmit} disabled={uploading} className="bg-red-600 hover:bg-red-700">
                     {uploading ? "Uploading..." : "Add to Cart"}
                 </Button>
-            </DialogFooter>
+            </div>
         </Modal>
     );
 }
