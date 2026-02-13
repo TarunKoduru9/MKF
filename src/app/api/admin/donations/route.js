@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
 import { jwtVerify } from "jose";
@@ -29,6 +30,22 @@ export async function GET(req) {
             ORDER BY d.created_at DESC
             LIMIT 100
         `);
+
+        // Fetch details for these donations
+        if (donations.length > 0) {
+            const donationIds = donations.map(d => d.id).join(',');
+            // Check if donationIds is not empty string to avoid SQL error
+            if (donationIds) {
+                const details = await query(`
+                    SELECT * FROM food_donation_details WHERE donation_id IN (${donationIds})
+                `);
+
+                // Map details to donations
+                donations.forEach(donation => {
+                    donation.food_details = details.filter(detail => detail.donation_id === donation.id);
+                });
+            }
+        }
 
         return NextResponse.json(donations);
 

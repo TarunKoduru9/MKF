@@ -88,3 +88,14 @@ CREATE TABLE login_audit_logs (
     INDEX idx_status (login_status),
     INDEX idx_created_at (created_at)
 );
+
+CREATE TABLE food_donation_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    donation_id INT NOT NULL,
+    category VARCHAR(50) NOT NULL, -- 'Birthday', 'Anniversary', 'Other'
+    reason VARCHAR(255), -- If category is 'Other'
+    event_date DATE,
+    image_urls JSON, -- Store array of image URLs
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (donation_id) REFERENCES donations(id) ON DELETE CASCADE
+);

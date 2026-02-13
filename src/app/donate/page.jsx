@@ -15,30 +15,17 @@ import useStore from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { API_ROUTES } from "@/lib/routes";
+import { FoodDonationPopup } from "@/components/donate/FoodDonationPopup";
 
 import { foodPackages, specialPackages } from "@/lib/constants";
 
 // Reusable Package Card Component (Internal for cleaner page file)
-const PackageCard = ({ item }) => {
-    const addToCart = useStore((state) => state.addToCart);
-    const router = useRouter();
+const PackageCard = ({ item, onDonate }) => {
     const [quantity, setQuantity] = useState(1);
     const [variant, setVariant] = useState(item.variants ? "veg" : null);
 
     const price = item.variants ? item.variants[variant] : item.price;
     const title = item.variants ? `${item.title}` : item.title;
-
-    const handleDonate = () => {
-        addToCart({
-            id: item.variants ? `${item.id}-${variant}` : item.id,
-            title: item.variants ? `${title} (${variant === 'veg' ? 'Veg' : 'Non-Veg'})` : title,
-            price: price,
-            quantity: quantity,
-            image: item.image,
-            description: item.desc
-        });
-        router.push('/cart');
-    };
 
     return (
         <div className="bg-[#FAF9F5] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-slate-100 flex flex-col">
@@ -88,7 +75,10 @@ const PackageCard = ({ item }) => {
                         <button onClick={() => setQuantity(quantity + 1)} className="p-3 text-slate-400 hover:text-red-600"><Plus className="w-4 h-4" /></button>
                     </div>
 
-                    <Button onClick={handleDonate} className="w-full bg-white text-red-600 border border-red-600 hover:bg-red-50 font-bold uppercase text-sm tracking-wider">
+                    <Button
+                        onClick={() => onDonate(item, quantity, variant)}
+                        className="w-full bg-white text-red-600 border border-red-600 hover:bg-red-50 font-bold uppercase text-sm tracking-wider"
+                    >
                         Donate Now <Heart className="w-3 h-3 ml-2 fill-current" />
                     </Button>
                 </div>
@@ -103,10 +93,15 @@ export default function DonatePage() {
     const [customAmount, setCustomAmount] = useState("");
     const [loading, setLoading] = useState(false);
     const [userData, setUserData] = useState({ name: "", email: "", phone: "", anonymous: false });
+
+    // Popup State
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedPack, setSelectedPack] = useState(null);
+
     const router = useRouter();
+    const { user, addToCart } = useStore();
 
     // Pre-fill user data if logged in
-    const { user } = useStore();
     useEffect(() => {
         if (user) {
             setUserData(prev => ({
@@ -119,6 +114,45 @@ export default function DonatePage() {
     }, [user]);
 
     const finalAmount = customAmount ? parseInt(customAmount) : amount;
+
+    // Handle package donation click
+    const handlePackageDonate = (item, quantity, variant) => {
+        if (!user) {
+            // If not logged in, redirect to login
+            // Maybe store return url? For now just redirect
+            router.push('/login?redirect=/donate');
+            return;
+        }
+
+        setSelectedPack({ item, quantity, variant });
+        setIsPopupOpen(true);
+    };
+
+    const handlePopupSubmit = (details) => {
+        if (!selectedPack) return;
+
+        const { item, quantity, variant } = selectedPack;
+        const price = item.variants ? item.variants[variant] : item.price;
+        const title = item.variants ? `${item.title}` : item.title;
+        const variantTitle = item.variants ? `${title} (${variant === 'veg' ? 'Veg' : 'Non-Veg'})` : title;
+
+        // Generate a unique ID to allow multiple donations of same type with different details
+        const baseId = item.variants ? `${item.id}-${variant}` : item.id;
+        const uniqueId = `${baseId}-${Date.now()}`;
+
+        addToCart({
+            id: uniqueId,
+            title: variantTitle,
+            price: price,
+            quantity: quantity,
+            image: item.image,
+            description: item.desc,
+            details: details // Add the extra details here
+        });
+
+        setIsPopupOpen(false);
+        router.push('/cart');
+    };
 
     const handleHeroDonate = async () => {
         // Hero Donation (Custom Amount) = Guest allowed. No login check.
@@ -297,7 +331,7 @@ export default function DonatePage() {
                             <h3 className="text-2xl font-bold text-slate-900">Food Donation Packages</h3>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {foodPackages.map(pkg => <PackageCard key={pkg.id} item={pkg} />)}
+                            {foodPackages.map(pkg => <PackageCard key={pkg.id} item={pkg} onDonate={handlePackageDonate} />)}
                         </div>
                     </div>
 
@@ -308,10 +342,18 @@ export default function DonatePage() {
                             <h3 className="text-2xl font-bold text-slate-900">Special Packages & Add-ons</h3>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {[...specialPackages].map(pkg => <PackageCard key={pkg.id} item={pkg} />)}
+                            {[...specialPackages].map(pkg => <PackageCard key={pkg.id} item={pkg} onDonate={handlePackageDonate} />)}
                         </div>
                     </div>
                 </section>
+
+                <FoodDonationPopup
+                    isOpen={isPopupOpen}
+                    onClose={() => setIsPopupOpen(false)}
+                    onSubmit={handlePopupSubmit}
+                    userName={user?.name}
+                    packageName={selectedPack?.item?.title}
+                />
             </main>
 
             <Footer />

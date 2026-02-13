@@ -2,10 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Loader2, Search } from "lucide-react";
+import { Loader2, Search, Eye, Download, Image as ImageIcon } from "lucide-react";
 import { useState } from "react";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function AdminDonationsPage() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -52,7 +53,8 @@ export default function AdminDonationsPage() {
                                 <th className="px-6 py-3">Order ID</th>
                                 <th className="px-6 py-3">Donor</th>
                                 <th className="px-6 py-3">Amount</th>
-                                <th className="px-6 py-3">Purpose</th>
+                                <th className="px-6 py-3">Category</th>
+                                <th className="px-6 py-3">Images</th>
                                 <th className="px-6 py-3">Status</th>
                                 <th className="px-6 py-3">Action</th>
                             </tr>
@@ -60,57 +62,86 @@ export default function AdminDonationsPage() {
                         <tbody className="divide-y divide-gray-200">
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan="7" className="py-8 text-center">
+                                    <td colSpan="8" className="py-8 text-center">
                                         <Loader2 className="mx-auto h-6 w-6 animate-spin text-primary" />
                                     </td>
                                 </tr>
                             ) : isError ? (
                                 <tr>
-                                    <td colSpan="7" className="py-8 text-center text-red-500">
+                                    <td colSpan="8" className="py-8 text-center text-red-500">
                                         Error loading data
                                     </td>
                                 </tr>
                             ) : filteredDonations?.length === 0 ? (
                                 <tr>
-                                    <td colSpan="7" className="py-8 text-center">No donations found.</td>
+                                    <td colSpan="8" className="py-8 text-center">No donations found.</td>
                                 </tr>
                             ) : (
-                                filteredDonations?.map((donation) => (
-                                    <tr key={donation.id} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            {new Date(donation.created_at).toLocaleDateString()}
-                                            <div className="text-xs text-gray-400">{new Date(donation.created_at).toLocaleTimeString()}</div>
-                                        </td>
-                                        <td className="px-6 py-4 font-mono text-xs">{donation.order_id || "-"}</td>
-                                        <td className="px-6 py-4">
-                                            <div className="font-medium text-gray-900">
-                                                {donation.user_name || donation.guest_name || "Anonymous"}
-                                            </div>
-                                            <div className="text-xs text-gray-400">
-                                                {donation.user_email || donation.guest_email || "-"}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 font-medium text-gray-900">
-                                            ₹ {parseFloat(donation.amount).toLocaleString()}
-                                        </td>
-                                        <td className="px-6 py-4 max-w-[200px] truncate" title={donation.purpose}>{donation.purpose}</td>
-                                        <td className="px-6 py-4">
-                                            <span
-                                                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${donation.payment_status === "success"
-                                                    ? "bg-green-100 text-green-800"
-                                                    : donation.payment_status === "failed"
-                                                        ? "bg-red-100 text-red-800"
-                                                        : "bg-yellow-100 text-yellow-800"
-                                                    }`}
-                                            >
-                                                {donation.payment_status}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <Button variant="outline" size="sm" onClick={() => setSelectedDonation(donation)}>View</Button>
-                                        </td>
-                                    </tr>
-                                ))
+                                filteredDonations?.map((donation) => {
+                                    const details = donation.food_details?.[0] || {};
+                                    return (
+                                        <tr key={donation.id} className="hover:bg-gray-50">
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                {new Date(donation.created_at).toLocaleDateString()}
+                                                <div className="text-xs text-gray-400">{new Date(donation.created_at).toLocaleTimeString()}</div>
+                                            </td>
+                                            <td className="px-6 py-4 font-mono text-xs">{donation.order_id || "-"}</td>
+                                            <td className="px-6 py-4">
+                                                <div className="font-medium text-gray-900">
+                                                    {donation.user_name || donation.guest_name || "Anonymous"}
+                                                </div>
+                                                <div className="text-xs text-gray-400">
+                                                    {donation.user_email || donation.guest_email || "-"}
+                                                </div>
+                                                <div className="text-xs text-gray-400">
+                                                    {donation.user_phone || donation.guest_phone || "-"}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 font-medium text-gray-900">
+                                                ₹ {parseFloat(donation.amount).toLocaleString()}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {details.category ? (
+                                                    <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                                        {details.category}
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-gray-400">-</span>
+                                                )}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {details.image_urls && JSON.parse(details.image_urls).length > 0 ? (
+                                                    <div className="flex -space-x-2 overflow-hidden">
+                                                        {JSON.parse(details.image_urls).map((url, i) => (
+                                                            <div key={i} className="inline-block h-8 w-8 rounded-full ring-2 ring-white relative overflow-hidden bg-gray-100">
+                                                                <Image src={url} alt="Proof" fill className="object-cover" />
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-gray-400">-</span>
+                                                )}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <span
+                                                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${donation.payment_status === "success"
+                                                        ? "bg-green-100 text-green-800"
+                                                        : donation.payment_status === "failed"
+                                                            ? "bg-red-100 text-red-800"
+                                                            : "bg-yellow-100 text-yellow-800"
+                                                        }`}
+                                                >
+                                                    {donation.payment_status}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <Button variant="outline" size="sm" onClick={() => setSelectedDonation(donation)}>
+                                                    View
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })
                             )}
                         </tbody>
                     </table>
@@ -119,8 +150,8 @@ export default function AdminDonationsPage() {
 
             <Modal isOpen={!!selectedDonation} onClose={() => setSelectedDonation(null)} title="Donation Details">
                 {selectedDonation && (
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="space-y-6">
+                        <div className="grid grid-cols-2 gap-4 text-sm bg-slate-50 p-4 rounded-lg border border-slate-100">
                             <div>
                                 <h4 className="font-semibold text-gray-500">Amount</h4>
                                 <p className="text-xl font-bold text-green-600">₹{parseFloat(selectedDonation.amount).toLocaleString()}</p>
@@ -141,18 +172,44 @@ export default function AdminDonationsPage() {
                             </div>
                         </div>
 
-                        <div className="border-t pt-4">
-                            <h4 className="font-semibold text-gray-500 mb-2">Donor Info</h4>
-                            <div className="text-sm space-y-1">
+                        <div>
+                            <h4 className="font-semibold text-gray-900 border-b pb-2 mb-3">Donor Information</h4>
+                            <div className="grid grid-cols-2 gap-y-2 text-sm">
                                 <p><span className="text-gray-500">Name:</span> {selectedDonation.user_name || selectedDonation.guest_name || "Anonymous"}</p>
                                 <p><span className="text-gray-500">Email:</span> {selectedDonation.user_email || selectedDonation.guest_email || "-"}</p>
                                 <p><span className="text-gray-500">Phone:</span> {selectedDonation.user_phone || selectedDonation.guest_phone || "-"}</p>
                             </div>
                         </div>
 
-                        <div className="border-t pt-4">
-                            <h4 className="font-semibold text-gray-500 mb-2">Purpose / Items</h4>
-                            <div className="bg-slate-50 p-3 rounded-md border border-slate-100 text-sm">
+                        {selectedDonation.food_details?.map((detail, idx) => (
+                            <div key={idx} className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                    Event Details
+                                    <span className="text-xs font-normal bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{detail.category}</span>
+                                </h4>
+                                <div className="space-y-2 text-sm">
+                                    {detail.reason && <p><span className="font-medium text-gray-500">Occasion/Reason:</span> {detail.reason}</p>}
+                                    {detail.event_date && <p><span className="font-medium text-gray-500">Event Date:</span> {new Date(detail.event_date).toLocaleDateString()}</p>}
+
+                                    {detail.image_urls && (
+                                        <div className="mt-3">
+                                            <p className="font-medium text-gray-500 mb-2">Uploaded Images:</p>
+                                            <div className="flex gap-2 bg-white p-2 rounded-md border border-slate-100">
+                                                {JSON.parse(detail.image_urls).map((url, i) => (
+                                                    <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="block relative w-20 h-20 rounded-md overflow-hidden hover:opacity-80 transition-opacity border border-slate-200">
+                                                        <Image src={url} alt={`Upload ${i + 1}`} fill className="object-cover" />
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+
+                        <div>
+                            <h4 className="font-semibold text-gray-900 border-b pb-2 mb-3">Items / Purpose</h4>
+                            <div className="bg-slate-50 p-3 rounded-md border border-slate-100 text-sm whitespace-pre-wrap">
                                 {selectedDonation.purpose}
                             </div>
                         </div>

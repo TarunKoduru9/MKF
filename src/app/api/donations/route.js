@@ -18,19 +18,17 @@ export async function POST(request) {
             let calculatedTotal = 0;
 
             cart.forEach(cartItem => {
-                // Find in foodPackages
-                let product = foodPackages.find(p => p.id === cartItem.id.split('-')[0]);
+                // Find in foodPackages using startsWith to handle suffixes like -veg, -timestamp
+                let product = foodPackages.find(p => cartItem.id.startsWith(p.id));
                 let price = 0;
 
                 if (product) {
                     const variant = cartItem.id.includes('-veg') || cartItem.title.includes('(Veg)') ? 'veg' : 'nonveg';
+                    // Fallback to nonveg if variant not explicitly veg
                     price = product.variants ? (product.variants[variant] || product.variants.nonveg) : 0;
-                    if (cartItem.id.includes('-veg')) price = product.variants.veg;
-                    else if (cartItem.id.includes('-nonveg')) price = product.variants.nonveg;
-                    else price = Object.values(product.variants)[0];
                 } else {
                     // Check specialPackages
-                    product = specialPackages.find(p => p.id === cartItem.id);
+                    product = specialPackages.find(p => cartItem.id.startsWith(p.id));
                     if (product) price = product.price;
                 }
 
@@ -81,10 +79,24 @@ export async function POST(request) {
         );
 
         // 2. Save "Pending" transaction to DB.
-        await query(
+        const result = await query(
             'INSERT INTO donations (uid, amount, purpose, payment_status, order_id, guest_name, guest_email, guest_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
             [finalUid, amount, purpose, 'pending', orderId, guest_name || null, guest_email || null, guest_phone || null]
         );
+
+        const donationId = result.insertId;
+
+        // 3. Save Food Donation Details if available in cart items
+        if (cart && Array.isArray(cart)) {
+            for (const item of cart) {
+                if (item.details) {
+                    await query(
+                        `INSERT INTO food_donation_details (donation_id, category, reason, event_date, image_urls) VALUES (?, ?, ?, ?, ?)`,
+                        [donationId, item.details.category, item.details.reason || null, item.details.eventDate || null, JSON.stringify(item.details.images || [])]
+                    );
+                }
+            }
+        }
 
         return NextResponse.json({
             success: true,
