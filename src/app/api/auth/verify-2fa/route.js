@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
+import pool from "@/lib/db";
 import { SignJWT } from "jose";
 import { cookies } from "next/headers";
 

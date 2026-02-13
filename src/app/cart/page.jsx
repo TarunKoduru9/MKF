@@ -18,7 +18,11 @@ import axios from "axios";
 import { foodPackages, specialPackages } from "@/lib/constants";
 
 export default function CartPage() {
-    const { cart, removeFromCart, updateQuantity, clearCart, user } = useStore();
+    const cart = useStore((state) => state.cart);
+    const removeFromCart = useStore((state) => state.removeFromCart);
+    const updateQuantity = useStore((state) => state.updateQuantity);
+    const clearCart = useStore((state) => state.clearCart);
+    const user = useStore((state) => state.user);
     const [loading, setLoading] = useState(false);
     const [recommendations, setRecommendations] = useState([]);
 

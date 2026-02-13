@@ -99,7 +99,8 @@ export default function DonatePage() {
     const [selectedPack, setSelectedPack] = useState(null);
 
     const router = useRouter();
-    const { user, addToCart } = useStore();
+    const user = useStore((state) => state.user);
+    const addToCart = useStore((state) => state.addToCart);
 
     // Pre-fill user data if logged in
     useEffect(() => {
