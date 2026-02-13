@@ -1,12 +1,20 @@
-import { NextResponse } from 'next/server';
-import { query } from '@/lib/db';
-import { verifyAdminSession } from "@/lib/auth-helper";
+import { NextResponse } from "next/server";
+import { query } from "@/lib/db";
+import { jwtVerify } from "jose";
+import { cookies } from "next/headers";
 
 export async function GET(req) {
     try {
-        const session = await verifyAdminSession();
-        if (session.error) {
-            return NextResponse.json({ error: session.error }, { status: session.status });
+        const cookieStore = await cookies();
+        const session = cookieStore.get("session")?.value;
+        if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
+        try {
+            const { payload } = await jwtVerify(session, secret);
+            if (payload.role !== 'admin') throw new Error("Not Admin");
+        } catch (e) {
+            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
         const users = await query(`

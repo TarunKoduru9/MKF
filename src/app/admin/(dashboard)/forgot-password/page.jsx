@@ -61,7 +61,7 @@ export default function AdminForgotPasswordPage() {
 
     return (
         <div className="mx-auto max-w-xl">
-            <div className="rounded-xl border bg-white p-4 sm:p-8 shadow-sm">
+            <div className="rounded-xl border bg-white p-8 shadow-sm">
                 <div className="mb-8 text-center">
                     <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
                         <KeyRound className="h-6 w-6" />

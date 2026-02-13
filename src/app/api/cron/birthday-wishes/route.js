@@ -51,7 +51,7 @@ export async function GET(req) {
 
         return NextResponse.json({
             message: `Processed birthdays. Sent: ${sentCount}, Failed: ${failedCount}`,
-            count: sentCount
+            users: users.map(u => u.email)
         });
 
     } catch (error) {

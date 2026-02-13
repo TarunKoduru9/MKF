@@ -3,14 +3,8 @@ import { NextResponse } from 'next/server';
 import cloudinary from '@/lib/cloudinary';
 import { query } from '@/lib/db';
 
-import { verifyAdminSession } from "@/lib/auth-helper";
-
 export async function POST(req) {
     try {
-        const session = await verifyAdminSession();
-        if (session.error) {
-            return NextResponse.json({ error: session.error }, { status: session.status });
-        }
         const formData = await req.formData();
         const type = formData.get('type');
         const category = formData.get('category');

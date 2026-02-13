@@ -37,7 +37,7 @@ export default function AdminDashboardLayout({ children }) {
             <AdminSidebar />
             <AdminHeader />
 
-            <main className="ml-0 lg:ml-64 pt-16">
+            <main className="ml-64 pt-16">
                 <div className="p-6">
                     {children}
                 </div>
