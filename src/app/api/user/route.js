@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { z } from 'zod';
+import { verifySession } from '@/lib/auth-helper';
 
 const userSchema = z.object({
     uid: z.string(),
@@ -13,13 +14,16 @@ const userSchema = z.object({
     dob: z.string().optional().nullable().or(z.literal(""))
 });
 
-export async function GET(request) {
-    const { searchParams } = new URL(request.url);
-    const uid = searchParams.get('uid');
 
-    if (!uid) {
-        return NextResponse.json({ error: 'UID required' }, { status: 400 });
+
+export async function GET(request) {
+    const session = await verifySession();
+    if (session.error) {
+        return NextResponse.json({ error: session.error }, { status: session.status });
     }
+
+    // Use uid from session, ignoring any searchParams for security
+    const uid = session.user.uid;
 
     try {
         const users = await query('SELECT * FROM users WHERE uid = ?', [uid]);
@@ -38,10 +42,20 @@ export async function GET(request) {
 
 export async function POST(request) {
     try {
+        const session = await verifySession();
+        if (session.error) {
+            return NextResponse.json({ error: session.error }, { status: session.status });
+        }
+
         const body = await request.json();
         // Validate input
         const validatedData = userSchema.parse(body);
         const { uid, name, phone, address, district, state, pincode, dob } = validatedData;
+
+        // Ensure user is updating their own profile
+        if (uid !== session.user.uid) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
 
         // DB Update
         await query(

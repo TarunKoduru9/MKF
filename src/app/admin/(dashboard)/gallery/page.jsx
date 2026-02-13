@@ -102,9 +102,9 @@ export default function GalleryManagementPage() {
 
     return (
         <div className="p-6 space-y-6 bg-slate-50 min-h-screen">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <h1 className="text-2xl font-bold text-slate-900">Gallery Management</h1>
-                <Button onClick={() => setIsModalOpen(true)} className="bg-blue-600 hover:bg-blue-700">
+                <Button onClick={() => setIsModalOpen(true)} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
                     <Plus className="w-4 h-4 mr-2" />
                     Add New Item
                 </Button>
@@ -115,7 +115,7 @@ export default function GalleryManagementPage() {
                     <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {items.map((item) => (
                         <div key={item.id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-100 group">
                             <div className="aspect-video relative bg-slate-100">

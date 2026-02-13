@@ -3,8 +3,14 @@ import { NextResponse } from 'next/server';
 import cloudinary from '@/lib/cloudinary';
 import { query } from '@/lib/db';
 
+import { verifyAdminSession } from "@/lib/auth-helper";
+
 export async function DELETE(req) {
     try {
+        const session = await verifyAdminSession();
+        if (session.error) {
+            return NextResponse.json({ error: session.error }, { status: session.status });
+        }
         const { searchParams } = new URL(req.url);
         const id = searchParams.get('id');
 

@@ -95,7 +95,7 @@ export default function SecurityAuditPage() {
 
             {/* Filters */}
             <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-4 mb-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                     {/* Email Filter */}
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>

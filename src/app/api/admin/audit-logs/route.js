@@ -1,31 +1,12 @@
-import { NextResponse } from "next/server";
-import { query } from "@/lib/db";
-import { jwtVerify } from "jose";
-import { cookies } from "next/headers";
+import { NextResponse } from 'next/server';
+import { query } from '@/lib/db';
+import { verifyAdminSession } from "@/lib/auth-helper";
 
 export async function GET(req) {
     try {
-        // Verify admin authentication
-        const cookieStore = await cookies();
-        const session = cookieStore.get("session");
-
-        if (!session) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-
-        // Verify JWT token
-        const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
-        let payload;
-        try {
-            const verified = await jwtVerify(session.value, secret);
-            payload = verified.payload;
-        } catch (error) {
-            return NextResponse.json({ error: "Invalid session" }, { status: 401 });
-        }
-
-        // Verify admin role
-        if (payload.role !== 'admin') {
-            return NextResponse.json({ error: "Access Denied. Admins only." }, { status: 403 });
+        const session = await verifyAdminSession();
+        if (session.error) {
+            return NextResponse.json({ error: session.error }, { status: session.status });
         }
 
         // Get query parameters for filtering and pagination

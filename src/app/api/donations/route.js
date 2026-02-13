@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import pool, { query } from '@/lib/db';
-import { jwtVerify } from 'jose';
 import Razorpay from 'razorpay';
+import { verifySession } from '@/lib/auth-helper';
 
 import { foodPackages, specialPackages } from '@/lib/constants';
 
@@ -127,18 +127,18 @@ export async function POST(request) {
     }
 }
 
+
+
 export async function GET(request) {
     try {
-        const session = request.cookies.get("session")?.value;
-        if (!session) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        const session = await verifySession();
+        if (session.error) {
+            return NextResponse.json({ error: session.error }, { status: session.status });
         }
 
-        // Verify Token & Get UID
-        const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
-        const { payload } = await jwtVerify(session, secret);
-        const uid = payload.uid;
-        const email = payload.email;
+        const uid = session.user.uid;
+        const email = session.user.email;
+
 
         // Fetch Donations (Include those made as guest with same email)
         const donations = await query(
