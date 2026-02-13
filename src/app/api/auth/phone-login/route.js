@@ -37,11 +37,22 @@ export async function POST(req) {
             }
         };
 
+        // Helper to normalize phone (last 10 digits)
+        const normalizePhone = (p) => {
+            if (!p) return "";
+            const cleaned = p.replace(/\D/g, ""); // Remove non-digits
+            return cleaned.slice(-10); // Take last 10
+        };
+
+        const phoneLast10 = normalizePhone(phoneNumber);
+
         let user;
-        const users = await query("SELECT * FROM users WHERE phone = ? OR uid = ?", [phoneNumber, uid]);
+        const users = await query(
+            "SELECT * FROM users WHERE phone = ? OR phone LIKE ? OR uid = ?",
+            [phoneNumber, `%${phoneLast10}`, uid]
+        );
 
         if (users.length === 0) {
-
             return NextResponse.json({ error: "User not found. Please Sign Up." }, { status: 404 });
         } else {
             user = users[0];
