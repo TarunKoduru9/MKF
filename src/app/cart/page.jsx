@@ -25,33 +25,64 @@ export default function CartPage() {
     const user = useStore((state) => state.user);
     const [loading, setLoading] = useState(false);
     const [recommendations, setRecommendations] = useState([]);
+    const [addons, setAddons] = useState([]);
+    const [selectedAddonIds, setSelectedAddonIds] = useState([]);
 
     useEffect(() => {
-        // 1. Get all special packages (fixed)
-        // 2. Get 2 random food packages
-        const shuffledFood = [...foodPackages].sort(() => 0.5 - Math.random());
-        const randomFood = shuffledFood.slice(0, 2);
+        // Fetch Products and Addons from DB
+        const fetchProducts = async () => {
+            try {
+                const res = await axios.get('/api/products');
+                const products = res.data;
 
-        setRecommendations([...specialPackages, ...randomFood]);
+                if (Array.isArray(products)) {
+                    // Filter addons
+                    const fetchedAddons = products.filter(p => p.type === 'addon');
+                    setAddons(fetchedAddons);
+
+                    // Recommendations (Random food packages + specific packages)
+                    const foodPackages = products.filter(p => p.type === 'package' && p.id.startsWith('food'));
+                    const otherPackages = products.filter(p => p.type === 'package' && !p.id.startsWith('food'));
+
+                    const shuffledFood = [...foodPackages].sort(() => 0.5 - Math.random());
+                    const randomFood = shuffledFood.slice(0, 2);
+
+                    setRecommendations([...otherPackages, ...randomFood]);
+                }
+            } catch (error) {
+                console.error("Failed to fetch products", error);
+            }
+        };
+
+        fetchProducts();
     }, []);
 
-    const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const toggleAddon = (addonId) => {
+        setSelectedAddonIds(prev =>
+            prev.includes(addonId)
+                ? prev.filter(id => id !== addonId)
+                : [...prev, addonId]
+        );
+    };
 
-    const router = useRouter(); // Ensure this is imported
+    // Calculate Total
+    const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const addonsTotal = addons
+        .filter(addon => selectedAddonIds.includes(addon.id))
+        .reduce((total, addon) => total + Number(addon.price), 0);
 
-    // ...
+    const totalAmount = cartTotal + addonsTotal;
+
+    const router = useRouter();
 
     const handleCheckout = async () => {
-        // 1. Check Auth - Harden check
         if (!user || !user.uid) {
-            // Force redirect if not fully authenticated
             return router.push('/login');
         }
 
         setLoading(true);
 
         try {
-            // 2. Load Razorpay SDK
             const isLoaded = await loadRazorpay();
             if (!isLoaded) {
                 alert('Razorpay SDK failed to load. Are you online?');
@@ -60,36 +91,40 @@ export default function CartPage() {
             }
 
             // Construct detailed purpose string
-            const purposeDetails = cart.map(item =>
-                `${item.title} (x${item.quantity})`
-            ).join(", ");
+            const cartDetails = cart.map(item => `${item.title} (x${item.quantity})`).join(", ");
+            const addonDetails = addons
+                .filter(a => selectedAddonIds.includes(a.id))
+                .map(a => `${a.title} (Addon)`)
+                .join(", ");
 
-            // 3. Create Order on Server
+            const purposeDetails = [cartDetails, addonDetails].filter(Boolean).join(" + ");
+
+            // Create Order on Server
             const res = await axios.post(API_ROUTES.DONATION.CREATE, {
-                amount: totalAmount,
-                purpose: purposeDetails, // Send detailed item list
+                amount: totalAmount, // This is just for initial check, server will validate
+                purpose: purposeDetails,
                 uid: user?.uid || "guest",
-                cart: cart // Send cart for backend validation
+                cart: cart,
+                addonIds: selectedAddonIds // Send selected addons IDs
             });
             const data = res.data;
 
             if (!data.success) {
-                alert("Server error processing donation. Please try again.");
+                alert(data.error || "Server error processing donation.");
                 setLoading(false);
                 return;
             }
 
-            // 4. Options for Razorpay
+            // Options for Razorpay
             const options = {
                 key: data.key,
                 amount: data.amount,
                 currency: "INR",
                 name: "MKF Trust",
                 description: "Donation for a cause",
-                image: "/logo.png", // Add logo in public folder
+                getImage: "/logo.png",
                 order_id: data.orderId,
                 handler: async function (response) {
-                    // Payment Success - Call Verification API
                     try {
                         const verifyRes = await axios.post(API_ROUTES.DONATION.VERIFY, {
                             orderId: data.orderId,
@@ -97,12 +132,10 @@ export default function CartPage() {
                             signature: response.razorpay_signature
                         });
 
-                        const verifyData = verifyRes.data;
-
-                        if (verifyData.success) {
+                        if (verifyRes.data.success) {
                             alert(`Payment Successful! Email sent.`);
                             clearCart();
-                            // router.push('/success'); // Optional: Redirect to a success page
+                            setSelectedAddonIds([]); // Clear addons
                         } else {
                             alert("Payment success, but verification failed. Please contact support.");
                         }
@@ -117,9 +150,7 @@ export default function CartPage() {
                     email: user?.email || "",
                     contact: user?.phone || ""
                 },
-                theme: {
-                    color: "#DC2626" // Primary Red
-                }
+                theme: { color: "#DC2626" }
             };
 
             const paymentObject = new window.Razorpay(options);
@@ -127,7 +158,7 @@ export default function CartPage() {
 
         } catch (err) {
             console.error(err);
-            alert("Something went wrong");
+            alert(err.response?.data?.error || "Something went wrong");
         } finally {
             setLoading(false);
         }
@@ -169,7 +200,6 @@ export default function CartPage() {
                             {cart.map((item) => (
                                 <Card key={item.id} className="flex flex-col sm:flex-row items-center p-4 gap-4">
                                     <div className="h-20 w-20 bg-slate-200 rounded-md shrink-0 overflow-hidden relative">
-                                        {/* Ideally use Next.js Image here in production */}
                                         <Image
                                             src={item.image || "/images/placeholder.svg"}
                                             alt={item.title}
@@ -199,6 +229,40 @@ export default function CartPage() {
                             ))}
                         </div>
 
+                        {/* Special Addon Section */}
+                        {addons.length > 0 && (
+                            <div className="bg-amber-100/50 p-6 rounded-xl border border-amber-200">
+                                <h3 className="text-xl font-bold mb-4 text-amber-900">Special Addon</h3>
+                                <div className="space-y-3">
+                                    {addons.map((addon) => (
+                                        <div
+                                            key={addon.id}
+                                            className={`flex items-center justify-between p-4 rounded-lg border transition-all cursor-pointer ${selectedAddonIds.includes(addon.id)
+                                                    ? "bg-white border-red-500 shadow-sm"
+                                                    : "bg-white/50 border-transparent hover:bg-white"
+                                                }`}
+                                            onClick={() => toggleAddon(addon.id)}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 bg-red-100 rounded-lg text-red-600">
+                                                    {/* You can add dynamic icons here based on type/title if needed */}
+                                                    <span className="text-xl">🎁</span>
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-semibold text-slate-900">{addon.title}</h4>
+                                                    <p className="text-sm text-slate-500">{addon.description} {addon.price > 0 && `(₹${addon.price})`}</p>
+                                                </div>
+                                            </div>
+                                            <div className={`w-6 h-6 rounded border flex items-center justify-center transition-colors ${selectedAddonIds.includes(addon.id) ? "bg-red-600 border-red-600" : "border-slate-300 bg-white"
+                                                }`}>
+                                                {selectedAddonIds.includes(addon.id) && <span className="text-white text-xs">✓</span>}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         {/* Add More to Your Impact */}
                         <div className="bg-slate-50 p-6 rounded-lg border border-slate-200">
                             <h3 className="text-xl font-bold mb-6">Add More to Your Impact</h3>
@@ -210,7 +274,7 @@ export default function CartPage() {
                                         title={item.title}
                                         price={item.price}
                                         variants={item.variants}
-                                        description={item.desc}
+                                        description={item.description || item.desc}
                                         type={item.variants ? "pack" : "unit"}
                                         image={item.image}
                                     />
@@ -227,9 +291,15 @@ export default function CartPage() {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Total Items</span>
-                                    <span className="font-medium">{cart.reduce((acc, item) => acc + item.quantity, 0)}</span>
+                                    <span className="text-muted-foreground">Cart Items</span>
+                                    <span className="font-medium">₹{cartTotal}</span>
                                 </div>
+                                {addonsTotal > 0 && (
+                                    <div className="flex justify-between text-sm text-amber-700">
+                                        <span className="flex items-center gap-1"> Special Addons</span>
+                                        <span className="font-medium">+ ₹{addonsTotal}</span>
+                                    </div>
+                                )}
                                 <div className="flex justify-between text-lg font-bold border-t pt-4">
                                     <span>Total Amount</span>
                                     <span className="text-primary">₹{totalAmount}</span>

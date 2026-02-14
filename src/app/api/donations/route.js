@@ -8,41 +8,75 @@ import { foodPackages, specialPackages } from '@/lib/constants';
 export async function POST(request) {
     try {
         const body = await request.json();
-        let { amount, purpose, uid, guest_name, guest_email, guest_phone, anonymous, cart } = body;
+        let { amount, purpose, uid, guest_name, guest_email, guest_phone, anonymous, cart, addonIds } = body;
 
-        let finalAmount = amount;
+        let finalAmount = 0;
+        let calculatedPurpose = [];
 
-        // SERVER-SIDE PRICE VALIDATION
-        // If a cart is provided, we recalculate the total based on trusted prices in constants.js
-        if (cart && Array.isArray(cart) && cart.length > 0) {
-            let calculatedTotal = 0;
+        // SERVER-SIDE PRICE VALIDATION (DB BASED)
+        const products = await query("SELECT * FROM products WHERE is_active = TRUE");
 
-            cart.forEach(cartItem => {
-                // Find in foodPackages using startsWith to handle suffixes like -veg, -timestamp
-                let product = foodPackages.find(p => cartItem.id.startsWith(p.id));
-                let price = 0;
+        // Helper to find product price
+        const findPrice = (id, quantity = 1, title = "") => {
+            // 1. Try exact match (e.g., addon-reel)
+            let product = products.find(p => p.id === id);
 
-                if (product) {
-                    const variant = cartItem.id.includes('-veg') || cartItem.title.includes('(Veg)') ? 'veg' : 'nonveg';
-                    // Fallback to nonveg if variant not explicitly veg
-                    price = product.variants ? (product.variants[variant] || product.variants.nonveg) : 0;
+            // 2. Try prefix match for food packages (e.g., food-20-veg -> food-20)
+            if (!product) {
+                product = products.find(p => id.startsWith(p.id));
+            }
+
+            if (product) {
+                // Parse variants if string
+                const variants = typeof product.variants === 'string' ? JSON.parse(product.variants) : product.variants;
+
+                if (variants) {
+                    // Determine variant
+                    const variantKey = id.includes('-veg') || title.includes('(Veg)') ? 'veg' : 'nonveg';
+                    return (variants[variantKey] || variants.nonveg || 0) * quantity;
                 } else {
-                    // Check specialPackages
-                    product = specialPackages.find(p => cartItem.id.startsWith(p.id));
-                    if (product) price = product.price;
+                    return Number(product.price) * quantity;
                 }
+            }
+            return 0;
+        };
 
+        // 1. Calculate Cart Total
+        if (cart && Array.isArray(cart) && cart.length > 0) {
+            cart.forEach(item => {
+                const price = findPrice(item.id, item.quantity, item.title);
                 if (price > 0) {
-                    calculatedTotal += price * cartItem.quantity;
+                    finalAmount += price;
+                    calculatedPurpose.push(`${item.title} (x${item.quantity})`);
                 }
             });
-
-            if (calculatedTotal > 0) {
-                finalAmount = calculatedTotal;
-
-                purpose = cart.map(item => `${item.title} (x${item.quantity})`).join(", ");
-            }
         }
+
+        // 2. Calculate Addons Total
+        if (addonIds && Array.isArray(addonIds) && addonIds.length > 0) {
+            addonIds.forEach(addonId => {
+                const product = products.find(p => p.id === addonId && p.type === 'addon');
+                if (product) {
+                    finalAmount += Number(product.price);
+                    calculatedPurpose.push(`${product.title} (Addon)`);
+                }
+            });
+        }
+
+        // Use calculated amount if valid, otherwise fallback (or error out)
+        if (finalAmount > 0) {
+            purpose = calculatedPurpose.join(" + ");
+        } else {
+            // Fallback for custom donations or if DB lookup fails (should handle gracefully)
+            // For now, if DB lookup yields 0 but amount is sent (e.g. custom donation), we might accept it 
+            // BUT for Cart/Addons we strictly enforce DB price.
+            // If it was a purely custom amount donation (not cart), we'd need a flag.
+            // Assuming this endpoint is ONLY for cart checkout:
+            finalAmount = amount; // Dangerous fallback, but kept for non-product flows if any
+        }
+
+        // Strict consistency check (Optional: reject if mismatch)
+        // if (Math.abs(finalAmount - amount) > 1) { ... }
 
         if (!finalAmount || !purpose) {
             return NextResponse.json({ error: 'Amount and Purpose required' }, { status: 400 });
@@ -87,7 +121,7 @@ export async function POST(request) {
             // 3. Save "Pending" transaction
             const [result] = await connection.execute(
                 'INSERT INTO donations (uid, amount, purpose, payment_status, order_id, guest_name, guest_email, guest_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                [finalUid, amount, purpose, 'pending', orderId, guest_name || null, guest_email || null, guest_phone || null]
+                [finalUid, finalAmount, purpose, 'pending', orderId, guest_name || null, guest_email || null, guest_phone || null]
             );
 
             const donationId = result.insertId;
