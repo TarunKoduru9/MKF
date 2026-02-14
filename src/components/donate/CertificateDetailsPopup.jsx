@@ -156,7 +156,7 @@ export function CertificateDetailsPopup({ isOpen, onClose, orderId, onComplete }
                 <div className="flex-none sticky bottom-0 bg-white border-t border-slate-100 px-6 py-4 flex flex-col-reverse md:flex-row justify-end gap-3 rounded-b-2xl">
                     <Button variant="ghost" onClick={onClose} className="w-full md:w-auto text-slate-500 hover:text-slate-700 h-11 rounded-xl">Skip for Now</Button>
                     <Button onClick={handleSubmit} disabled={loading} className="w-full md:w-auto bg-slate-900 hover:bg-slate-800 text-white font-bold px-8 h-11 shadow-lg shadow-slate-200 rounded-xl">
-                        {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : "Submit & Get Certificate"}
+                        {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : "Submit"}
                     </Button>
                 </div>
             </div>

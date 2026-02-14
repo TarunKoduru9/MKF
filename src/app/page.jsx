@@ -8,6 +8,7 @@ import { OccasionsSection } from "@/components/home/OccasionsSection";
 import { InvolvedSection } from "@/components/home/InvolvedSection";
 import { FaqSection } from "@/components/home/FaqSection";
 import { HeroSection } from "@/components/home/HeroSection";
+import { VideoCarousel } from "@/components/home/VideoCarousel";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
         <ProgramSection />
         <OccasionsSection />
         <InvolvedSection />
+        <VideoCarousel />
         <FaqSection />
       </main>
 
