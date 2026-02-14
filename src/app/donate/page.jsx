@@ -16,6 +16,8 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { API_ROUTES } from "@/lib/routes";
 import { FoodDonationPopup } from "@/components/donate/FoodDonationPopup";
+import { CertificateDetailsPopup } from "@/components/donate/CertificateDetailsPopup";
+
 
 const PackageCard = ({ item, onDonate }) => {
     const [quantity, setQuantity] = useState(1);
@@ -93,6 +95,8 @@ export default function DonatePage() {
 
     // Popup State
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [showCertPopup, setShowCertPopup] = useState(false);
+    const [completedOrderId, setCompletedOrderId] = useState("");
     const [selectedPack, setSelectedPack] = useState(null);
     const [products, setProducts] = useState([]);
 
@@ -216,9 +220,8 @@ export default function DonatePage() {
                             signature: response.razorpay_signature
                         });
                         if (verifyRes.data.success) {
-                            alert("Thank you for your donation!");
-                            setUserData({ name: "", email: "", phone: "", anonymous: false });
-                            setCustomAmount("");
+                            setCompletedOrderId(data.orderId);
+                            setShowCertPopup(true);
                         }
                     } catch (e) {
                         alert("Verification failed, but payment was successful. Please contact support.");
@@ -241,6 +244,12 @@ export default function DonatePage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleCertPopupComplete = () => {
+        setUserData({ name: "", email: "", phone: "", anonymous: false });
+        setCustomAmount("");
+        setShowCertPopup(false);
     };
 
     return (
@@ -385,8 +394,14 @@ export default function DonatePage() {
                     isOpen={isPopupOpen}
                     onClose={() => setIsPopupOpen(false)}
                     onSubmit={handlePopupSubmit}
-                    userName={user?.name}
                     packageName={selectedPack?.item?.title}
+                />
+
+                <CertificateDetailsPopup
+                    isOpen={showCertPopup}
+                    onClose={() => setShowCertPopup(false)}
+                    orderId={completedOrderId}
+                    onComplete={handleCertPopupComplete}
                 />
             </main>
 

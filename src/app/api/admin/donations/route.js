@@ -40,9 +40,14 @@ export async function GET(req) {
                     SELECT * FROM food_donation_details WHERE donation_id IN (${donationIds})
                 `);
 
+                const certificates = await query(`
+                    SELECT * FROM donation_certificates WHERE donation_id IN (${donationIds})
+                `);
+
                 // Map details to donations
                 donations.forEach(donation => {
                     donation.food_details = details.filter(detail => detail.donation_id === donation.id);
+                    donation.certificate_details = certificates.filter(cert => cert.donation_id === donation.id)[0] || null;
                 });
             }
         }

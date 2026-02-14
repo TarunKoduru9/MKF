@@ -11,12 +11,20 @@ import axios from "axios";
 import Image from "next/image";
 import { API_ROUTES } from "@/lib/routes";
 
-export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, packageName }) {
+export function FoodDonationPopup({ isOpen, onClose, onSubmit, packageName }) {
     const [category, setCategory] = useState("Birthday");
+    const [name1, setName1] = useState("");
+    const [name2, setName2] = useState("");
     const [reason, setReason] = useState("");
+    const [wishes, setWishes] = useState("");
     const [eventDate, setEventDate] = useState("");
     const [images, setImages] = useState([]);
     const [uploading, setUploading] = useState(false);
+
+    // ... (keep handleImageUpload and removeImage as is)
+
+    // Re-declare them here since I can't easily skip lines in this specific tool without replacing the whole block or making multiple calls for small chunks.
+    // Actually, I can just replace the top part and the submit part.
 
     const handleImageUpload = async (e) => {
         const files = Array.from(e.target.files);
@@ -29,7 +37,6 @@ export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, package
         try {
             const uploadedUrls = [];
             for (const file of files) {
-                // Client-side validation
                 if (!file.type.startsWith("image/")) {
                     alert(`Skipping ${file.name}: Only images are allowed.`);
                     continue;
@@ -64,6 +71,14 @@ export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, package
             alert("Please select an event date.");
             return;
         }
+        if (category === "Marriage Anniversary" && (!name1 || !name2)) {
+            alert("Please enter both names.");
+            return;
+        }
+        if (category !== "Marriage Anniversary" && !name1) {
+            alert("Please enter the name.");
+            return;
+        }
         if (category === "Other" && !reason.trim()) {
             alert("Please specify the reason.");
             return;
@@ -71,7 +86,10 @@ export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, package
 
         onSubmit({
             category,
+            name1,
+            name2: category === "Marriage Anniversary" ? name2 : null,
             reason: category === "Other" ? reason : null,
+            wishes,
             eventDate,
             images
         });
@@ -81,14 +99,9 @@ export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, package
         <Modal isOpen={isOpen} onClose={onClose} title={`Donate: ${packageName}`}>
             <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                    <Label>Your Name</Label>
-                    <Input value={userName || "Guest"} disabled className="bg-slate-100" />
-                </div>
-
-                <div className="space-y-2">
-                    <Label>Event Category</Label>
+                    <Label>Category</Label>
                     <select
-                        className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-950"
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                     >
@@ -97,6 +110,37 @@ export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, package
                         <option value="Other">Other</option>
                     </select>
                 </div>
+
+                {/* Dynamic Name Inputs */}
+                {category === "Marriage Anniversary" ? (
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label>Husband's Name</Label>
+                            <Input
+                                placeholder="Name"
+                                value={name1}
+                                onChange={(e) => setName1(e.target.value)}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Wife's Name</Label>
+                            <Input
+                                placeholder="Name"
+                                value={name2}
+                                onChange={(e) => setName2(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                ) : (
+                    <div className="space-y-2">
+                        <Label>Name</Label>
+                        <Input
+                            placeholder="Full Name"
+                            value={name1}
+                            onChange={(e) => setName1(e.target.value)}
+                        />
+                    </div>
+                )}
 
                 {category === "Other" && (
                     <div className="space-y-2">
@@ -108,6 +152,16 @@ export function FoodDonationPopup({ isOpen, onClose, onSubmit, userName, package
                         />
                     </div>
                 )}
+
+                <div className="space-y-2">
+                    <Label>Wishes / Message</Label>
+                    <textarea
+                        className="flex min-h-[80px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Write your best wishes here..."
+                        value={wishes}
+                        onChange={(e) => setWishes(e.target.value)}
+                    />
+                </div>
 
                 <div className="space-y-2">
                     <Label>Event Date</Label>

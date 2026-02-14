@@ -97,7 +97,28 @@ CREATE TABLE food_donation_details (
     category VARCHAR(50) NOT NULL, -- 'Birthday', 'Anniversary', 'Other'
     reason VARCHAR(255), -- If category is 'Other'
     event_date DATE,
+    name_1 VARCHAR(255),
+    name_2 VARCHAR(255) ,
+    wishes TEXT,
     image_urls JSON, -- Store array of image URLs
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (donation_id) REFERENCES donations(id) ON DELETE CASCADE
 );
+
+CREATE TABLE donation_certificates (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    donation_id INT NOT NULL,
+    order_id VARCHAR(100),
+    title VARCHAR(20),
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    email VARCHAR(255),
+    whatsapp VARCHAR(50),
+    address TEXT,
+    doc_type VARCHAR(50), -- Optional
+    doc_number VARCHAR(100), -- Optional
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (donation_id) REFERENCES donations(id) ON DELETE CASCADE,
+    INDEX idx_order_id (order_id)
+);
+

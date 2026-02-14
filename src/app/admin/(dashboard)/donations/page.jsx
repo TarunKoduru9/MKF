@@ -250,6 +250,32 @@ export default function AdminDonationsPage() {
                                                 )}
                                             </div>
 
+                                            {/* Names and Wishes */}
+                                            {(detail.name_1 || detail.wishes) && (
+                                                <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 mt-2 space-y-2">
+                                                    {detail.name_1 && (
+                                                        <div>
+                                                            <span className="block text-xs text-gray-500 mb-0.5 uppercase tracking-wider font-semibold">
+                                                                {detail.category === 'Marriage Anniversary' ? "Husband's Name" : "Name"}
+                                                            </span>
+                                                            <span className="font-medium text-gray-900">{detail.name_1}</span>
+                                                        </div>
+                                                    )}
+                                                    {detail.name_2 && detail.category === 'Marriage Anniversary' && (
+                                                        <div>
+                                                            <span className="block text-xs text-gray-500 mb-0.5 uppercase tracking-wider font-semibold">Wife's Name</span>
+                                                            <span className="font-medium text-gray-900">{detail.name_2}</span>
+                                                        </div>
+                                                    )}
+                                                    {detail.wishes && (
+                                                        <div className="pt-2 border-t border-slate-200 mt-2">
+                                                            <span className="block text-xs text-gray-500 mb-1 uppercase tracking-wider font-semibold">Wishes</span>
+                                                            <p className="text-sm text-slate-700 italic">"{detail.wishes}"</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+
                                             {detailImages.length > 0 && (
                                                 <div>
                                                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Uploaded Images</p>
@@ -278,12 +304,48 @@ export default function AdminDonationsPage() {
                                     );
                                 })}
 
-                                <div>
-                                    <h4 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-3">Purpose / Items</h4>
-                                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 text-sm whitespace-pre-wrap text-slate-700 leading-relaxed">
-                                        {selectedDonation.purpose}
-                                    </div>
+                                <h4 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-3">Purpose / Items</h4>
+                                <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 text-sm whitespace-pre-wrap text-slate-700 leading-relaxed">
+                                    {selectedDonation.purpose}
                                 </div>
+
+
+                                {/* Certificate Details Section */}
+                                {selectedDonation.certificate_details && (
+                                    <div>
+                                        <h4 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-3">80G Certificate Details</h4>
+                                        <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 space-y-3">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <p className="text-xs text-gray-500 mb-0.5">Name</p>
+                                                    <p className="font-medium text-gray-900">
+                                                        {selectedDonation.certificate_details.title} {selectedDonation.certificate_details.first_name} {selectedDonation.certificate_details.last_name}
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-xs text-gray-500 mb-0.5">WhatsApp</p>
+                                                    <p className="font-medium text-gray-900">{selectedDonation.certificate_details.whatsapp}</p>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-gray-500 mb-0.5">Address</p>
+                                                <p className="font-medium text-gray-900">{selectedDonation.certificate_details.address}</p>
+                                            </div>
+                                            {(selectedDonation.certificate_details.doc_type || selectedDonation.certificate_details.doc_number) && (
+                                                <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-200">
+                                                    <div>
+                                                        <p className="text-xs text-gray-500 mb-0.5">Document Type</p>
+                                                        <p className="font-medium text-gray-900">{selectedDonation.certificate_details.doc_type || "-"}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs text-gray-500 mb-0.5">Document Number</p>
+                                                        <p className="font-medium text-gray-900">{selectedDonation.certificate_details.doc_number || "-"}</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -291,8 +353,9 @@ export default function AdminDonationsPage() {
                             <Button variant="outline" onClick={() => setSelectedDonation(null)}>Close Details</Button>
                         </div>
                     </div>
-                )}
-            </DonationModal>
+                )
+                }
+            </DonationModal >
         </div >
     );
 }

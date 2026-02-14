@@ -14,8 +14,7 @@ import { useState, useEffect } from "react";
 import { API_ROUTES } from "@/lib/routes";
 import { DonationCard } from "@/components/donate/DonationCard";
 import axios from "axios";
-
-import { foodPackages, specialPackages } from "@/lib/constants";
+import { CertificateDetailsPopup } from "@/components/donate/CertificateDetailsPopup";
 
 export default function CartPage() {
     const cart = useStore((state) => state.cart);
@@ -27,6 +26,8 @@ export default function CartPage() {
     const [recommendations, setRecommendations] = useState([]);
     const [addons, setAddons] = useState([]);
     const [selectedAddonIds, setSelectedAddonIds] = useState([]);
+    const [showCertPopup, setShowCertPopup] = useState(false);
+    const [completedOrderId, setCompletedOrderId] = useState("");
 
     useEffect(() => {
         // Fetch Products and Addons from DB
@@ -133,9 +134,12 @@ export default function CartPage() {
                         });
 
                         if (verifyRes.data.success) {
-                            alert(`Payment Successful! Email sent.`);
+                            setCompletedOrderId(data.orderId);
+                            setShowCertPopup(true);
+                            // We don't clear cart immediately here, we do it after they fill details or close popup?
+                            // Or better: clear cart now so they don't pay again, but show popup.
                             clearCart();
-                            setSelectedAddonIds([]); // Clear addons
+                            setSelectedAddonIds([]);
                         } else {
                             alert("Payment success, but verification failed. Please contact support.");
                         }
@@ -315,6 +319,12 @@ export default function CartPage() {
                 </div>
             </main>
 
+            <CertificateDetailsPopup
+                isOpen={showCertPopup}
+                onClose={() => setShowCertPopup(false)}
+                orderId={completedOrderId}
+                onComplete={() => setShowCertPopup(false)}
+            />
             <Footer />
         </div>
     );

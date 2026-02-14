@@ -5,49 +5,8 @@ import { ArrowUpRight } from "lucide-react";
 
 export function HeroSection() {
     return (
-        <section className="relative flex flex-col justify-center overflow-visible bg-white pb-12 pt-12 lg:pt-12 lg:pb-12">
+        <section className="relative flex flex-col justify-center overflow-visible bg-white">
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
-
-            <div className="container relative z-10 mx-auto px-4 pb-12 lg:pb-24">
-                <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-                    <div className="relative mx-auto w-full max-w-[400px] lg:max-w-[480px] order-2 lg:order-1">
-                        {/* Gray Box Placeholder matching reference */}
-                        <div className="relative rounded-[2.5rem] overflow-hidden shadow-none bg-gray-300 aspect-[4/3] w-full flex items-center justify-center">
-                            <Image
-                                src="/images/helping-hands1.png"
-                                alt="Empowering Lives"
-                                fill
-                                className="object-cover"
-                                priority
-                            />
-                        </div>
-                    </div>
-
-                    <div className="text-center lg:text-left order-1 lg:order-2 space-y-6">
-                        <h2 className="text-blue-600 font-semibold tracking-normal text-lg">
-                            Together We Make Change
-                        </h2>
-                        <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl leading-[1.1]">
-                            Empowering Lives, <br />
-                            <span className="text-slate-900">Building Futures</span>
-                        </h1>
-
-                        <div className="flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start pt-4">
-                            <Link href="/donate">
-                                <Button size="lg" className="rounded-full bg-red-600 hover:bg-red-700 text-white px-8 h-12 text-base font-bold shadow-lg hover:shadow-red-600/25 transition-all w-full sm:w-auto cursor-pointer">
-                                    Donate Now! <ArrowUpRight className="ml-2 h-4 w-4" strokeWidth={3} />
-                                </Button>
-                            </Link>
-                            <Link href="/gallery">
-                                <Button variant="outline" size="lg" className="rounded-full px-8 h-12 text-base font-semibold border border-slate-300 hover:bg-slate-50 text-slate-700 w-full sm:w-auto cursor-pointer">
-                                    View Our Program
-                                </Button>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             {/* Overlapping Cards Section */}
             <div className="relative z-20 container mx-auto px-4 -mt-10 mb-12">
                 <div className="grid gap-6 md:grid-cols-3">

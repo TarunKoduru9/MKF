@@ -130,9 +130,19 @@ export async function POST(request) {
             if (cart && Array.isArray(cart)) {
                 for (const item of cart) {
                     if (item.details) {
+                        const { category, reason, eventDate, images, name1, name2, wishes } = item.details;
                         await connection.execute(
-                            `INSERT INTO food_donation_details (donation_id, category, reason, event_date, image_urls) VALUES (?, ?, ?, ?, ?)`,
-                            [donationId, item.details.category, item.details.reason || null, item.details.eventDate || null, JSON.stringify(item.details.images || [])]
+                            `INSERT INTO food_donation_details (donation_id, category, reason, event_date, image_urls, name_1, name_2, wishes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                            [
+                                donationId,
+                                category,
+                                reason || null,
+                                eventDate || null,
+                                JSON.stringify(images || []),
+                                name1 || null,
+                                name2 || null,
+                                wishes || null
+                            ]
                         );
                     }
                 }
