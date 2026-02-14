@@ -53,12 +53,21 @@ export async function POST(req) {
         }
 
         const donation = donations[0];
-        const email = donation.guest_email; // Priority to guest email
-        const guestName = donation.guest_name || "Donor";
+        let email = donation.guest_email; // Priority to guest email
+        let guestName = donation.guest_name || "Donor";
         const guestPhone = donation.guest_phone || "0000000000"; // Fallback phone
         let finalUid = donation.uid;
         let isNewAccount = false;
         let generatedPassword = "";
+
+        // FIX: If logged in (cart checkout), guest_email might be null. Fetch from users table.
+        if (finalUid !== 'guest' && !email) {
+            const userRes = await query("SELECT email, name FROM users WHERE uid = ?", [finalUid]);
+            if (userRes.length > 0) {
+                email = userRes[0].email;
+                guestName = userRes[0].name || guestName; // Use user name if guest name is default/missing
+            }
+        }
 
         if (finalUid === 'guest' && email) {
             let checkQuery = "SELECT * FROM users WHERE email = ?";
