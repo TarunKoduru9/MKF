@@ -5,6 +5,7 @@ import axios from "axios";
 import { Loader2, Search, Eye, Download, Image as ImageIcon } from "lucide-react";
 import { useState } from "react";
 import { Modal } from "@/components/ui/modal";
+import { DonationModal } from "./DonationModal";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { API_ROUTES } from "@/lib/routes";
@@ -170,108 +171,128 @@ export default function AdminDonationsPage() {
                 </div>
             </div>
 
-            <Modal isOpen={!!selectedDonation} onClose={() => setSelectedDonation(null)} title="Donation Details">
+            <DonationModal isOpen={!!selectedDonation} onClose={() => setSelectedDonation(null)} title="Donation Details">
                 {selectedDonation && (
-                    <div className="space-y-6">
-                        <div className="grid grid-cols-2 gap-4 text-sm bg-slate-50 p-4 rounded-lg border border-slate-100">
-                            <div>
-                                <h4 className="font-semibold text-gray-500">Amount</h4>
-                                <p className="text-xl font-bold text-green-600">₹{parseFloat(selectedDonation.amount).toLocaleString()}</p>
+                    <div className="space-y-8">
+                        {/* Top Stats Row */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 p-6 rounded-xl border border-slate-100">
+                            <div className="space-y-1">
+                                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</h4>
+                                <p className="text-2xl font-bold text-gray-900">₹{parseFloat(selectedDonation.amount).toLocaleString()}</p>
                             </div>
-                            <div>
-                                <h4 className="font-semibold text-gray-500">Status</h4>
-                                <p className={`font-medium ${selectedDonation.payment_status === 'success' ? 'text-green-600' : 'text-yellow-600'}`}>
+                            <div className="space-y-1">
+                                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</h4>
+                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${selectedDonation.payment_status === 'success'
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-yellow-100 text-yellow-800'
+                                    }`}>
                                     {selectedDonation.payment_status.toUpperCase()}
-                                </p>
+                                </span>
                             </div>
-                            <div>
-                                <h4 className="font-semibold text-gray-500">Date</h4>
-                                <p>{new Date(selectedDonation.created_at).toLocaleString()}</p>
+                            <div className="space-y-1">
+                                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</h4>
+                                <p className="font-medium text-gray-900">{new Date(selectedDonation.created_at).toLocaleDateString()}</p>
+                                <p className="text-xs text-gray-500">{new Date(selectedDonation.created_at).toLocaleTimeString()}</p>
                             </div>
-                            <div>
-                                <h4 className="font-semibold text-gray-500">Order ID</h4>
-                                <p className="font-mono text-xs">{selectedDonation.order_id}</p>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 className="font-semibold text-gray-900 border-b pb-2 mb-3">Donor Information</h4>
-                            <div className="grid grid-cols-2 gap-y-2 text-sm">
-                                <p><span className="text-gray-500">Name:</span> {selectedDonation.user_name || selectedDonation.guest_name || "Anonymous"}</p>
-                                <p><span className="text-gray-500">Email:</span> {selectedDonation.user_email || selectedDonation.guest_email || "-"}</p>
-                                <p><span className="text-gray-500">Phone:</span> {selectedDonation.user_phone || selectedDonation.guest_phone || "-"}</p>
+                            <div className="space-y-1">
+                                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Order ID</h4>
+                                <p className="font-mono text-sm text-gray-600 truncate" title={selectedDonation.order_id}>{selectedDonation.order_id}</p>
                             </div>
                         </div>
 
-                        {selectedDonation.food_details?.map((detail, idx) => {
-                            const detailImages = safeParseImages(detail.image_urls);
-                            return (
-                                <div key={idx} className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                                    <div className="flex items-center justify-between mb-3">
-                                        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-                                            Event Details
-                                        </h4>
-                                        <span className="text-xs font-semibold bg-blue-100 text-blue-700 px-3 py-1 rounded-full">{detail.category}</span>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {/* Donor Info Column */}
+                            <div className="md:col-span-1 space-y-4">
+                                <h4 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-2">Donor Information</h4>
+                                <div className="space-y-3">
+                                    <div>
+                                        <p className="text-xs text-gray-500 mb-0.5">Name</p>
+                                        <p className="font-medium text-gray-900">{selectedDonation.user_name || selectedDonation.guest_name || "Anonymous"}</p>
                                     </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
-                                        {detail.reason && (
-                                            <div className="bg-white p-3 rounded border border-slate-100">
-                                                <span className="block text-xs text-gray-500 mb-1 uppercase tracking-in-widest font-bold">Occasion</span>
-                                                <span className="font-medium text-gray-900">{detail.reason}</span>
-                                            </div>
-                                        )}
-                                        {detail.event_date && (
-                                            <div className="bg-white p-3 rounded border border-slate-100">
-                                                <span className="block text-xs text-gray-500 mb-1 uppercase tracking-in-widest font-bold">Event Date</span>
-                                                <span className="font-medium text-gray-900">{new Date(detail.event_date).toLocaleDateString(undefined, {
-                                                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-                                                })}</span>
-                                            </div>
-                                        )}
+                                    <div>
+                                        <p className="text-xs text-gray-500 mb-0.5">Email</p>
+                                        <p className="text-sm text-gray-700 break-all">{selectedDonation.user_email || selectedDonation.guest_email || "-"}</p>
                                     </div>
-
-                                    {detailImages.length > 0 && (
-                                        <div className="mt-4">
-                                            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Uploaded Images</p>
-                                            <div className="flex flex-wrap gap-4 bg-white p-4 rounded-lg border border-slate-200">
-                                                {detailImages.map((url, i) => (
-                                                    <div key={i} className="group relative w-full sm:w-48 aspect-video rounded-lg overflow-hidden border border-slate-200 shadow-sm">
-                                                        <a href={url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
-                                                            <Image src={url} alt={`Upload ${i + 1}`} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
-                                                        </a>
-                                                        <a
-                                                            href={url}
-                                                            download={`donation-proof-${i + 1}.jpg`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="absolute bottom-2 right-2 bg-white/90 p-2 rounded-full text-slate-700 shadow-sm opacity-0 group-hover:opacity-100 transition-all hover:text-blue-600 hover:scale-110"
-                                                            title="Download"
-                                                        >
-                                                            <Download className="h-4 w-4" />
-                                                        </a>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
+                                    <div>
+                                        <p className="text-xs text-gray-500 mb-0.5">Phone</p>
+                                        <p className="text-sm text-gray-700">{selectedDonation.user_phone || selectedDonation.guest_phone || "-"}</p>
+                                    </div>
                                 </div>
-                            );
-                        })}
+                            </div>
 
-                        <div>
-                            <h4 className="font-semibold text-gray-900 border-b pb-2 mb-3">Items / Purpose</h4>
-                            <div className="bg-slate-50 p-3 rounded-md border border-slate-100 text-sm whitespace-pre-wrap font-medium text-slate-700">
-                                {selectedDonation.purpose}
+                            {/* Event Details & Purpose Column - Spans 2 columns on desktop */}
+                            <div className="md:col-span-2 space-y-6">
+                                {selectedDonation.food_details?.map((detail, idx) => {
+                                    const detailImages = safeParseImages(detail.image_urls);
+                                    return (
+                                        <div key={idx} className="space-y-4">
+                                            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                                                <h4 className="text-sm font-semibold text-gray-900">Event Details</h4>
+                                                <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                                    {detail.category}
+                                                </span>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                {detail.reason && (
+                                                    <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                                        <span className="block text-xs text-gray-500 mb-1 uppercase tracking-wider font-semibold">Occasion</span>
+                                                        <span className="font-medium text-gray-900">{detail.reason}</span>
+                                                    </div>
+                                                )}
+                                                {detail.event_date && (
+                                                    <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                                        <span className="block text-xs text-gray-500 mb-1 uppercase tracking-wider font-semibold">Event Date</span>
+                                                        <span className="font-medium text-gray-900">{new Date(detail.event_date).toLocaleDateString(undefined, {
+                                                            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                                                        })}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {detailImages.length > 0 && (
+                                                <div>
+                                                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Uploaded Images</p>
+                                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                                        {detailImages.map((url, i) => (
+                                                            <div key={i} className="group relative aspect-video rounded-lg overflow-hidden border border-slate-200 bg-gray-100 shadow-sm">
+                                                                <a href={url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+                                                                    <Image src={url} alt={`Upload ${i + 1}`} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+                                                                </a>
+                                                                <a
+                                                                    href={url}
+                                                                    download={`donation-proof-${i + 1}.jpg`}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="absolute bottom-2 right-2 bg-white/90 p-1.5 rounded-full text-slate-700 shadow-sm opacity-0 group-hover:opacity-100 transition-all hover:text-blue-600 hover:scale-110"
+                                                                    title="Download"
+                                                                >
+                                                                    <Download className="h-4 w-4" />
+                                                                </a>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+
+                                <div>
+                                    <h4 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-3">Purpose / Items</h4>
+                                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 text-sm whitespace-pre-wrap text-slate-700 leading-relaxed">
+                                        {selectedDonation.purpose}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="flex justify-end pt-4">
-                            <Button onClick={() => setSelectedDonation(null)}>Close</Button>
+                        <div className="flex justify-end pt-4 border-t border-gray-100">
+                            <Button variant="outline" onClick={() => setSelectedDonation(null)}>Close Details</Button>
                         </div>
                     </div>
                 )}
-            </Modal >
+            </DonationModal>
         </div >
     );
 }
