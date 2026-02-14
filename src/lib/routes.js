@@ -28,6 +28,7 @@ export const API_ROUTES = {
     DONATION: {
         CREATE: "/api/donations",
         VERIFY: "/api/donations/verify",
+        PRODUCTS: "/api/products",
     },
     GALLERY: {
         GET: "/api/gallery",

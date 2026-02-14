@@ -17,9 +17,6 @@ import { cn } from "@/lib/utils";
 import { API_ROUTES } from "@/lib/routes";
 import { FoodDonationPopup } from "@/components/donate/FoodDonationPopup";
 
-import { foodPackages, specialPackages } from "@/lib/constants";
-
-// Reusable Package Card Component (Internal for cleaner page file)
 const PackageCard = ({ item, onDonate }) => {
     const [quantity, setQuantity] = useState(1);
     const [variant, setVariant] = useState(item.variants ? "veg" : null);
@@ -97,6 +94,21 @@ export default function DonatePage() {
     // Popup State
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedPack, setSelectedPack] = useState(null);
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const res = await axios.get(API_ROUTES.DONATION.PRODUCTS);
+                if (Array.isArray(res.data)) {
+                    setProducts(res.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch products", error);
+            }
+        };
+        fetchProducts();
+    }, []);
 
     const router = useRouter();
     const user = useStore((state) => state.user);
@@ -332,7 +344,13 @@ export default function DonatePage() {
                             <h3 className="text-2xl font-bold text-slate-900">Food Donation Packages</h3>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {foodPackages.map(pkg => <PackageCard key={pkg.id} item={pkg} onDonate={handlePackageDonate} />)}
+                            {loading ? (
+                                <p>Loading packages...</p>
+                            ) : (
+                                products.filter(p => p.type === 'package' && p.id.startsWith('food')).map(pkg => (
+                                    <PackageCard key={pkg.id} item={pkg} onDonate={handlePackageDonate} />
+                                ))
+                            )}
                         </div>
                     </div>
 
@@ -343,7 +361,13 @@ export default function DonatePage() {
                             <h3 className="text-2xl font-bold text-slate-900">Special Packages & Add-ons</h3>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {[...specialPackages].map(pkg => <PackageCard key={pkg.id} item={pkg} onDonate={handlePackageDonate} />)}
+                            {loading ? (
+                                <p>Loading packages...</p>
+                            ) : (
+                                products.filter(p => p.type === 'package' && !p.id.startsWith('food')).map(pkg => (
+                                    <PackageCard key={pkg.id} item={pkg} onDonate={handlePackageDonate} />
+                                ))
+                            )}
                         </div>
                     </div>
                 </section>

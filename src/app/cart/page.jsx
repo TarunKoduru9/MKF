@@ -32,7 +32,7 @@ export default function CartPage() {
         // Fetch Products and Addons from DB
         const fetchProducts = async () => {
             try {
-                const res = await axios.get('/api/products');
+                const res = await axios.get(API_ROUTES.DONATION.PRODUCTS);
                 const products = res.data;
 
                 if (Array.isArray(products)) {
@@ -238,8 +238,8 @@ export default function CartPage() {
                                         <div
                                             key={addon.id}
                                             className={`flex items-center justify-between p-4 rounded-lg border transition-all cursor-pointer ${selectedAddonIds.includes(addon.id)
-                                                    ? "bg-white border-red-500 shadow-sm"
-                                                    : "bg-white/50 border-transparent hover:bg-white"
+                                                ? "bg-white border-red-500 shadow-sm"
+                                                : "bg-white/50 border-transparent hover:bg-white"
                                                 }`}
                                             onClick={() => toggleAddon(addon.id)}
                                         >
