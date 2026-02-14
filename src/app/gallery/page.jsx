@@ -160,7 +160,10 @@ export default function GalleryPage() {
                                         key={item.id}
                                         className={cn(
                                             "group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500",
-                                            isWide ? "md:col-span-2 aspect-[16/9]" : "md:col-span-1 aspect-[4/3] md:aspect-auto"
+                                            // Mobile: Taller aspect ratio to show more of the image
+                                            "aspect-[3/4]",
+                                            // Desktop: Wide or Standard aspect ratio
+                                            isWide ? "md:col-span-2 md:aspect-[16/9]" : "md:col-span-1 md:aspect-[4/3]"
                                         )}
                                     >
                                         <Image
