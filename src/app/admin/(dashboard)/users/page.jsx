@@ -39,7 +39,7 @@ export default function AdminUsersPage() {
                 </div>
             </div>
 
-            <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
+            <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm text-gray-500">
                         <thead className="bg-gray-50 text-xs uppercase text-gray-700">

@@ -66,7 +66,7 @@ export default function AdminDashboardPage() {
                 {statCards.map((stat, index) => {
                     const Icon = stat.icon;
                     return (
-                        <div key={index} className="rounded-xl border bg-white p-6 shadow-sm">
+                        <div key={index} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                             <div className="flex items-center justify-between">
                                 <div>
                                     <p className="text-sm font-medium text-gray-500">{stat.title}</p>
@@ -81,7 +81,7 @@ export default function AdminDashboardPage() {
                 })}
             </div>
 
-            <div className="mt-8 rounded-xl border bg-white p-6 shadow-sm">
+            <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                 <h3 className="mb-4 text-lg font-bold text-gray-900">Recent Activity</h3>
 
                 <div className="overflow-x-auto">

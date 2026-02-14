@@ -4,7 +4,7 @@ import { AdminSidebar } from "./AdminSidebar";
 
 export function AdminHeader() {
     return (
-        <header className="fixed right-0 top-0 z-30 flex h-16 w-full lg:w-[calc(100%-16rem)] items-center justify-between border-b bg-white px-6 font-sans">
+        <header className="fixed right-0 top-0 z-30 flex h-16 w-full lg:w-[calc(100%-16rem)] items-center justify-between shadow-sm border border-slate-200 bg-white px-6 font-sans">
             <div className="flex items-center gap-4">
                 <Sheet>
                     <SheetTrigger asChild>
@@ -12,7 +12,7 @@ export function AdminHeader() {
                             <Menu className="h-6 w-6" />
                         </button>
                     </SheetTrigger>
-                    <SheetContent side="left" className="p-0 w-64 border-r">
+                    <SheetContent side="left" className="p-0 w-64 border-r shadow-lg">
                         <AdminSidebar className="flex static w-full h-full" />
                     </SheetContent>
                 </Sheet>

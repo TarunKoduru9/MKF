@@ -64,7 +64,7 @@ export default function AdminDonationsPage() {
                 </div>
             </div>
 
-            <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
+            <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm text-gray-500">
                         <thead className="bg-gray-50 text-xs uppercase text-gray-700">
@@ -207,46 +207,61 @@ export default function AdminDonationsPage() {
                             const detailImages = safeParseImages(detail.image_urls);
                             return (
                                 <div key={idx} className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                                        Event Details
-                                        <span className="text-xs font-normal bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{detail.category}</span>
-                                    </h4>
-                                    <div className="space-y-2 text-sm">
-                                        {detail.reason && <p><span className="font-medium text-gray-500">Occasion/Reason:</span> {detail.reason}</p>}
-                                        {detail.event_date && <p><span className="font-medium text-gray-500">Event Date:</span> {new Date(detail.event_date).toLocaleDateString()}</p>}
+                                    <div className="flex items-center justify-between mb-3">
+                                        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                                            Event Details
+                                        </h4>
+                                        <span className="text-xs font-semibold bg-blue-100 text-blue-700 px-3 py-1 rounded-full">{detail.category}</span>
+                                    </div>
 
-                                        {detailImages.length > 0 && (
-                                            <div className="mt-3">
-                                                <p className="font-medium text-gray-500 mb-2">Uploaded Images:</p>
-                                                <div className="flex gap-2 bg-white p-2 rounded-md border border-slate-100">
-                                                    {detailImages.map((url, i) => (
-                                                        <div key={i} className="group relative w-20 h-20 rounded-md overflow-hidden border border-slate-200">
-                                                            <a href={url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
-                                                                <Image src={url} alt={`Upload ${i + 1}`} fill className="object-cover transition-transform group-hover:scale-105" />
-                                                            </a>
-                                                            <a
-                                                                href={url}
-                                                                download={`donation-proof-${i + 1}.jpg`}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="absolute bottom-1 right-1 bg-white/90 p-1 rounded-full text-slate-700 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity hover:text-blue-600"
-                                                                title="Download"
-                                                            >
-                                                                <Download className="h-3 w-3" />
-                                                            </a>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                                        {detail.reason && (
+                                            <div className="bg-white p-3 rounded border border-slate-100">
+                                                <span className="block text-xs text-gray-500 mb-1 uppercase tracking-in-widest font-bold">Occasion</span>
+                                                <span className="font-medium text-gray-900">{detail.reason}</span>
+                                            </div>
+                                        )}
+                                        {detail.event_date && (
+                                            <div className="bg-white p-3 rounded border border-slate-100">
+                                                <span className="block text-xs text-gray-500 mb-1 uppercase tracking-in-widest font-bold">Event Date</span>
+                                                <span className="font-medium text-gray-900">{new Date(detail.event_date).toLocaleDateString(undefined, {
+                                                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                                                })}</span>
                                             </div>
                                         )}
                                     </div>
+
+                                    {detailImages.length > 0 && (
+                                        <div className="mt-4">
+                                            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Uploaded Images</p>
+                                            <div className="flex flex-wrap gap-4 bg-white p-4 rounded-lg border border-slate-200">
+                                                {detailImages.map((url, i) => (
+                                                    <div key={i} className="group relative w-full sm:w-48 aspect-video rounded-lg overflow-hidden border border-slate-200 shadow-sm">
+                                                        <a href={url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+                                                            <Image src={url} alt={`Upload ${i + 1}`} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+                                                        </a>
+                                                        <a
+                                                            href={url}
+                                                            download={`donation-proof-${i + 1}.jpg`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="absolute bottom-2 right-2 bg-white/90 p-2 rounded-full text-slate-700 shadow-sm opacity-0 group-hover:opacity-100 transition-all hover:text-blue-600 hover:scale-110"
+                                                            title="Download"
+                                                        >
+                                                            <Download className="h-4 w-4" />
+                                                        </a>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                            )
+                            );
                         })}
 
                         <div>
                             <h4 className="font-semibold text-gray-900 border-b pb-2 mb-3">Items / Purpose</h4>
-                            <div className="bg-slate-50 p-3 rounded-md border border-slate-100 text-sm whitespace-pre-wrap">
+                            <div className="bg-slate-50 p-3 rounded-md border border-slate-100 text-sm whitespace-pre-wrap font-medium text-slate-700">
                                 {selectedDonation.purpose}
                             </div>
                         </div>
@@ -256,7 +271,7 @@ export default function AdminDonationsPage() {
                         </div>
                     </div>
                 )}
-            </Modal>
-        </div>
+            </Modal >
+        </div >
     );
 }

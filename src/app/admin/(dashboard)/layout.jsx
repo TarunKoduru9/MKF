@@ -37,7 +37,7 @@ export default function AdminDashboardLayout({ children }) {
     }, []);
 
     return (
-        <div className="min-h-screen bg-slate-50 font-sans">
+        <div className="min-h-screen bg-slate-200 font-sans">
             <AdminSidebar />
             <AdminHeader />
 
