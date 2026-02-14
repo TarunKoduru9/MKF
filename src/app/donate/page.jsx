@@ -101,7 +101,16 @@ export default function DonatePage() {
             try {
                 const res = await axios.get(API_ROUTES.DONATION.PRODUCTS);
                 if (Array.isArray(res.data)) {
-                    setProducts(res.data);
+                    const sorted = res.data.sort((a, b) => {
+                        // Sort food packages by the number in their ID
+                        if (a.id.startsWith('food-') && b.id.startsWith('food-')) {
+                            const numA = parseInt(a.id.split('-')[1]);
+                            const numB = parseInt(b.id.split('-')[1]);
+                            return numA - numB;
+                        }
+                        return 0; // Keep original order for others
+                    });
+                    setProducts(sorted);
                 }
             } catch (error) {
                 console.error("Failed to fetch products", error);

@@ -196,13 +196,6 @@ export default function GalleryPage() {
                                     className="aspect-square rounded-3xl overflow-hidden shadow-md bg-white border border-slate-100 relative group"
                                 >
                                     <VideoCard item={item} className="w-full h-full" showOverlay={false} />
-
-                                    {/* Play Button Overlay */}
-                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
-                                        <div className="w-16 h-16 bg-black/50 rounded-full flex items-center justify-center border-2 border-white/50 backdrop-blur-sm">
-                                            <Play className="w-6 h-6 text-white ml-1 fill-white" />
-                                        </div>
-                                    </div>
                                 </motion.div>
                             ))}
                         </div>

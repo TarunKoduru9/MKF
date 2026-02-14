@@ -11,16 +11,19 @@ const banners = [
         id: 1,
         title: "Your Contribution Matters",
         img: "/images/Frame104.png",
+        mobileImg: "/images/Frame 119.png",
     },
     {
         id: 2,
         title: "Support Our Causes",
         img: "/images/Frame105.png",
+        mobileImg: "/images/Frame 120.png",
     },
     {
         id: 3,
         title: "Empower Through Giving",
         img: "/images/Frame106.png",
+        mobileImg: "/images/Frame 121.png",
     }
 ];
 
@@ -77,7 +80,7 @@ export function BannerCarousel() {
                     <ChevronRight className="w-4 h-4 md:w-6 md:h-6" />
                 </button>
 
-                <div className="relative w-full h-[250px] md:h-[550px] flex justify-center items-center overflow-hidden">
+                <div className="relative w-full h-[450px] md:h-[550px] flex justify-center items-center overflow-hidden">
                     <div className="absolute inset-0 flex justify-center items-center">
                         {banners.map((banner, index) => {
                             const isActive = index === currentIndex;
@@ -121,21 +124,30 @@ export function BannerCarousel() {
                                         transition-all duration-700 ease-in-out cursor-pointer
                                         ${isActive
                                             ? "w-full md:w-[1200px] shadow-xl bg-[#FFFFFF]"
-                                            : "w-[300px] md:w-[800px] shadow-lg bg-gray-50/80"
+                                            : "w-[300px] md:w-[800px] shadow-xl bg-gray-50/80"
                                         }
                                         ${positionClass} ${zIndex} ${opacity} ${blur}
                                         flex flex-col md:flex-row items-center justify-between rounded-[2rem] md:rounded-[2.5rem]
-                                        relative overflow-hidden h-[200px] md:h-[500px] border border-gray-100
+                                        relative overflow-hidden h-[400px] md:h-[500px] border border-gray-100
                                     `}
                                 >
                                     {/* Full Slide Image */}
                                     <div className="absolute inset-0 h-full w-full z-0">
                                         <Link href="/donate">
+                                            {/* Desktop Image */}
                                             <Image
                                                 src={banner.img}
                                                 alt={banner.title}
                                                 fill
-                                                className="object-fill"
+                                                className="hidden md:block object-fill"
+                                                priority={isActive}
+                                            />
+                                            {/* Mobile Image */}
+                                            <Image
+                                                src={banner.mobileImg}
+                                                alt={banner.title}
+                                                fill
+                                                className="block md:hidden object-contain"
                                                 priority={isActive}
                                             />
                                         </Link>
@@ -147,7 +159,7 @@ export function BannerCarousel() {
                 </div>
 
                 {/* Bottom Pagination Dots */}
-                <div className="flex justify-center gap-3 mt-6">
+                <div className="flex justify-center gap-3 mt-2">
                     {banners.map((_, idx) => (
                         <button
                             key={idx}
