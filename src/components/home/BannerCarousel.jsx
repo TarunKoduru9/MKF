@@ -10,42 +10,17 @@ const banners = [
     {
         id: 1,
         title: "Your Contribution Matters",
-        subtitle: "Every donation helps us bring change to those in need.",
-        bgClass: "bg-orange-50",
-        img: "/images/3785b985f8dcd25cac23adfc34b286725973f069.png",
-        highlightColor: "text-[#dc2626]",
-        btnColor: "bg-[#dc2626] hover:bg-[#dc2626]/80 text-white",
-        accent: "border-l-8 border-[#dc2626]/20"
+        img: "/images/Frame104.png",
     },
     {
         id: 2,
         title: "Support Our Causes",
-        subtitle: "Join hands with us to make a lasting impact on society.",
-        bgClass: "bg-pink-50",
-        img: "/images/aceb5753ec4688f80c19a7be4c042823800b5cc51.jpg",
-        highlightColor: "text-[#dc2626]",
-        btnColor: "bg-[#dc2626] hover:bg-[#dc2626]/80 text-white",
-        accent: "border-l-8 border-[#dc2626]/20"
+        img: "/images/Frame105.png",
     },
     {
         id: 3,
         title: "Empower Through Giving",
-        subtitle: "Your generosity clears the path for a better future.",
-        bgClass: "bg-blue-50",
-        img: "/images/e933905819302f6ddd3f23bd9f43bc98ec401420.jpg",
-        highlightColor: "text-[#dc2626]",
-        btnColor: "bg-[#dc2626] hover:bg-[#dc2626]/80 text-white",
-        accent: "border-l-8 border-[#dc2626]/20"
-    },
-    {
-        id: 4,
-        title: "Make a Difference Today",
-        subtitle: "Small acts of kindness create endless ripples of hope.",
-        bgClass: "bg-orange-50",
-        img: "/images/143b1ea32ff101b5af8784514c5ab1b53621d68d.jpg",
-        highlightColor: "text-[#dc2626]",
-        btnColor: "bg-[#dc2626] hover:bg-[#dc2626]/80 text-white",
-        accent: "border-l-8 border-[#dc2626]/20"
+        img: "/images/Frame106.png",
     }
 ];
 
@@ -79,7 +54,7 @@ export function BannerCarousel() {
 
     return (
         <section
-            className="relative bg-white overflow-hidden pb-12 md:pb-28 md:pt-20"
+            className="relative bg-white overflow-hidden pb-10 md:pb-28 md:pt-5"
             onMouseEnter={() => setIsHovered(true)}
 
             onMouseLeave={() => setIsHovered(false)}
@@ -123,13 +98,13 @@ export function BannerCarousel() {
                                 zIndex = "z-10";
                                 opacity = "opacity-35";
                                 blur = "blur-xs";
-                                transform = "translate(-50%, -50%) translateX(-650px) scale(0.4)";
+                                transform = "translate(-50%, -50%) translateX(-700px) scale(0.4)";
                             } else if (index === (currentIndex + 1) % banners.length) {
                                 positionClass = "hidden md:block";
                                 zIndex = "z-10";
                                 opacity = "opacity-35";
-                                blur = "blur-xs";
-                                transform = "translate(-50%, -50%) translateX(650px) scale(0.4)";
+                                blur = "blur-sm";
+                                transform = "translate(-50%, -50%) translateX(700px) scale(0.4)";
                             }
 
                             return (
@@ -145,45 +120,25 @@ export function BannerCarousel() {
                                     className={`
                                         transition-all duration-700 ease-in-out cursor-pointer
                                         ${isActive
-                                            ? "w-full md:w-[1000px] shadow-2xl"
-                                            : "w-[300px] md:w-[800px] shadow-lg"
+                                            ? "w-full md:w-[1200px] shadow-xl bg-[#FFFFFF]"
+                                            : "w-[300px] md:w-[800px] shadow-lg bg-gray-50/80"
                                         }
                                         ${positionClass} ${zIndex} ${opacity} ${blur}
-                                        flex flex-col md:flex-row items-center justify-between p-6 md:p-14 gap-6 md:gap-8 rounded-[2rem] md:rounded-[2.5rem]
-                                        ${banner.bgClass} ${banner.accent} relative overflow-hidden
+                                        flex flex-col md:flex-row items-center justify-between rounded-[2rem] md:rounded-[2.5rem]
+                                        relative overflow-hidden h-[450px] md:h-[500px] border border-gray-100
                                     `}
                                 >
-
-                                    {/* Decorative Background Elements */}
-                                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-
-                                    {/* Content */}
-                                    <div className="flex-1 z-10 text-center md:text-left order-2 md:order-1">
-                                        <h2 className={`text-2xl md:text-5xl font-extrabold mb-3 md:mb-4 leading-tight ${banner.highlightColor}`}>
-                                            {banner.title}
-                                        </h2>
-                                        <p className="text-base md:text-xl text-slate-700 font-medium mb-6 md:mb-8 max-w-xl mx-auto md:mx-0">
-                                            {banner.subtitle}
-                                        </p>
+                                    {/* Full Slide Image */}
+                                    <div className="absolute inset-0 h-full w-full z-0">
                                         <Link href="/donate">
-                                            <Button
-                                                className={`${banner.btnColor} text-base md:text-lg font-bold px-6 md:px-8 py-3 md:py-4 rounded-full shadow-md hover:shadow-lg transition-all`}
-                                            >
-                                                Donate Now
-                                            </Button>
+                                        <Image
+                                            src={banner.img}
+                                            alt={banner.title}
+                                            fill
+                                            className="object-fill"
+                                            priority={isActive}
+                                        />
                                         </Link>
-                                    </div>
-
-                                    {/* Image */}
-                                    <div className="w-full h-[220px] md:h-[380px] md:flex-1 relative max-w-[280px] md:max-w-sm mx-auto md:mx-0 z-10 order-1 md:order-2 shrink-0">
-                                        <div className="absolute inset-0 rounded-full border-[8px] md:border-[10px] border-white/50 shadow-inner overflow-hidden">
-                                            <Image
-                                                src={banner.img}
-                                                alt={banner.title}
-                                                fill
-                                                className="object-cover"
-                                            />
-                                        </div>
                                     </div>
                                 </div>
                             );
