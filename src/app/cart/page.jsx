@@ -168,155 +168,151 @@ export default function CartPage() {
         }
     };
 
-    if (cart.length === 0) {
-        return (
-            <div className="flex min-h-screen flex-col bg-slate-50 font-sans">
-                <Navbar />
-                <main className="flex-1 flex items-center justify-center p-4">
-                    <div className="text-center max-w-md bg-white p-8 rounded-2xl shadow-sm">
-                        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
-                            <ShoppingCart className="h-8 w-8" />
-                        </div>
-                        <h2 className="text-xl font-bold mb-2">Your Cart is Empty</h2>
-                        <p className="text-muted-foreground mb-6">Start making a difference by exploring our donation programs.</p>
-                        <Link href="/donate">
-                            <Button className="w-full">Donate Now</Button>
-                        </Link>
-                    </div>
-                </main>
-                <Footer />
-            </div>
-        );
-    }
-
     return (
         <div className="flex min-h-screen flex-col bg-slate-50 font-sans">
             <Navbar />
 
-            <main className="flex-1 container mx-auto px-4 py-12">
-                <h1 className="text-3xl font-bold mb-8">Your Contribution Cart</h1>
-
-                <div className="grid gap-8 lg:grid-cols-12 items-start">
-                    {/* LEFT COLUMN */}
-                    <div className="lg:col-span-8 flex flex-col gap-8">
-                        {/* Cart Items List */}
-                        <div className="space-y-4">
-                            {cart.map((item) => (
-                                <Card key={item.id} className="flex flex-col sm:flex-row items-center p-4 gap-4">
-                                    <div className="h-20 w-20 bg-slate-200 rounded-md shrink-0 overflow-hidden relative">
-                                        <Image
-                                            src={item.image || "/images/placeholder.svg"}
-                                            alt={item.title}
-                                            width={400}
-                                            height={400}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <div className="flex-1 text-center sm:text-left">
-                                        <h3 className="font-bold">{item.title}</h3>
-                                        <p className="text-sm text-muted-foreground">
-                                            ₹{item.price} x {item.quantity} = <span className="font-bold text-slate-900">₹{item.price * item.quantity}</span>
-                                        </p>
-                                    </div>
-
-                                    <div className="flex items-center gap-4">
-                                        <div className="flex items-center border border-slate-200 rounded-md">
-                                            <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-3 py-1 hover:bg-slate-50">-</button>
-                                            <span className="px-2">{item.quantity}</span>
-                                            <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-3 py-1 hover:bg-slate-50">+</button>
-                                        </div>
-                                        <Button variant="ghost" size="icon" className="text-red-600 hover:text-red-600 hover:bg-red-50" onClick={() => removeFromCart(item.id)}>
-                                            <Trash2 className="h-5 w-5" />
-                                        </Button>
-                                    </div>
-                                </Card>
-                            ))}
+            <main className="flex-1">
+                {cart.length === 0 ? (
+                    <div className="flex items-center justify-center p-4 min-h-[60vh]">
+                        <div className="text-center max-w-md bg-white p-8 rounded-2xl shadow-sm">
+                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                                <ShoppingCart className="h-8 w-8" />
+                            </div>
+                            <h2 className="text-xl font-bold mb-2">Your Cart is Empty</h2>
+                            <p className="text-muted-foreground mb-6">Start making a difference by exploring our donation programs.</p>
+                            <Link href="/donate">
+                                <Button className="w-full">Donate Now</Button>
+                            </Link>
                         </div>
+                    </div>
+                ) : (
+                    <div className="container mx-auto px-4 py-12">
+                        <h1 className="text-3xl font-bold mb-8">Your Contribution Cart</h1>
 
-                        {/* Special Addon Section */}
-                        {addons.length > 0 && (
-                            <div className="bg-amber-100/50 p-6 rounded-xl border border-amber-200">
-                                <h3 className="text-xl font-bold mb-4 text-amber-900">Special Addon</h3>
-                                <div className="space-y-3">
-                                    {addons.map((addon) => (
-                                        <div
-                                            key={addon.id}
-                                            className={`flex items-center justify-between p-4 rounded-lg border transition-all cursor-pointer ${selectedAddonIds.includes(addon.id)
-                                                ? "bg-white border-red-500 shadow-sm"
-                                                : "bg-white/50 border-transparent hover:bg-white"
-                                                }`}
-                                            onClick={() => toggleAddon(addon.id)}
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <div className="p-2 bg-red-100 rounded-lg text-red-600">
-                                                    {/* You can add dynamic icons here based on type/title if needed */}
-                                                    <span className="text-xl">🎁</span>
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-semibold text-slate-900">{addon.title}</h4>
-                                                    <p className="text-sm text-slate-500">{addon.description} {addon.price > 0 && `(₹${addon.price})`}</p>
-                                                </div>
+                        <div className="grid gap-8 lg:grid-cols-12 items-start">
+                            {/* LEFT COLUMN */}
+                            <div className="lg:col-span-8 flex flex-col gap-8">
+                                {/* Cart Items List */}
+                                <div className="space-y-4">
+                                    {cart.map((item) => (
+                                        <Card key={item.id} className="flex flex-col sm:flex-row items-center p-4 gap-4">
+                                            <div className="h-20 w-20 bg-slate-200 rounded-md shrink-0 overflow-hidden relative">
+                                                <Image
+                                                    src={item.image || "/images/placeholder.svg"}
+                                                    alt={item.title}
+                                                    width={400}
+                                                    height={400}
+                                                    className="w-full h-full object-cover"
+                                                />
                                             </div>
-                                            <div className={`w-6 h-6 rounded border flex items-center justify-center transition-colors ${selectedAddonIds.includes(addon.id) ? "bg-red-600 border-red-600" : "border-slate-300 bg-white"
-                                                }`}>
-                                                {selectedAddonIds.includes(addon.id) && <span className="text-white text-xs">✓</span>}
+                                            <div className="flex-1 text-center sm:text-left">
+                                                <h3 className="font-bold">{item.title}</h3>
+                                                <p className="text-sm text-muted-foreground">
+                                                    ₹{item.price} x {item.quantity} = <span className="font-bold text-slate-900">₹{item.price * item.quantity}</span>
+                                                </p>
                                             </div>
-                                        </div>
+
+                                            <div className="flex items-center gap-4">
+                                                <div className="flex items-center border border-slate-200 rounded-md">
+                                                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-3 py-1 hover:bg-slate-50">-</button>
+                                                    <span className="px-2">{item.quantity}</span>
+                                                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-3 py-1 hover:bg-slate-50">+</button>
+                                                </div>
+                                                <Button variant="ghost" size="icon" className="text-red-600 hover:text-red-600 hover:bg-red-50" onClick={() => removeFromCart(item.id)}>
+                                                    <Trash2 className="h-5 w-5" />
+                                                </Button>
+                                            </div>
+                                        </Card>
                                     ))}
                                 </div>
-                            </div>
-                        )}
 
-                        {/* Add More to Your Impact */}
-                        <div className="bg-slate-50 p-6 rounded-lg border border-slate-200">
-                            <h3 className="text-xl font-bold mb-6">Add More to Your Impact</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {recommendations.map((item) => (
-                                    <DonationCard
-                                        key={item.id}
-                                        id={item.id}
-                                        title={item.title}
-                                        price={item.price}
-                                        variants={item.variants}
-                                        description={item.description || item.desc}
-                                        type={item.variants ? "pack" : "unit"}
-                                        image={item.image}
-                                    />
-                                ))}
+                                {/* Special Addon Section */}
+                                {addons.length > 0 && (
+                                    <div className="bg-amber-100/50 p-6 rounded-xl border border-amber-200">
+                                        <h3 className="text-xl font-bold mb-4 text-amber-900">Special Addon</h3>
+                                        <div className="space-y-3">
+                                            {addons.map((addon) => (
+                                                <div
+                                                    key={addon.id}
+                                                    className={`flex items-center justify-between p-4 rounded-lg border transition-all cursor-pointer ${selectedAddonIds.includes(addon.id)
+                                                        ? "bg-white border-red-500 shadow-sm"
+                                                        : "bg-white/50 border-transparent hover:bg-white"
+                                                        }`}
+                                                    onClick={() => toggleAddon(addon.id)}
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="p-2 bg-red-100 rounded-lg text-red-600">
+                                                            {/* You can add dynamic icons here based on type/title if needed */}
+                                                            <span className="text-xl">🎁</span>
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="font-semibold text-slate-900">{addon.title}</h4>
+                                                            <p className="text-sm text-slate-500">{addon.description} {addon.price > 0 && `(₹${addon.price})`}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className={`w-6 h-6 rounded border flex items-center justify-center transition-colors ${selectedAddonIds.includes(addon.id) ? "bg-red-600 border-red-600" : "border-slate-300 bg-white"
+                                                        }`}>
+                                                        {selectedAddonIds.includes(addon.id) && <span className="text-white text-xs">✓</span>}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Add More to Your Impact */}
+                                <div className="bg-slate-50 p-6 rounded-lg border border-slate-200">
+                                    <h3 className="text-xl font-bold mb-6">Add More to Your Impact</h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {recommendations.map((item) => (
+                                            <DonationCard
+                                                key={item.id}
+                                                id={item.id}
+                                                title={item.title}
+                                                price={item.price}
+                                                variants={item.variants}
+                                                description={item.description || item.desc}
+                                                type={item.variants ? "pack" : "unit"}
+                                                image={item.image}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* RIGHT COLUMN: Summary */}
+                            <div className="lg:col-span-4 sticky top-24">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>Donation Summary</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4">
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-muted-foreground">Cart Items</span>
+                                            <span className="font-medium">₹{cartTotal}</span>
+                                        </div>
+                                        {addonsTotal > 0 && (
+                                            <div className="flex justify-between text-sm text-amber-700">
+                                                <span className="flex items-center gap-1"> Special Addons</span>
+                                                <span className="font-medium">+ ₹{addonsTotal}</span>
+                                            </div>
+                                        )}
+                                        <div className="flex justify-between text-lg font-bold border-t pt-4">
+                                            <span>Total Amount</span>
+                                            <span className="text-primary">₹{totalAmount}</span>
+                                        </div>
+                                    </CardContent>
+                                    <CardFooter>
+                                        <Button size="lg" className="w-full shadow-lg" onClick={handleCheckout} disabled={loading}>
+                                            {loading ? "Processing..." : "Proceed to Pay"} <ArrowRight className="ml-2 h-4 w-4" />
+                                        </Button>
+                                    </CardFooter>
+                                </Card>
                             </div>
                         </div>
                     </div>
-
-                    {/* RIGHT COLUMN: Summary */}
-                    <div className="lg:col-span-4 sticky top-24">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Donation Summary</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Cart Items</span>
-                                    <span className="font-medium">₹{cartTotal}</span>
-                                </div>
-                                {addonsTotal > 0 && (
-                                    <div className="flex justify-between text-sm text-amber-700">
-                                        <span className="flex items-center gap-1"> Special Addons</span>
-                                        <span className="font-medium">+ ₹{addonsTotal}</span>
-                                    </div>
-                                )}
-                                <div className="flex justify-between text-lg font-bold border-t pt-4">
-                                    <span>Total Amount</span>
-                                    <span className="text-primary">₹{totalAmount}</span>
-                                </div>
-                            </CardContent>
-                            <CardFooter>
-                                <Button size="lg" className="w-full shadow-lg" onClick={handleCheckout} disabled={loading}>
-                                    {loading ? "Processing..." : "Proceed to Pay"} <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    </div>
-                </div>
+                )}
             </main>
 
             <CertificateDetailsPopup

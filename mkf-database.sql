@@ -105,6 +105,20 @@ CREATE TABLE food_donation_details (
     FOREIGN KEY (donation_id) REFERENCES donations(id) ON DELETE CASCADE
 );
 
+-- Create products table
+CREATE TABLE IF NOT EXISTS products (
+    id VARCHAR(50) PRIMARY KEY,
+    type ENUM('package', 'addon') NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) DEFAULT 0.00,
+    variants JSON DEFAULT NULL,
+    description TEXT,
+    image TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 CREATE TABLE donation_certificates (
     id INT AUTO_INCREMENT PRIMARY KEY,
     donation_id INT NOT NULL,
