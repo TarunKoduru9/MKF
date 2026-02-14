@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 export async function POST() {
     const cookieStore = await cookies();
-    cookieStore.delete("session");
-    cookieStore.delete("refresh_token");
+    cookieStore.set("session", "", { maxAge: 0, path: "/" });
+    cookieStore.set("refresh_token", "", { maxAge: 0, path: "/" });
     return NextResponse.json({ message: "Logged out" });
 }

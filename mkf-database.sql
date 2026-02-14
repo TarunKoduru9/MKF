@@ -3,6 +3,8 @@ DROP DATABASE IF EXISTS mkf_trust_db;
 CREATE DATABASE mkf_trust_db;
 USE mkf_trust_db;
 
+select * from users;
+
 CREATE TABLE users (
     uid VARCHAR(255) PRIMARY KEY, 
     email VARCHAR(255) NOT NULL UNIQUE,

@@ -21,6 +21,7 @@ export default function MyAccountPage() {
     const { data: profile, isLoading: loading, error } = useUser();
     const logout = useStore((state) => state.logout);
     const router = useRouter();
+    const { toast } = useToast();
 
     // Redirect if not logged in
     useEffect(() => {
@@ -30,7 +31,13 @@ export default function MyAccountPage() {
     }, [loading, profile, router]);
 
     const handleLogout = async () => {
+        try {
+            await axios.post(API_ROUTES.AUTH.LOGOUT);
+        } catch (error) {
+            console.error("Logout failed", error);
+        }
         logout();
+        toast({ title: "Logged Out", description: "You have been successfully logged out." });
         router.push("/login");
     };
 
@@ -144,12 +151,12 @@ function ProfileSection({ user }) {
                 ...formData,
                 uid: user.uid
             });
-            toast({ title: "Success", description: "Profile updated successfully." });
+            toast({ title: "Profile Updated", description: "Your details have been saved successfully." });
             setIsEditing(false);
             router.refresh(); // Or better yet, we could invalidate queries here!
         } catch (error) {
             console.error(error);
-            toast({ variant: "destructive", title: "Error", description: "Failed to update profile." });
+            toast({ variant: "destructive", title: "Update Failed", description: "Could not save changes. Please try again." });
         } finally {
             setLoading(false);
         }

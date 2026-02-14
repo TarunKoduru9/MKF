@@ -46,7 +46,11 @@ export default function LoginPage() {
 
         } catch (error) {
             let msg = error.response?.data?.error || error.message;
-            toast({ variant: "destructive", title: "Error", description: msg });
+            if (error.response?.status === 404) {
+                msg = "Account does not exist. Please Signup first.";
+                router.push("/signup");
+            }
+            toast({ variant: "destructive", title: "Login Failed", description: msg });
         } finally {
             setLoading(false);
         }
@@ -59,11 +63,15 @@ export default function LoginPage() {
         try {
             const res = await axios.post(API_ROUTES.AUTH.VERIFY_2FA, { email, code: otp });
             setUser(res.data.user);
-            toast({ title: "Welcome Back!", description: "Login successful." });
+            toast({ title: "Welcome Back!", description: "You have successfully logged in." });
             router.push("/my-account");
         } catch (error) {
             console.error(error);
-            toast({ variant: "destructive", title: "Verification Failed", description: "Invalid or expired OTP." });
+            let msg = "Invalid or expired OTP.";
+            if (error.response?.data?.error) {
+                msg = error.response.data.error;
+            }
+            toast({ variant: "destructive", title: "Verification Failed", description: msg });
         } finally {
             setLoading(false);
         }
@@ -140,14 +148,21 @@ export default function LoginPage() {
                 name: user.name
             });
 
-            toast({ title: "Welcome Back!", description: "Login successful." });
+            toast({ title: "Welcome Back!", description: "You have successfully logged in." });
             router.push("/my-account");
         } catch (error) {
             console.error(error);
             let msg = "Invalid OTP.";
             if (error.response && error.response.data && error.response.data.error) {
                 msg = error.response.data.error;
+            } else if (error.code === 'auth/invalid-verification-code') {
+                msg = "Invalid OTP code entered.";
             }
+
+            if (error.response?.status === 404) {
+                msg = "Account does not exist. Please Signup first.";
+            }
+
             toast({ variant: "destructive", title: "Verification Failed", description: msg });
         } finally {
             setLoading(false);
