@@ -2,7 +2,7 @@
 
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Play } from "lucide-react";
@@ -19,32 +19,46 @@ const VideoCard = ({ item, className, showOverlay = true }) => {
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const handleMouseEnter = async () => {
-        if (videoRef.current) {
-            try {
-                videoRef.current.muted = true;
-                await videoRef.current.play();
-                setIsPlaying(true);
-            } catch (error) {
-                if (error.name !== "AbortError") {
-                    console.error("Video play failed:", error);
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    video.muted = true; // Ensure muted for autoplay policy
+                    video.play().catch(e => console.log("Autoplay error:", e));
+                    setIsPlaying(true);
+                } else {
+                    video.pause();
+                    setIsPlaying(false);
                 }
-            }
-        }
-    };
+            },
+            { threshold: 0.6 } // Play when 60% visible
+        );
 
-    const handleMouseLeave = () => {
         if (videoRef.current) {
-            videoRef.current.pause();
-            setIsPlaying(false);
+            observer.observe(videoRef.current);
+        }
+
+        return () => {
+            if (videoRef.current) observer.unobserve(videoRef.current);
+        };
+    }, []);
+
+    const togglePlay = () => {
+        if (videoRef.current) {
+            if (isPlaying) {
+                videoRef.current.pause();
+            } else {
+                videoRef.current.play();
+            }
+            setIsPlaying(!isPlaying);
         }
     };
 
     return (
         <div
             className={cn("relative overflow-hidden bg-black group h-full w-full", className)}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            onClick={togglePlay}
         >
             <video
                 ref={videoRef}

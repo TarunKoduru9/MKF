@@ -77,7 +77,7 @@ export function BannerCarousel() {
                     <ChevronRight className="w-4 h-4 md:w-6 md:h-6" />
                 </button>
 
-                <div className="relative w-full h-[550px] md:h-[550px] flex justify-center items-center overflow-hidden">
+                <div className="relative w-full h-[250px] md:h-[550px] flex justify-center items-center overflow-hidden">
                     <div className="absolute inset-0 flex justify-center items-center">
                         {banners.map((banner, index) => {
                             const isActive = index === currentIndex;
@@ -125,19 +125,19 @@ export function BannerCarousel() {
                                         }
                                         ${positionClass} ${zIndex} ${opacity} ${blur}
                                         flex flex-col md:flex-row items-center justify-between rounded-[2rem] md:rounded-[2.5rem]
-                                        relative overflow-hidden h-[450px] md:h-[500px] border border-gray-100
+                                        relative overflow-hidden h-[200px] md:h-[500px] border border-gray-100
                                     `}
                                 >
                                     {/* Full Slide Image */}
                                     <div className="absolute inset-0 h-full w-full z-0">
                                         <Link href="/donate">
-                                        <Image
-                                            src={banner.img}
-                                            alt={banner.title}
-                                            fill
-                                            className="object-fill"
-                                            priority={isActive}
-                                        />
+                                            <Image
+                                                src={banner.img}
+                                                alt={banner.title}
+                                                fill
+                                                className="object-fill"
+                                                priority={isActive}
+                                            />
                                         </Link>
                                     </div>
                                 </div>
