@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { GraduationCap, Target, Leaf, Users } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 // Data matching the screenshot text and icons
 const occasions = [
@@ -51,20 +52,23 @@ export function OccasionsSection() {
                     {/* Left: 2x2 Grid using Flex/Grid */}
                     <div className="lg:w-[60%] grid md:grid-cols-2 gap-6">
                         {occasions.map((item, index) => (
-                            <Card key={index} className="bg-white border-0 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-lg transition-all text-center rounded-[2rem] p-6 h-full flex flex-col items-center justify-center">
-                                <CardHeader className="p-0 mb-6 w-full flex flex-col items-center">
-                                    <div className="text-[#DC2626] mb-4">
-                                        <item.icon className="h-10 w-10" strokeWidth={1.5} />
-                                    </div>
-                                    <CardTitle className="text-xl font-bold text-slate-900">{item.title}</CardTitle>
-                                </CardHeader>
-                                <CardContent className="p-0">
-                                    <CardDescription className="text-slate-500 leading-relaxed">
-                                        {item.description}
-                                    </CardDescription>
-                                </CardContent>
-                            </Card>
+                            <Link key={index} href="/donate#packages" className="block h-full">
+                                <Card className="bg-white border-0 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-lg transition-all text-center rounded-[2rem] p-6 h-full flex flex-col items-center justify-center cursor-pointer hover:scale-[1.02] duration-300">
+                                    <CardHeader className="p-0 mb-6 w-full flex flex-col items-center">
+                                        <div className="text-[#DC2626] mb-4">
+                                            <item.icon className="h-10 w-10" strokeWidth={1.5} />
+                                        </div>
+                                        <CardTitle className="text-xl font-bold text-slate-900">{item.title}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="p-0">
+                                        <CardDescription className="text-slate-500 leading-relaxed">
+                                            {item.description}
+                                        </CardDescription>
+                                    </CardContent>
+                                </Card>
+                            </Link>
                         ))}
+
                     </div>
 
                     {/* Right: Large Image Placeholder */}

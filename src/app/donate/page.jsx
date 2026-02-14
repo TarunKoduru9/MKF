@@ -349,7 +349,7 @@ export default function DonatePage() {
                 </section>
 
                 {/* PACKAGES SECTION */}
-                <section className="py-10 bg-white">
+                <section id="packages" className="py-10 bg-white">
                     <div className="container mx-auto px-4 text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-bold text-red-600 mb-4">Make A Donation</h2>
                         <p className="text-slate-500">Please inform us atleast 3 days in advance so we can make proper arrangements</p>
